@@ -27,22 +27,22 @@ const ProfileCard: React.FC<ProfileProps>= ({avatar,avatarHover,children, name, 
                 <img 
                     src={finalAvatar}
                     alt='Mauricio Matias, cr0wg4n' 
-                    width={'240'} 
-                    height={'240'}
-                    className="rounded-full cursor-pointer"
+                    // width={'240'} 
+                    // height={'240'}
+                    className="rounded-full cursor-pointer w-32 md:w-64"
                     onMouseEnter={alternativeAvatar}
                     onMouseLeave={normalAvatar}
                 />
             </div>
             <div className='my-auto col-span-6'>
-                <div className='font-normal text-normal text-left'>
-                Who am I?
+                <div className='font-normal text-sm md:text-base text-left'>
+                    Who am I?
                 </div>
-                <div className='font-medium text-2xl md:text-2xl lg:text-4xl text-white'>
-                {name}
+                <div className='font-medium text-2xl md:text-2xl lg:text-4xl text-white text-center'>
+                    {name}
                 </div>
-                <div className='font-normal text-xs md:text-lg text-left'>
-                {role}
+                <div className='font-normal text-xs md:text-lg text-center'>
+                    {role}
                 </div>
                 <br />
                 <div className='font-normal text-xs md:text-sm text-center text-white font-sans'>
