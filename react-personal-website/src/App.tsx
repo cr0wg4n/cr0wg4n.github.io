@@ -6,7 +6,7 @@ function App() {
   return (
     <div className='bg-blue-gray-900 p-4 md:p-10 font-serif text-blue-gray-50'>
 
-      <SimpleBox firstColor='deep-orange-900' secondColor='deep-orange-500'>
+      <SimpleBox firstColorClass='from-deep-orange-900' secondColorClass='to-deep-orange-500'>
         <ProfileCard 
             name={'Mauricio Matias C.'}
             avatar={'/images/mauri.jpeg'}
@@ -16,7 +16,7 @@ function App() {
                 Currently, I still learning about systems programming and
                 <span className='text-light-blue-200'>
                   &nbsp;
-                  <a href="https://www.rust-lang.org/" rel='nofollow noopener'>@rust</a> 
+                  <a href="https://www.rust-lang.org/" rel="nofollow noopener noreferrer" target={'_blank'}>@rust</a> 
                   &nbsp;
                 </span>
                 for fun. I love and follow 
@@ -27,11 +27,13 @@ function App() {
         />
       </SimpleBox>
 
-      <SimpleBox firstColor="teal-900" secondColor="teal-500" title='Side Projects' orientation>
-
+      <SimpleBox firstColorClass="from-teal-900" secondColorClass="to-teal-500" title='Side Projects' orientation>
+        <div className='h-64 w-64 bg-yellow-200 mt-4'>
+          asdasdsd
+        </div>
       </SimpleBox>
 
-      <SimpleBox firstColor="deep-purple-900" secondColor={'deep-purple-500'} title='My Blog Posts'>
+      <SimpleBox firstColorClass="from-deep-purple-900" secondColorClass={'to-deep-purple-500'} title='My Blog Posts'>
 
       </SimpleBox>
 

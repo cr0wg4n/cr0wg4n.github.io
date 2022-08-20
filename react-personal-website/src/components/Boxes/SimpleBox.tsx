@@ -3,30 +3,34 @@ import {classNames} from '../../utils';
 
 type SimpleBoxProps = {
   children: React.ReactNode,
-  firstColor: string,
-  secondColor: string,
+  firstColorClass: string,
+  secondColorClass: string,
   title?: string,
   orientation?: boolean
 }
 
-const SimpleBox: React.FC<SimpleBoxProps> = ({children,firstColor,secondColor,title, orientation}: SimpleBoxProps)=>{
-  const optOrientation = orientation?'mr-0 ml-auto':'';
-  const optTextOrientation = !orientation?'text-left':'text-right';
-  const fColor = `from-${firstColor}`;
-  const sColor = `to-${secondColor}`;
-  const className=classNames(
-    'bg-gradient-to-t',
-    fColor,
-    sColor,
-    optOrientation,
-    `w-12/12 sm:w-12/12 md:w-10/12 xl:w-8/12 mb-10 rounded-xl shadow-xl hover:shadow-2xl`
-  );
+const SimpleBox: React.FC<SimpleBoxProps> = ({children,firstColorClass,secondColorClass,title, orientation}: SimpleBoxProps)=>{
+  const [className,setClassName]= React.useState('');
+  const optTextOrientation = orientation?'text-left':'text-right';
+
+  React.useEffect(()=>{
+    const optOrientation = orientation?'mr-0 ml-auto':'';
+      setClassName(
+        classNames(
+            'bg-gradient-to-t',
+            firstColorClass,
+            secondColorClass,
+            optOrientation,
+            `w-12/12 sm:w-12/12 md:w-10/12 xl:w-8/12 mb-10 rounded-xl shadow-xl hover:shadow-2xl p-2 lg:p-5`
+        )
+      );
+  });
   
   return (
-    <div className={className}>
+    <div className={className+' hover:scale-105'}>
       {
         title &&
-        <div className={'font-medium text-xl md:text-3xl p-10 text-white '+optTextOrientation}>
+        <div className={'font-medium text-xl md:text-2xl text-white '+optTextOrientation}>
           {title}
         </div>
       }
