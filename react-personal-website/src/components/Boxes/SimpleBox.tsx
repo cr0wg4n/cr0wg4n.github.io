@@ -10,24 +10,22 @@ type SimpleBoxProps = {
 }
 
 const SimpleBox: React.FC<SimpleBoxProps> = ({children,firstColorClass,secondColorClass,title, orientation}: SimpleBoxProps)=>{
-  const [className,setClassName]= React.useState('');
+  // const [className,setClassName]= React.useState('');
   const optTextOrientation = orientation?'text-left':'text-right';
 
-  React.useEffect(()=>{
-    const optOrientation = orientation?'mr-0 ml-auto':'';
-      setClassName(
-        classNames(
-            'bg-gradient-to-t',
-            firstColorClass,
-            secondColorClass,
-            optOrientation,
-            `w-12/12 sm:w-12/12 md:w-10/12 xl:w-8/12 mb-10 rounded-xl shadow-xl hover:shadow-2xl p-2 lg:p-5`
-        )
-      );
-  });
-  
+  const optOrientation = orientation?'mr-0 ml-auto':'';
+  const className = (
+    classNames(
+        'bg-gradient-to-t',
+        firstColorClass,
+        secondColorClass,
+        optOrientation,
+        `w-12/12 sm:w-12/12 md:w-10/12 xl:w-8/12 mb-4 md:mb-10 rounded-xl shadow-xl hover:shadow-2xl p-3 lg:p-5`
+    )
+  );
+
   return (
-    <div className={className+' hover:scale-105'}>
+    <div className={className+' md:hover:scale-105'}>
       {
         title &&
         <div className={'font-medium text-xl md:text-2xl text-white '+optTextOrientation}>

@@ -32,6 +32,9 @@ module.exports = withMT({
     fontFamily: {
       sans: ['Graphik', 'sans-serif'],
       serif: ['Merriweather', 'serif'],
+      ubuntu: ['Ubuntu'],
+      quicksand: ['Quicksand'],
+      monospace: ['Syne Mono']
     },
     extend: {
       spacing: {

@@ -9,7 +9,7 @@ const IconItem: React.FC<IconItemProps> = ({children}:IconItemProps)=>{
     return (
         <IconContext.Provider value={{
             color:'white',
-            size:'1.3rem',
+            size:'1.4rem',
             className:'hover:cursor-pointer hover:scale-125'
         }}> 
             {children}
