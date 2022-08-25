@@ -4,7 +4,7 @@ import IconList from '../Icons/IconList';
 type ProfileProps = {
     children?: React.ReactNode,
     name: string,
-    description: React.ReactNode,
+    description: string,
     role: string,
     avatar: string,
     avatarHover?: string
@@ -19,7 +19,11 @@ const ProfileCard: React.FC<ProfileProps> = ({avatar,avatarHover,children, name,
         avatar&&setFinalAvatar(avatar);
     };
     return <>
-        <div className="grid grid-cols-12 gap-1 md:p-10">
+        <div
+            className="grid grid-cols-12 gap-1 md:p-10"
+            onMouseEnter={alternativeAvatar}
+            onMouseLeave={normalAvatar}
+        >
             <div className='col-span-1 m-auto'>
                 <IconList/>
             </div>
@@ -27,11 +31,7 @@ const ProfileCard: React.FC<ProfileProps> = ({avatar,avatarHover,children, name,
                 <img 
                     src={finalAvatar}
                     alt='Mauricio Matias, cr0wg4n' 
-                    // width={'240'} 
-                    // height={'240'}
                     className="rounded-full cursor-pointer w-32 md:w-64"
-                    onMouseEnter={alternativeAvatar}
-                    onMouseLeave={normalAvatar}
                 />
             </div>
             <div className='my-auto col-span-7'>
@@ -44,9 +44,10 @@ const ProfileCard: React.FC<ProfileProps> = ({avatar,avatarHover,children, name,
                 <div className='font-normal text-xs md:text-lg text-center font-quicksand'>
                     {role}
                 </div>
-                <div className='font-normal text-xs md:text-sm text-center text-white font-sans mt-2 md:mt-7'>
-                    {description}
-                </div>
+                <div 
+                    className='font-quicksand text-xs md:text-sm text-center text-white mt-2 md:mt-7'
+                    dangerouslySetInnerHTML={{__html:description}}
+                />
             </div>
         </div>
     </>

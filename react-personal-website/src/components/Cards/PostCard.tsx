@@ -12,7 +12,7 @@ const PostCard: React.FC<PostCardProps> = ({
     name='',
     url='',
     cover='',
-    date='00/00/00'
+    date=undefined
 }: PostCardProps)=>{
   
   const bgColors = [
@@ -40,11 +40,11 @@ const PostCard: React.FC<PostCardProps> = ({
               {name}
             </div>
             
-            <div className='absolute before:content-[""] top-0 bg-black w-18 opacity-80 px-2 py-1 font-quicksand text-right right-0 rounded-bl-xl'>
+            {date&&<div className='absolute before:content-[""] top-0 bg-black w-18 opacity-80 px-2 py-1 font-quicksand text-right right-0 rounded-bl-xl'>
               <div className='text-center text-xs'>
                 {date}
               </div>
-            </div>
+            </div>}
           </a>
       </div>
   </>;
