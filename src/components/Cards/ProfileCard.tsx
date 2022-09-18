@@ -45,7 +45,7 @@ const ProfileCard: React.FC<ProfileProps> = ({avatar,avatarHover,children, name,
                     {role}
                 </div>
                 <div 
-                    className='font-quicksand text-xs md:text-sm text-center text-white mt-2 md:mt-7'
+                    className='font-quicksand text-xs lg:text-base sm:text-xs md:text-sm text-center text-white mt-2 md:mt-7'
                     dangerouslySetInnerHTML={{__html:description}}
                 />
             </div>
