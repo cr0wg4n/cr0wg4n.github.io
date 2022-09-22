@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/cr0wg4n.github.io/static/css/main.f0f1e6b5.css",
+    "main.js": "/cr0wg4n.github.io/static/js/main.fa608327.js",
+    "index.html": "/cr0wg4n.github.io/index.html",
+    "main.f0f1e6b5.css.map": "/cr0wg4n.github.io/static/css/main.f0f1e6b5.css.map",
+    "main.fa608327.js.map": "/cr0wg4n.github.io/static/js/main.fa608327.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f0f1e6b5.css",
+    "static/js/main.fa608327.js"
+  ]
+}
