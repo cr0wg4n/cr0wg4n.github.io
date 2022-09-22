@@ -1,7 +1,6 @@
 {
   "name": "react-personal-website",
   "version": "0.1.0",
-  "homepage": "https://cr0wg4n.github.io/cr0wg4n.github.io",
   "private": true,
   "dependencies": {
     "@material-tailwind/react": "^1.2.3",

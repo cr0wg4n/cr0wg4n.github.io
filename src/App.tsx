@@ -42,37 +42,6 @@ function App() {
       <SimpleBox firstColorClass="from-deep-purple-900" secondColorClass={'to-deep-purple-500'} title='My Blog Posts'>
         <div className='mt-5' />
         <PostList/>
-        {/* <div className='grid grid-cols-12 gap-3 md:gap-5'>
-          <PostCard 
-            name='Palabras Vacías en Español (stop words) ft Python'
-            url='https://cr0wg4n.medium.com/palabras-vac%C3%ADas-en-espa%C3%B1ol-stop-words-ft-python-3117e52d2bff'
-            cover='/portfolio/post_1.png'
-            date='07/03/22'
-          />
-          <PostCard 
-            name='Palabras Vacías en Español (stop words) ft Python'
-            url='https://cr0wg4n.medium.com/palabras-vac%C3%ADas-en-espa%C3%B1ol-stop-words-ft-python-3117e52d2bff'
-            cover='/portfolio/post_1.png'
-            date='07/03/22'
-          />
-          <PostCard 
-            name='Palabras Vacías en Español (stop words) ft Python' 
-            url='https://cr0wg4n.medium.com/palabras-vac%C3%ADas-en-espa%C3%B1ol-stop-words-ft-python-3117e52d2bff'
-            date='10/02/21'
-          />
-          <PostCard 
-            name='Palabras Vacías en Español (stop words) ft Python'
-            url='https://cr0wg4n.medium.com/palabras-vac%C3%ADas-en-espa%C3%B1ol-stop-words-ft-python-3117e52d2bff'
-            cover='/portfolio/post_1.png'
-            date='07/03/22'
-          />
-          <PostCard 
-            name='Palabras Vacías en Español (stop words) ft Python'
-            url='https://cr0wg4n.medium.com/palabras-vac%C3%ADas-en-espa%C3%B1ol-stop-words-ft-python-3117e52d2bff'
-            cover='/portfolio/post_1.png'
-            date='07/03/22'
-          />
-        </div> */}
       </SimpleBox>
 
       <MainGame />
