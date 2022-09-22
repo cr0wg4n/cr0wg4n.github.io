@@ -12,7 +12,7 @@ export default function data(){
     </span>
     for fun. I love and follow 
     the Open Source and Free Sofware initiatives. I occasionally instruct 
-    programming and share my day-to-day tech experience as Software Developer through talks.
+    programming and share my day-to-day tech experience as Software Developer through articles and talks.
   </div>
     `,
     avatar: '/images/mauri.jpeg',
