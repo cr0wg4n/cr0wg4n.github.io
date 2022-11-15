@@ -1,4 +1,4 @@
-import postData from './posts.json'
+import postsData from './posts.json'
 
 export interface PostCard {
   name: string,
@@ -8,7 +8,7 @@ export interface PostCard {
 };
 
 const posts: PostCard[] = [
-  ...postData,
+  ...postsData,
 ];
 
 export default function data(){
