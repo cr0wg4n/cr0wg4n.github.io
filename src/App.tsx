@@ -6,6 +6,7 @@ import MainGame from './components/Game/Index';
 import PostList from './components/Posts/PostsList';
 import { useAppSelector } from './app/hooks';
 import { selectProfile } from './store/profile';
+import SlidesList from './components/Slides/SlidesList';
 
 function App() {
   const profile = useAppSelector(selectProfile);
@@ -23,8 +24,10 @@ function App() {
         />
       </SimpleBox>
 
-      <SimpleBox firstColorClass="from-teal-900" secondColorClass="to-teal-500" title='Web Pages Development' orientation>
-        <div className='grid grid-cols-12 gap-5'>
+      <SimpleBox firstColorClass="from-teal-900" secondColorClass="to-teal-500" title='Slides' orientation>
+        <SlidesList/>
+
+        {/* <div className='grid grid-cols-12 gap-5'>
           <div className=' col-span-4 mt-4'>
             <img src='/portfolio/ehc-mainpage.png' width={'100%'} alt='ehc group main page' className='rounded-lg'/>
           </div>
@@ -36,7 +39,7 @@ function App() {
           <div className=' col-span-4 mt-4'>
             <img src='/portfolio/ehc-mainpage.png' width={'100%'} alt='ehc group main page' className='rounded-lg'/>
           </div>
-        </div>
+        </div> */}
       </SimpleBox>
 
       <SimpleBox firstColorClass="from-deep-purple-900" secondColorClass={'to-deep-purple-500'} title='My Blog Posts'>
