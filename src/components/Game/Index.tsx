@@ -1,7 +1,7 @@
 import React from 'react';
 
 const MainGame: React.FC = ()=>{
-  const gameScreen = 'cr0wg4n@demo: demo \n demo\n\n\n\n\n\n\n';
+  const gameScreen = 'cr0wg4n@personal-page: ./building_webpage.rs \n ...Buiding';
   return <>
     <div className="
       bg-black
@@ -19,17 +19,19 @@ const MainGame: React.FC = ()=>{
       p-3
       md:p-5
     ">
-      <div className='text-center'>
+      {/* <div className='text-center'>
         <pre>Starman   (space bar or touch to jump)</pre>
-      </div>
+      </div> */}
       <pre>
         { gameScreen }
       </pre>
+      <div className='text-right'>
+
       <a href="https://github.com/cr0wg4n" target={'_blank'} rel={'noreferrer'} className='hover:underline'>
-        <div className='text-right'>
           <pre>Made with ❤️ by cr0wg4n</pre>
-        </div>
       </a>
+      </div>
+
     </div> 
   </>
 }

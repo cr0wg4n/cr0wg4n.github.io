@@ -23,7 +23,7 @@ function App() {
         />
       </SimpleBox>
 
-      <SimpleBox firstColorClass="from-teal-900" secondColorClass="to-teal-500" title='Side Projects' orientation>
+      <SimpleBox firstColorClass="from-teal-900" secondColorClass="to-teal-500" title='Web Pages Development' orientation>
         <div className='grid grid-cols-12 gap-5'>
           <div className=' col-span-4 mt-4'>
             <img src='/portfolio/ehc-mainpage.png' width={'100%'} alt='ehc group main page' className='rounded-lg'/>

@@ -28,7 +28,7 @@ const PostCard: React.FC<PostCardProps> = ({
   const [bgColor] = React.useState(bgColors[Math.floor(Math.random() * (bgColors.length))]);
 
   return <>
-      <div className='col-span-6 md:col-span-3 relative  hover:cursor-pointer'>
+      <div className='col-span-6 md:col-span-3 relative hover:cursor-pointer hover:border-b-2'>
           <a href={url} target={'_blank'} rel={"noreferrer"}>
             <div className='w-full overflow-hidden h-32'>
               {cover?
