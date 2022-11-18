@@ -6,11 +6,14 @@ import App from './App';
 import { ThemeProvider } from '@material-tailwind/react';
 import { store } from './app/store';
 import { Provider } from 'react-redux';
+import ReactGa from 'react-ga'
 
+ReactGa.initialize('G-26G85FRHW8');
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
     <Provider store={store}>
