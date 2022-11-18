@@ -6,8 +6,8 @@ import ReactGa from 'react-ga4'
 const IconList: React.FC = ()=>{
     const registerEvent =  (socialName: string) => {
         ReactGa.event({
-            category: `social:${String(socialName).toLowerCase()}`,
-            action:'click:social',
+            category: `social`,
+            action:`click:${String(socialName).toLowerCase()}`,
         })
     }
 
