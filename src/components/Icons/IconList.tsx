@@ -1,7 +1,7 @@
 import React from 'react';
 import IconItem from './IconItem';
 import loadData from '../../data/social';
-import ReactGa from 'react-ga'
+import ReactGa from 'react-ga4'
 
 const IconList: React.FC = ()=>{
     const registerEvent =  (socialName: string) => {

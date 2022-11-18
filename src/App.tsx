@@ -7,7 +7,7 @@ import PostList from './components/Posts/PostsList';
 import { useAppSelector } from './app/hooks';
 import { selectProfile } from './store/profile';
 import SlidesList from './components/Slides/SlidesList';
-import ReactGa from 'react-ga';
+import ReactGa from 'react-ga4';
 import { useEffect } from 'react';
 
 
@@ -15,9 +15,9 @@ function App() {
   const profile = useAppSelector(selectProfile);
 
   useEffect(()=>{
-    ReactGa.pageview(window.location.pathname);
+    ReactGa.send({ hitType: "pageview", page: "/" });
   },[])
-  
+
   return (
     <div className='bg-blue-gray-900 p-4 md:p-10 font-ubuntu text-blue-gray-50'>
       <SimpleBox firstColorClass='from-deep-orange-900' secondColorClass='to-deep-orange-500'>

@@ -6,7 +6,7 @@ import App from './App';
 import { ThemeProvider } from '@material-tailwind/react';
 import { store } from './app/store';
 import { Provider } from 'react-redux';
-import ReactGa from 'react-ga'
+import ReactGa from 'react-ga4'
 
 ReactGa.initialize('G-26G85FRHW8');
 
