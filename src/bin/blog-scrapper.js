@@ -14,7 +14,7 @@ async function getRssData (url, path) {
   const database = []
   for (const item of feed.items) {
     const data = await getUrlOpenGraph(item.link);
-    const image = data['og:image'].replace('max/1200', 'max/400');
+    const image = data['og:image'].replace(/max\/\d+\//g, 'max/300/');
     database.push({
       name: item.title,
       url: item.link,
