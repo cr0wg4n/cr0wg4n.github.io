@@ -1,7 +1,6 @@
 import './App.css';
 import ProfileCard from './components/Cards/ProfileCard';
 import SimpleBox from './components/Boxes/SimpleBox';
-import PostCard from './components/Cards/PostCard';
 import MainGame from './components/Game/Index';
 import PostList from './components/Posts/PostsList';
 import { useAppSelector } from './app/hooks';
@@ -9,6 +8,7 @@ import { selectProfile } from './store/profile';
 import SlidesList from './components/Slides/SlidesList';
 import ReactGa from 'react-ga4';
 import { useEffect } from 'react';
+import Clothes from './components/Clothes/Clothes';
 
 
 function App() {
@@ -30,11 +30,15 @@ function App() {
         />
       </SimpleBox>
 
-      <SimpleBox firstColorClass="from-teal-900" secondColorClass="to-teal-500" title='Slides' orientation>
+      <SimpleBox firstColorClass="from-deep-purple-900" secondColorClass={'to-deep-purple-500'} title='Top Public Repos ⭐' orientation>
+        <Clothes />
+      </SimpleBox>
+
+      <SimpleBox firstColorClass="from-teal-900" secondColorClass="to-teal-500" title='Slides' orientation={false}>
         <SlidesList/>
       </SimpleBox>
 
-      <SimpleBox firstColorClass="from-deep-purple-900" secondColorClass={'to-deep-purple-500'} title='My Blog Posts'>
+      <SimpleBox firstColorClass="from-indigo-900" secondColorClass={'to-indigo-500'} title='My Blog Posts' orientation>
         <div className='mt-5' />
         <PostList/>
       </SimpleBox>

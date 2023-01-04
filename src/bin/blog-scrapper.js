@@ -9,7 +9,7 @@ async function getUrlOpenGraph(url) {
   return await fetchOpengraph.fetch(url);
 }
 
-async function getRssData (url, path) {
+async function getRssData(url, path) {
   let feed = await parser.parseURL(url);
   const database = []
   for (const item of feed.items) {
@@ -22,7 +22,7 @@ async function getRssData (url, path) {
       cover: image
     })
   }
-  fs.writeFileSync(path,JSON.stringify(database,null,2))
+  fs.writeFileSync(path, JSON.stringify(database,null,2))
 }
 
 async function getSlidesData(urls, path) {
@@ -38,7 +38,7 @@ async function getSlidesData(urls, path) {
   fs.writeFileSync(path,JSON.stringify(database,null,2))
 }
 
-getRssData('https://medium.com/feed/@cr0wg4n',join(__dirname,'../data/posts.json'));
+getRssData('https://medium.com/feed/@cr0wg4n', join(__dirname,'../data/posts.json'));
 
 getSlidesData([
   'https://slides.com/cr0wg4n/privacidad-y-datos-personales',
