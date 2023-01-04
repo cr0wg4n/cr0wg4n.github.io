@@ -28,7 +28,8 @@
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "load-data": "node src/bin/blog-scrapper.js"
+    "load-data": "node src/bin/blog-scrapper.js",
+    "load-github-data": "sh src/bin/github-api-respositories.sh"
   },
   "eslintConfig": {
     "extends": [
