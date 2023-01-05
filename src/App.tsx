@@ -34,11 +34,11 @@ function App() {
         <Clothes />
       </SimpleBox>
 
-      <SimpleBox firstColorClass="from-teal-900" secondColorClass="to-teal-500" title='Slides' orientation={false}>
+      <SimpleBox firstColorClass="from-teal-900" secondColorClass="to-teal-500" title='Slides ▶️' orientation={false}>
         <SlidesList/>
       </SimpleBox>
 
-      <SimpleBox firstColorClass="from-indigo-900" secondColorClass={'to-indigo-500'} title='My Blog Posts' orientation>
+      <SimpleBox firstColorClass="from-indigo-900" secondColorClass={'to-indigo-500'} title='My Blog Posts 📰' orientation>
         <div className='mt-5' />
         <PostList/>
       </SimpleBox>

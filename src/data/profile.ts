@@ -2,7 +2,7 @@
 export default function data(){
   return {
     name: 'Mauricio Matias C.',
-    role: 'Software Developer',
+    role: 'Software Developer (A.k.a. cr0wg4n)',
     description: `
   <div>
     Hi, I'm Mauricio. Technology Building and designing is my main passion. 
