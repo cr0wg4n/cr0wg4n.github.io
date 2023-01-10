@@ -2,6 +2,7 @@ import {
     FaTwitter,
     FaMedium,
     FaGithub,
+    FaYoutube,
 } from 'react-icons/fa';
 
 
@@ -16,6 +17,11 @@ export default function data(){
             name: 'Medium',
             url: 'https://cr0wg4n.medium.com',
             icon: FaMedium
+        },
+        {
+            name: 'Youtube',
+            url: 'https://www.youtube.com/@lowleveltech',
+            icon: FaYoutube
         },
         {
             name: 'Twitter',
