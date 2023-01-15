@@ -1,5 +1,11 @@
 [
   {
+    "name": "Pinout nRF51822 board HW-651",
+    "url": "https://cr0wg4n.medium.com/pinout-nrf51822-board-hw-651-78da2eda8894?source=rss-b402714ccae1------2",
+    "date": "Jan 15 2023",
+    "cover": "https://miro.medium.com/max/300/1*UXk2bUD1Xe84BW4yn_m7uw.png"
+  },
+  {
     "name": "Fastuto: Instalar Docker en LMDE 5",
     "url": "https://cr0wg4n.medium.com/fastuto-instalar-docker-en-lmde-5-aa3b5ad5ec88?source=rss-b402714ccae1------2",
     "date": "Oct 05 2022",
@@ -52,11 +58,5 @@
     "url": "https://cr0wg4n.medium.com/latex-y-visual-studio-code-gu%C3%ADa-de-instalaci%C3%B3n-ca8bef3935e3?source=rss-b402714ccae1------2",
     "date": "Jan 11 2020",
     "cover": "https://miro.medium.com/max/300/1*4s6VQpTuhnE7epFee2PnJw.png"
-  },
-  {
-    "name": "Como corregir un “heap out of memory” en Node.js",
-    "url": "https://cr0wg4n.medium.com/como-corregir-un-heap-out-of-memory-en-node-js-5e370fd1897?source=rss-b402714ccae1------2",
-    "date": "Nov 19 2019",
-    "cover": "https://miro.medium.com/max/300/1*hYP9N30zS6Jhi61De80mYw.png"
   }
 ]

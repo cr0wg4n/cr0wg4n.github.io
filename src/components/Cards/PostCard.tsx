@@ -32,7 +32,7 @@ const PostCard: React.FC<PostCardProps> = ({
           <a href={url} target={'_blank'} rel={"noreferrer"}>
             <div className='w-full overflow-hidden h-40'>
               {cover?
-                <img src={cover} alt={name} className='rounded-lg object-cover w-full h-full'/>:
+                <img src={cover} alt={name} className='rounded-tl-lg object-cover w-full h-full bg-white'/>:
                 <img src={'/images/pattern.png'} alt={'pattern'} className={`rounded-lg object-cover w-full h-full bg-blue-gray-50 ${bgColor}`} />
               }
             </div>

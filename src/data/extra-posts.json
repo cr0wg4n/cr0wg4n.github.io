@@ -1,0 +1,27 @@
+[
+  {
+    "name": "What’s the problem with the CSURF package?",
+    "cover": "https://dev-academy.com/csurf-vulnerability/banner.png",
+    "url": "https://dev-academy.com/csurf-vulnerability/"
+  },
+  {
+    "name": "Using localStorage with React Hooks",
+    "cover": "https://dev-academy.com/react-localstorage/banner.png",
+    "url": "https://dev-academy.com/react-localstorage/"
+  },
+  {
+    "name": "Vue Router Best Practices",
+    "cover": "https://dev-academy.com/vue-router-best-practices/banner.png",
+    "url": "https://dev-academy.com/vue-router-best-practices/"
+  },
+  {
+    "name": "Vue Security Best Practices 💎",
+    "cover": "https://dev-academy.com/vue-security-best-practices/banner.png",
+    "url": "https://dev-academy.com/vue-security-best-practices/"
+  },
+  {
+    "name": "Avoid XSS Attacks 🗡️ in Vue",
+    "cover": "https://dev-academy.com/vue-xss/banner.png",
+    "url": "https://dev-academy.com/vue-xss/"
+  }
+]
