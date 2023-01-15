@@ -17,7 +17,7 @@ const IconList: React.FC = ()=>{
             return <>
                 <div key={item.url}>
                     <IconItem>
-                        <a href={item.url} rel="noopener nofollow noreferrer" target={'_blank'} onClick={
+                        <a href={item.url} aria-label={item.name} rel="noopener nofollow noreferrer" target={'_blank'} onClick={
                             ()=>registerEvent(item.name)
                         }>
                             {item.icon({})}
