@@ -3,9 +3,7 @@ import {
     FaMedium,
     FaGithub,
     FaYoutube,
-    FaLinkedin,
 } from 'react-icons/fa';
-
 
 export default function data(){
     return [
