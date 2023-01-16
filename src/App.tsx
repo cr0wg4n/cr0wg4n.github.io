@@ -9,6 +9,7 @@ import SlidesList from './components/Slides/SlidesList';
 import ReactGa from 'react-ga4';
 import { useEffect } from 'react';
 import Clothes from './components/Clothes/Clothes';
+import Control from './components/Boxes/Control';
 
 
 function App() {
@@ -19,7 +20,10 @@ function App() {
   },[])
 
   return (
-    <div className='bg-blue-gray-900 p-4 md:p-10 font-ubuntu text-blue-gray-50'>
+    <div className='bg-blue-gray-900 p-4 md:p-10 font-ubuntu text-blue-gray-50 relative h-full'>
+
+      <Control />
+
       <SimpleBox id={'profile'} firstColorClass='from-deep-orange-900' secondColorClass='to-deep-orange-500'>
         <ProfileCard 
             name={profile.name}
@@ -38,12 +42,12 @@ function App() {
         <SlidesList />
       </SimpleBox>
 
-      <SimpleBox id='articles' firstColorClass="from-indigo-900" secondColorClass={'to-indigo-500'} title='My Articles 📰' orientation>
+      <SimpleBox id='articles' firstColorClass="from-indigo-900" secondColorClass={'to-indigo-500'} title='Articles 📰' orientation>
         <div className='mt-5' />
         <PostList />
       </SimpleBox>
 
-      <MainGame />
+      <MainGame id='terminal' />
     </div>
   );
 }

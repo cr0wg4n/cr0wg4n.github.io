@@ -1,6 +1,11 @@
 import React from 'react';
 
-const MainGame: React.FC = ()=>{
+type MainGameProps =  {
+  children?: React.ReactNode,
+  id?: string
+};
+
+const MainGame: React.FC<MainGameProps> = ({id}: MainGameProps)=>{
   const gameScreen = 'cr0wg4n@personal-page: ./building_webpage.rs \n ...Buiding';
   return <>
     <div className="
@@ -18,7 +23,9 @@ const MainGame: React.FC = ()=>{
       lg:text-base
       p-3
       md:p-5
-    ">
+    "
+      {...id && {id}}
+    >
       {/* <div className='text-center'>
         <pre>Starman   (space bar or touch to jump)</pre>
       </div> */}
