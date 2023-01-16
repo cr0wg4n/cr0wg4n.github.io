@@ -8,11 +8,15 @@ export default function data(){
     Hi, I'm Mauricio. Technology Building and designing is my main passion. 
     Currently, I'm learning about systems programming and
     <span style="color: #bacedf">
-      <a href="https://www.rust-lang.org/" rel="nofollow noopener noreferrer" target={'_blank'}>@rust</a> 
+      <a href="https://www.rust-lang.org/" rel="nofollow noopener noreferrer" target={'_blank'}>Rust</a> 
     </span>
     for fun. I love and follow 
     the Open Source and Free Sofware initiatives. I occasionally instruct 
-    programming and share my day-to-day tech experience as Software Developer through articles and talks.
+    programming with
+    <span style="color: #bacedf">
+      <a href="https://www.python.org/" rel="nofollow noopener noreferrer" target={'_blank'}>Python</a> 
+    </span>
+    and share my day-to-day tech experience as Software Developer through articles and talks.
   </div>
     `,
     avatar: '/images/mauri.jpeg',

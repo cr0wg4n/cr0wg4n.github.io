@@ -3,13 +3,21 @@ import {classNames} from '../../utils';
 
 type SimpleBoxProps = {
   children: React.ReactNode,
+  id?: string,
   firstColorClass: string,
   secondColorClass: string,
   title?: string,
   orientation?: boolean
 }
 
-const SimpleBox: React.FC<SimpleBoxProps> = ({children,firstColorClass,secondColorClass,title, orientation}: SimpleBoxProps)=>{
+const SimpleBox: React.FC<SimpleBoxProps> = ({
+  id,
+  children,
+  firstColorClass,
+  secondColorClass,
+  title,
+  orientation
+}: SimpleBoxProps)=>{
   // const [className,setClassName]= React.useState('');
   const optTextOrientation = orientation?'text-left':'text-right';
 
@@ -25,7 +33,7 @@ const SimpleBox: React.FC<SimpleBoxProps> = ({children,firstColorClass,secondCol
   );
 
   return (
-    <div className={className+' md:hover:scale-105'}>
+    <div className={className+' md:hover:scale-105'} {...id && {id}}>
       {
         title &&
         <div className={'font-medium text-xl md:text-2xl text-white '+optTextOrientation}>
