@@ -27,14 +27,14 @@ const ProfileCard: React.FC<ProfileProps> = ({avatar,avatarHover,children, name,
             <div className='col-span-1 m-auto'>
                 <IconList/>
             </div>
-            <div className='m-auto col-span-4'>
+            <div className='col-span-4 m-auto'>
                 <img 
                     src={finalAvatar}
                     alt='Mauricio Matias, cr0wg4n' 
                     className="rounded-full cursor-pointer w-32 md:w-64"
                 />
             </div>
-            <div className='my-auto col-span-7'>
+            <div className='col-span-7 my-auto'>
                 <div className='font-normal text-sm md:text-base text-left font-quicksand text-white'>
                     Who am I?
                 </div>
