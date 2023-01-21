@@ -5,7 +5,7 @@ const fetchOpengraph = require('fetch-opengraph');
 
 let parser = new Parser();
 
-export function parseDate (dateRaw) {
+function parseDate (dateRaw) {
   return new Date(dateRaw).toDateString().slice(4)
 }
 
@@ -61,5 +61,13 @@ getUrlData([
   'https://dev-academy.com/vue-router-best-practices/',
   'https://dev-academy.com/vue-security-best-practices/',
   'https://dev-academy.com/vue-xss/',
+  'https://cr0wg4n.medium.com/como-corregir-un-heap-out-of-memory-en-node-js-5e370fd1897',
+  'https://cr0wg4n.medium.com/antena-yagi-de-433mhz-diy-bd568013c3fc',
+  'https://cr0wg4n.medium.com/convirtiendo-un-teclado-musical-barato-en-uno-midi-d0c9893390b8',
+  'https://cr0wg4n.medium.com/controlando-tiras-led-con-fastled-en-nodemcu-esp-8266-f20445735a22',
+  'https://cr0wg4n.medium.com/gr%C3%A1fico-de-barras-con-unity-3d-b16b2e0a1625',
+  'https://blog.ehcgroup.io/2022/03/28/15/54/05/12945/que-puede-decir-tu-navegador-sobre-ti/noticias-ehc/mmatias/',
+  'https://blog.ehcgroup.io/2021/11/09/11/40/40/12083/los-5-arquetipos-del-desarrollador-de-software-ante-un-problema-con-cuales-te-identificas/noticias-ehc/mmatias/',
+  'https://blog.ehcgroup.io/2021/06/23/09/22/11/11291/que-tan-seguro-es-pypi-python-package-index/hacking/mmatias/',
 ],join(__dirname,'../data/extra-posts.json'));
 
