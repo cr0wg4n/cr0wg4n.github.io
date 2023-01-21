@@ -9,6 +9,10 @@ function parseDate (dateRaw) {
   return new Date(dateRaw).toDateString().slice(4)
 }
 
+function resizeIfMediumImage(image){
+  return image.replace(/max\/\d+\//g, 'max/300/')
+}
+
 async function getUrlOpenGraph(url) {
   return await fetchOpengraph.fetch(url);
 }
@@ -18,7 +22,7 @@ async function getRssData(url, path) {
   const database = []
   for (const item of feed.items) {
     const data = await getUrlOpenGraph(item.link);
-    const image = data['og:image'].replace(/max\/\d+\//g, 'max/300/');
+    const image = resizeIfMediumImage(data['og:image']);
     database.push({
       name: item.title,
       url: item.link,
@@ -35,7 +39,7 @@ async function getUrlData(urls, path) {
     const data = await getUrlOpenGraph(url);
     database.push({
       name: data['og:title'],
-      cover: data['og:image'],
+      cover: resizeIfMediumImage(data['og:image']),
       ...data['article:published_time'] && {
         date: parseDate(data['article:published_time']),
       },
