@@ -51,7 +51,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.8",
-    "fetch-opengraph": "^1.0.35",
+    "fetch-opengraph": "https://github.com/cr0wg4n/fetch-opengraph#6b2e48490761916c746c0010ca51e99bb008e154",
     "postcss": "^8.4.16",
     "rss-parser": "^3.12.0",
     "tailwindcss": "^3.1.8"

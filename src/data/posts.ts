@@ -1,5 +1,6 @@
 import postsData from './posts.json'
 import extraPostData from './extra-posts.json'
+import { orderByDatetime } from '../utils'
 
 export interface PostCard {
   name: string,
@@ -8,10 +9,10 @@ export interface PostCard {
   date?:string
 };
 
-const posts: PostCard[] = [
+const posts: PostCard[] = orderByDatetime([
   ...extraPostData,
   ...postsData,
-];
+], 'date');
 
 export default function data(){
   return posts;

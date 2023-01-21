@@ -5,7 +5,7 @@ const fetchOpengraph = require('fetch-opengraph');
 
 let parser = new Parser();
 
-function parseDate (dateRaw) {
+export function parseDate (dateRaw) {
   return new Date(dateRaw).toDateString().slice(4)
 }
 
@@ -33,7 +33,6 @@ async function getUrlData(urls, path) {
   const database = [];
   for (const url of urls) {
     const data = await getUrlOpenGraph(url);
-    console.log(data)
     database.push({
       name: data['og:title'],
       cover: data['og:image'],
