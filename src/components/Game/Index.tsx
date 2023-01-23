@@ -6,7 +6,10 @@ type MainGameProps =  {
 };
 
 const MainGame: React.FC<MainGameProps> = ({id}: MainGameProps)=>{
-  const gameScreen = 'cr0wg4n@personal-page: ./building_webpage.rs \n ...Buiding';
+  const gameScreen = `
+cr0wg4n@webpage: ./build
+  ...building
+`;
   return <>
     <div className="
       bg-black
@@ -33,9 +36,8 @@ const MainGame: React.FC<MainGameProps> = ({id}: MainGameProps)=>{
         { gameScreen }
       </pre>
       <div className='text-right'>
-
       <a href="https://github.com/cr0wg4n" target={'_blank'} rel={'noreferrer'} className='hover:underline'>
-          <pre>Made with ❤️ by cr0wg4n</pre>
+        <pre>Made with ❤️ by cr0wg4n</pre>
       </a>
       </div>
 
