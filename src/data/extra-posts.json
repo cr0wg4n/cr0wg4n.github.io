@@ -1,5 +1,11 @@
 [
   {
+    "name": "Vue Design Patterns",
+    "cover": "https://dev-academy.com/vue-design-patterns/banner.png",
+    "date": "Feb 26 2023",
+    "url": "https://dev-academy.com/vue-design-patterns/"
+  },
+  {
     "name": "What’s the problem with the CSURF package?",
     "cover": "https://dev-academy.com/csurf-vulnerability/banner.png",
     "date": "Nov 23 2022",
@@ -30,8 +36,14 @@
     "url": "https://dev-academy.com/vue-xss/"
   },
   {
+    "name": "LaTeX y Visual Studio Code (Guía de Instalación)",
+    "cover": "https://miro.medium.com/max/300/1*4s6VQpTuhnE7epFee2PnJw.png",
+    "date": "May 26 2021",
+    "url": "https://cr0wg4n.medium.com/latex-y-visual-studio-code-gu%C3%ADa-de-instalaci%C3%B3n-ca8bef3935e3"
+  },
+  {
     "name": "Como corregir un “heap out of memory” en Node.js",
-    "cover": "https://miro.medium.com/max/300/1*hYP9N30zS6Jhi61De80mYw.png",
+    "cover": "https://miro.medium.com/v2/resize:fit:320/1*hYP9N30zS6Jhi61De80mYw.png",
     "date": "Jul 29 2020",
     "url": "https://cr0wg4n.medium.com/como-corregir-un-heap-out-of-memory-en-node-js-5e370fd1897"
   },
@@ -49,13 +61,13 @@
   },
   {
     "name": "Controlando Tiras LED con FastLED en Nodemcu (ESP-8266)",
-    "cover": "https://miro.medium.com/max/300/1*4lM747gOEaNez68oTQ-fpA.png",
+    "cover": "https://miro.medium.com/v2/resize:fit:320/1*4lM747gOEaNez68oTQ-fpA.png",
     "date": "Nov 14 2019",
     "url": "https://cr0wg4n.medium.com/controlando-tiras-led-con-fastled-en-nodemcu-esp-8266-f20445735a22"
   },
   {
     "name": "Gráfico de Barras con Unity 3D",
-    "cover": "https://miro.medium.com/freeze/max/300/1*8mbpz42BrN4xaVoTk5PuJg.gif",
+    "cover": "https://miro.medium.com/v2/da:true/resize:fit:320/1*8mbpz42BrN4xaVoTk5PuJg.gif",
     "date": "Jun 14 2019",
     "url": "https://cr0wg4n.medium.com/gr%C3%A1fico-de-barras-con-unity-3d-b16b2e0a1625"
   },

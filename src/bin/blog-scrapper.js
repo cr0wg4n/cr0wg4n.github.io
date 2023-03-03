@@ -10,7 +10,7 @@ function parseDate (dateRaw) {
 }
 
 function resizeIfMediumImage(image){
-  return image.replace(/max\/\d+\//g, 'max/300/')
+  return image.replace(/resize:fit:\d+/g, 'resize:fit:320').replace(/max\/\d+\//g, 'max/300/')
 }
 
 async function getUrlOpenGraph(url) {
@@ -30,6 +30,7 @@ async function getRssData(url, path) {
       cover: image
     })
   }
+
   fs.writeFileSync(path, JSON.stringify(database,null,2))
 }
 
@@ -37,6 +38,7 @@ async function getUrlData(urls, path) {
   const database = [];
   for (const url of urls) {
     const data = await getUrlOpenGraph(url);
+
     database.push({
       name: data['og:title'],
       cover: resizeIfMediumImage(data['og:image']),
@@ -46,6 +48,7 @@ async function getUrlData(urls, path) {
       url,
     })
   }
+
   fs.writeFileSync(path,JSON.stringify(database,null,2))
 }
 
@@ -60,16 +63,20 @@ getUrlData([
 ],join(__dirname,'../data/slides.json'));
 
 getUrlData([
+  'https://dev-academy.com/vue-design-patterns/',
   'https://dev-academy.com/csurf-vulnerability/',
   'https://dev-academy.com/react-localstorage/',
   'https://dev-academy.com/vue-router-best-practices/',
   'https://dev-academy.com/vue-security-best-practices/',
   'https://dev-academy.com/vue-xss/',
+
+  'https://cr0wg4n.medium.com/latex-y-visual-studio-code-gu%C3%ADa-de-instalaci%C3%B3n-ca8bef3935e3',
   'https://cr0wg4n.medium.com/como-corregir-un-heap-out-of-memory-en-node-js-5e370fd1897',
   'https://cr0wg4n.medium.com/antena-yagi-de-433mhz-diy-bd568013c3fc',
   'https://cr0wg4n.medium.com/convirtiendo-un-teclado-musical-barato-en-uno-midi-d0c9893390b8',
   'https://cr0wg4n.medium.com/controlando-tiras-led-con-fastled-en-nodemcu-esp-8266-f20445735a22',
   'https://cr0wg4n.medium.com/gr%C3%A1fico-de-barras-con-unity-3d-b16b2e0a1625',
+
   'https://blog.ehcgroup.io/2022/03/28/15/54/05/12945/que-puede-decir-tu-navegador-sobre-ti/noticias-ehc/mmatias/',
   'https://blog.ehcgroup.io/2021/11/09/11/40/40/12083/los-5-arquetipos-del-desarrollador-de-software-ante-un-problema-con-cuales-te-identificas/noticias-ehc/mmatias/',
   'https://blog.ehcgroup.io/2021/06/23/09/22/11/11291/que-tan-seguro-es-pypi-python-package-index/hacking/mmatias/',

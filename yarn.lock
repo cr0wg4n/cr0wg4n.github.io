@@ -4435,9 +4435,10 @@ fb-watchman@^2.0.0:
   dependencies:
     bser "2.1.1"
 
-"fetch-opengraph@https://github.com/cr0wg4n/fetch-opengraph#6b2e48490761916c746c0010ca51e99bb008e154":
-  version "1.0.35"
-  resolved "https://github.com/cr0wg4n/fetch-opengraph#6b2e48490761916c746c0010ca51e99bb008e154"
+fetch-opengraph@^1.0.36:
+  version "1.0.36"
+  resolved "https://registry.yarnpkg.com/fetch-opengraph/-/fetch-opengraph-1.0.36.tgz#d42c2b30b375904153e08ddc68c0b732e2743180"
+  integrity sha512-w2Gs64zjL1O86E0I6E26MrxeXpTrR8Y1vWrgupmZN6NXKV8F5I3W0tlh+ZX686jZwxyilWnQjYwgnWpdETdHWw==
   dependencies:
     axios "^0.21.1"
     html-entities "^2.3.2"
