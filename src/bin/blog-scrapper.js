@@ -55,6 +55,7 @@ async function getUrlData(urls, path) {
 getRssData('https://medium.com/feed/@cr0wg4n', join(__dirname,'../data/posts.json'));
 
 getUrlData([
+  'https://slides.com/cr0wg4n/hardware-programming',
   'https://slides.com/cr0wg4n/privacidad-y-datos-personales',
   'https://slides.com/cr0wg4n/empaqueta-tus-ideas-con-pypi',
   'https://slides.com/cr0wg4n/taller-de-latex',

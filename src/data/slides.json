@@ -1,11 +1,16 @@
 [
   {
+    "name": "Hardware Programming",
+    "cover": "https://media.slid.es/thumbnails/9c5b0b8ec14b0ae90d9848cfa8f79017/thumb.jpg?1682090983",
+    "url": "https://slides.com/cr0wg4n/hardware-programming"
+  },
+  {
     "name": "Privacidad y Datos Personales en RRSS",
     "cover": "https://media.slid.es/thumbnails/9cf967f043206009f12194fbbf3983fe/thumb.jpg?1670880728",
     "url": "https://slides.com/cr0wg4n/privacidad-y-datos-personales"
   },
   {
-    "name": "Empaqueta y distribuyes tus ideas (PyPI)",
+    "name": "Empaqueta y distribuye tus ideas (PyPI)",
     "cover": "https://media.slid.es/thumbnails/e014482100341928165ce8ef64f2cae8/thumb.jpg?1662692050",
     "url": "https://slides.com/cr0wg4n/empaqueta-tus-ideas-con-pypi"
   },
