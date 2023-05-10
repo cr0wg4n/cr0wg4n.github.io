@@ -31,8 +31,8 @@
     "build:windows": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "load-data": "node src/bin/blog-scrapper.js",
-    "load-github-data": "sh src/bin/github-api-respositories.sh"
+    "load:data": "node src/bin/blog-scrapper.js",
+    "load:github:data": "sh src/bin/github-api-respositories.sh"
   },
   "eslintConfig": {
     "extends": [

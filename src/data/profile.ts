@@ -6,13 +6,9 @@ export default function data(){
     description: `
   <div>
     Hi, I'm Mauricio. Technology Building and designing is my main passion. 
-    Currently, I'm learning about systems programming and
-    <span style="color: #9cd6e2">
-      <a href="https://www.rust-lang.org/" rel="nofollow noopener noreferrer" target={'_blank'}>Rust</a> 
-    </span>
-    for fun. I love and follow 
-    the Open Source and Free Sofware initiatives. I occasionally instruct 
-    programming with
+    I love and follow the Open Source and Free Sofware initiatives.
+    I'm a member of a community called "Hacklab BrickHeads".
+    I occasionally instruct programming with
     <span style="color: #9cd6e2">
       <a href="https://www.python.org/" rel="nofollow noopener noreferrer" target={'_blank'}>Python</a> 
     </span>
@@ -23,3 +19,9 @@ export default function data(){
     avatarHover: 'images/cr0wg4n.png',
   }
 }
+
+// Currently, I'm learning about systems programming and
+//     <span style="color: #9cd6e2">
+//       <a href="https://www.rust-lang.org/" rel="nofollow noopener noreferrer" target={'_blank'}>Rust</a> 
+//     </span>
+//     for fun. 
