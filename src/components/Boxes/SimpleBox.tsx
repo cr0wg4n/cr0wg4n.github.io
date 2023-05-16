@@ -16,7 +16,7 @@ const SimpleBox: React.FC<SimpleBoxProps> = ({
   firstColorClass,
   secondColorClass,
   title,
-  orientation
+  orientation=true
 }: SimpleBoxProps)=>{
   // const [className,setClassName]= React.useState('');
   const optTextOrientation = orientation?'text-left':'text-right';
@@ -33,7 +33,7 @@ const SimpleBox: React.FC<SimpleBoxProps> = ({
   );
 
   return (
-    <div className={className+' md:hover:scale-105'} {...id && {id}}>
+    <div className={className+' md:hover:scale-[1.01]'} {...id && {id}}>
       {
         title &&
         <div className={'font-medium text-xl md:text-2xl text-white '+optTextOrientation}>
