@@ -20,6 +20,11 @@ export default function data() {
       url: 'https://hacklab.brickheads.space/',
       name: 'HackLab BrickHeads Webpage (on-development)',
       cover: '/projects/hacklab-page.png'
+    },
+    {
+      url: 'https://rick-and-morty-vue.lowleveltech.com/',
+      name: 'Rick and Morty Webapp (GraphQL & Vue 3)',
+      cover: '/projects/rick_morty.png'
     }
   ]
 }

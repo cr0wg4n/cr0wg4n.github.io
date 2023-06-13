@@ -60,7 +60,8 @@ getUrlData([
   'https://slides.com/cr0wg4n/empaqueta-tus-ideas-con-pypi',
   'https://slides.com/cr0wg4n/taller-de-latex',
   'https://slides.com/cr0wg4n/la-tercera-es-la-vencida-como-llevar-a-cabo-un-scraping-exitoso',
-  'https://slides.com/cr0wg4n/la-navaja-suizapython'
+  'https://slides.com/cr0wg4n/la-navaja-suizapython',
+  'https://slides.com/cr0wg4n/pythoniza-tu-vida',
 ],join(__dirname,'../data/slides.json'));
 
 getUrlData([
