@@ -25,6 +25,16 @@ export default function data() {
       url: 'https://rick-and-morty-vue.lowleveltech.com/',
       name: 'Rick and Morty Webapp (GraphQL & Vue 3)',
       cover: '/projects/rick_morty.png'
+    },
+    {
+      url: 'https://cr0wg4n.itch.io/starman/',
+      name: 'Retro-game: "Starman" by cr0wg4n and Ismael Conde',
+      cover: '/projects/starman.png'
+    },
+    {
+      url: 'https://cr0wg4n.itch.io/coin-simulator/',
+      name: 'App: Coin simulator',
+      cover: '/projects/coin_simulator.jpg'
     }
   ]
 }
