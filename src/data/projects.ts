@@ -35,6 +35,11 @@ export default function data() {
       url: 'https://cr0wg4n.itch.io/coin-simulator/',
       name: 'App: Coin simulator',
       cover: '/projects/coin_simulator.jpg'
+    },
+    {
+      url: 'https://0x7e7.hackmeeting.org.bo/',
+      name: 'Hackmeeting 2023 Webpage',
+      cover: '/projects/hackmeeting_webpage.png'
     }
   ]
 }

@@ -16,7 +16,7 @@
   },
   {
     "name": "Taller de LaTeX",
-    "cover": "https://media.slid.es/thumbnails/fff5d020f9d698688e10515078ad3354/thumb.jpg?1654575456",
+    "cover": "https://media.slid.es/thumbnails/fff5d020f9d698688e10515078ad3354/thumb.jpg?1695441124",
     "url": "https://slides.com/cr0wg4n/taller-de-latex"
   },
   {
@@ -38,5 +38,10 @@
     "name": "Web Scraping: Con la paciencia hasta el cielo y el scrapeo hasta el suelo",
     "cover": "https://media.slid.es/thumbnails/91fd0a075afe3c9066ead92c267ec508/thumb.jpg?1688436459",
     "url": "https://slides.com/cr0wg4n/web-scraping-scrapeo-hasta-el-suelo"
+  },
+  {
+    "name": "Herramientas Colaborativas: Un paseo por el pasado hasta nuestro contrastante presente",
+    "cover": "https://media.slid.es/thumbnails/82926c978ab14aed3fd64ac9b9910725/thumb.jpg?1693055166",
+    "url": "https://slides.com/cr0wg4n/herramientas-colaborativas-ia"
   }
 ]
