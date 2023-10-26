@@ -15,7 +15,7 @@ export default function data(){
     and I share my day-to-day tech experience through articles and talks.
   </div>
     `,
-    avatar: '/images/mauri.jpg',
+    avatar: '/images/mauri_2.jpg',
     avatarHover: 'images/cr0wg4n.png',
   }
 }
