@@ -33,7 +33,7 @@ const SimpleBox: React.FC<SimpleBoxProps> = ({
   );
 
   return (
-    <div className={className+' md:hover:scale-[1.01]'} {...id && {id}}>
+    <div className={className} {...id && {id}}>
       {
         title &&
         <div className={'font-medium text-xl md:text-2xl text-white '+optTextOrientation}>

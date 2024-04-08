@@ -5,23 +5,13 @@ export default function data(){
     role: 'Web Developer (A.k.a. cr0wg4n)',
     description: `
   <div>
-    Hi, I'm Mauricio. Technology Building and designing is my main passion. 
-    I love and follow the Open Source and Free Sofware initiatives.
-    I'm a member of a community called "Hacklab BrickHeads".
-    I occasionally instruct programming with
-    <span style="color: #9cd6e2">
-      <a href="https://www.python.org/" rel="nofollow noopener noreferrer" target={'_blank'}>Python</a> 
-    </span>
-    and I share my day-to-day tech experience through articles and talks.
+    Hi, I'm Mauricio. Building and designing technology is my main passion. 
+    I love and support Open Source and Free Software initiatives. I'm a member 
+    of a community called "Hacklab BrickHeads." I enjoy sharing my day-to-day
+    tech experiences through articles and talks.
   </div>
     `,
-    avatar: '/images/mauri_2.jpg',
+    avatar: '/images/mauri_3.jpg',
     avatarHover: 'images/cr0wg4n.png',
   }
 }
-
-// Currently, I'm learning about systems programming and
-//     <span style="color: #9cd6e2">
-//       <a href="https://www.rust-lang.org/" rel="nofollow noopener noreferrer" target={'_blank'}>Rust</a> 
-//     </span>
-//     for fun. 
