@@ -36,7 +36,7 @@ const PostCard: React.FC<PostCardProps> = ({
                 <img src={'/images/pattern.png'} alt={'pattern'} className={`rounded-lg object-cover w-full h-full bg-blue-gray-50 ${bgColor}`} />
               }
             </div>
-            <div className='absolute before:content-[""] bottom-0 bg-black w-full opacity-80 px-2 py-1 font-quicksand md:text-sm text-xs'>
+            <div className='absolute before:content-[""] bottom-0 bg-black w-full opacity-80 px-2 py-1 font-quicksand md:text-sm text-xs line-clamp-3'>
               {name}
             </div>
             

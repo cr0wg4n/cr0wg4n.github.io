@@ -29,7 +29,7 @@ const ProfileCard: React.FC<ProfileProps> = ({avatar,avatarHover,children, name,
                 <img 
                     src={finalAvatar}
                     alt='Mauricio Matias, cr0wg4n' 
-                    className="rounded-full cursor-pointer w-28 md:w-56"
+                    className="rounded-full cursor-pointer w-24 md:w-56"
                     onMouseEnter={alternativeAvatar}
                     onMouseLeave={normalAvatar}
                 />
