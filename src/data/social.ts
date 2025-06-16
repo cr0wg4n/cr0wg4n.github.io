@@ -1,7 +1,7 @@
 import {
-    FaTwitter,
-    FaMedium,
     FaGithub,
+    FaLinkedinIn,
+    FaMedium,
     FaYoutube,
 } from 'react-icons/fa';
 
@@ -18,14 +18,14 @@ export default function data(){
             icon: FaMedium
         },
         {
+            name: 'Linkedin',
+            url: 'https://www.linkedin.com/in/cr0wg4n/',
+            icon: FaLinkedinIn
+        },
+        {
             name: 'Youtube',
             url: 'https://www.youtube.com/@lowleveltech',
             icon: FaYoutube
-        },
-        {
-            name: 'Twitter',
-            url: 'https://twitter.com/cr0wg4n',
-            icon: FaTwitter
         },
     ];
 }

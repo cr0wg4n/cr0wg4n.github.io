@@ -1,11 +1,10 @@
-import React from "react";
 import {FaNewspaper, FaStar, FaTerminal, FaUser} from 'react-icons/fa'
-import {HiOutlinePresentationChartBar, } from 'react-icons/hi'
 
-
+import {HiOutlinePresentationChartBar,} from 'react-icons/hi'
+import React from "react";
 
 const Control: React.FC = () => {
-  return <div className='fixed z-10 right-3 top-1/2 w-10 -mt-24 bg-gray-900 rounded-full flex flex-col justify-center items-center p-1 opacity-75 hover:opacity-100 hover:scale-110'>
+  return <div className='fixed z-10 right-3 top-1/2 w-10 -mt-24 bg-gray-900 rounded-full flex flex-col justify-center items-center p-1 opacity-60 hover:opacity-90 hover:scale-110'>
     <div className='select-none h-10 flex items-center hover:scale-150 hover:cursor-pointer hover:text-orange-500 active:scale-150'>
       <a href="#profile">
         <FaUser/>

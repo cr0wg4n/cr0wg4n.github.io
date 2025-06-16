@@ -1,37 +1,37 @@
 [
   {
     "name": "Vue Design Patterns",
-    "cover": "https://dev-academy.com/vue-design-patterns/banner.png",
+    "cover": "/images/dev-academy.com/vue-design-patterns/banner.png",
     "date": "Feb 26 2023",
     "url": "https://dev-academy.com/vue-design-patterns/"
   },
   {
     "name": "What’s the problem with the CSURF package?",
-    "cover": "https://dev-academy.com/csurf-vulnerability/banner.png",
+    "cover": "/images/dev-academy.com/csurf-vulnerability/banner.png",
     "date": "Nov 23 2022",
     "url": "https://dev-academy.com/csurf-vulnerability/"
   },
   {
     "name": "Using localStorage with React Hooks",
-    "cover": "https://dev-academy.com/react-localstorage/banner.png",
+    "cover": "/images/dev-academy.com/react-localstorage/banner.png",
     "date": "Dec 21 2022",
     "url": "https://dev-academy.com/react-localstorage/"
   },
   {
     "name": "Vue Router Best Practices",
-    "cover": "https://dev-academy.com/vue-router-best-practices/banner.png",
+    "cover": "/images/dev-academy.com/vue-router-best-practices/banner.png",
     "date": "Sep 01 2022",
     "url": "https://dev-academy.com/vue-router-best-practices/"
   },
   {
     "name": "Vue Security Best Practices 💎",
-    "cover": "https://dev-academy.com/vue-security-best-practices/banner.png",
+    "cover": "/images/dev-academy.com/vue-security-best-practices/banner.png",
     "date": "Jul 24 2022",
     "url": "https://dev-academy.com/vue-security-best-practices/"
   },
   {
     "name": "Avoid XSS Attacks 🗡️ in Vue",
-    "cover": "https://dev-academy.com/vue-xss/banner.png",
+    "cover": "/images/dev-academy.com/vue-xss/banner.png",
     "date": "Jul 12 2022",
     "url": "https://dev-academy.com/vue-xss/"
   },

@@ -1,5 +1,5 @@
-import React from 'react';
 import IconList from '../Icons/IconList';
+import React from 'react';
 
 type ProfileProps = {
     children?: React.ReactNode,
@@ -20,9 +20,7 @@ const ProfileCard: React.FC<ProfileProps> = ({avatar,avatarHover,children, name,
     };
     return <>
         <div
-            className="grid grid-cols-12 gap-1 md:p-10"
-            onMouseEnter={alternativeAvatar}
-            onMouseLeave={normalAvatar}
+            className="grid grid-cols-12 gap-1 md:p-5"
         >
             <div className='col-span-1 m-auto'>
                 <IconList/>
@@ -31,7 +29,9 @@ const ProfileCard: React.FC<ProfileProps> = ({avatar,avatarHover,children, name,
                 <img 
                     src={finalAvatar}
                     alt='Mauricio Matias, cr0wg4n' 
-                    className="rounded-full cursor-pointer w-32 md:w-64"
+                    className="rounded-full cursor-pointer w-28 md:w-56"
+                    onMouseEnter={alternativeAvatar}
+                    onMouseLeave={normalAvatar}
                 />
                 <img src='images/flag.png' alt='bolivia flag' className='
                     absolute 

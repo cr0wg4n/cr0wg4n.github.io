@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+
 import data from '../../data/repositories'
 
-const Clothes: React.FC = () => {
+const Repositories: React.FC = () => {
   const respositoryData = data()
   const [query, setQuery] = useState('')
   const [repositories, setRepositories] = useState(respositoryData);
@@ -56,4 +57,4 @@ const Clothes: React.FC = () => {
   </div>
 }
 
-export default Clothes;
+export default Repositories;

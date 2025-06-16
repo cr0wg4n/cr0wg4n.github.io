@@ -1,7 +1,32 @@
 [
   {
+    "name": "Los Enredos de la Web",
+    "cover": "https://media.slid.es/thumbnails/1bed6db2099af8cfa942cdda18d0a399/thumb.jpg?1745965968",
+    "url": "https://slides.com/cr0wg4n/los-enredos-de-la-web"
+  },
+  {
+    "name": "La educación cambio mi vida",
+    "cover": "https://media.slid.es/thumbnails/8d31e14738c6911d3740e05b9b721e07/thumb.jpg?1743560230",
+    "url": "https://slides.com/cr0wg4n/la-educacion-cambio-mi-vida-dev-edition"
+  },
+  {
+    "name": "Escritura Tecnica una habilidad invaluable",
+    "cover": "https://media.slid.es/thumbnails/f6109d78d13063c44ec56b25e99b3daa/thumb.jpg?1733615740",
+    "url": "https://slides.com/cr0wg4n/escritura-tecnica-una-habilidad-invaluable"
+  },
+  {
+    "name": "Picosatélite CanSat como primer acercamiento a tecnologías espaciales (diseño, construcción de un Picosatélite CanSat y su estación terrena)",
+    "cover": "https://media.slid.es/thumbnails/c5c605f92f7df9ea4dd271999c5a849c/thumb.jpg?1723688214",
+    "url": "https://slides.com/cr0wg4n/picosatelite-cansat-como-primer-acercamiento-a-tecnologias-espaciales-diseno-construccion-de-un-picosatelite-cansat-y-su-estacion-terrena"
+  },
+  {
+    "name": "Como conseguir tu primera chamba, Dev Edition",
+    "cover": "https://media.slid.es/thumbnails/6bcfd6c8ba3f920cec921f38ffe93156/thumb.jpg?1733111447",
+    "url": "https://slides.com/cr0wg4n/como-conseguir-tu-primera-dev-edition"
+  },
+  {
     "name": "Un llamado a la escritura y el blogging",
-    "cover": "https://media.slid.es/thumbnails/11912a9cf5cb6efebcf1fd59ffc048cb/thumb.jpg?1713540960",
+    "cover": "https://media.slid.es/thumbnails/11912a9cf5cb6efebcf1fd59ffc048cb/thumb.jpg?1733456646",
     "url": "https://slides.com/cr0wg4n/un-llamado-a-la-escritura-y-el-blogging"
   },
   {

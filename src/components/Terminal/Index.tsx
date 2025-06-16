@@ -1,15 +1,16 @@
 import React from 'react';
 
-type MainGameProps =  {
+type TerminalProps =  {
   children?: React.ReactNode,
   id?: string
 };
 
-const MainGame: React.FC<MainGameProps> = ({id}: MainGameProps)=>{
+const Terminal: React.FC<TerminalProps> = ({id}: TerminalProps)=>{
   const gameScreen = `
 cr0wg4n@webpage: ./build
   ...building
 `;
+
   return <>
     <div className="
       bg-black
@@ -29,20 +30,18 @@ cr0wg4n@webpage: ./build
     "
       {...id && {id}}
     >
-      {/* <div className='text-center'>
-        <pre>Starman   (space bar or touch to jump)</pre>
-      </div> */}
       <pre>
         { gameScreen }
       </pre>
-      <div className='text-right'>
-      <a href="https://github.com/cr0wg4n" target={'_blank'} rel={'noreferrer'} className='hover:underline'>
-        <pre>Made with ❤️ by cr0wg4n</pre>
-      </a>
+      <div className='flex'>
+        <span className='w-full'></span>
+        <a href="https://github.com/cr0wg4n" target={'_blank'} rel={'noreferrer'} className='hover:underline'>
+          <pre>Made with ❤️ by cr0wg4n</pre>
+        </a>
       </div>
 
     </div> 
   </>
 }
 
-export default MainGame;
+export default Terminal;

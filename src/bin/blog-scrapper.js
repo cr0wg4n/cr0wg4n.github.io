@@ -55,6 +55,11 @@ async function getUrlData(urls, path) {
 getRssData('https://medium.com/feed/@cr0wg4n', join(__dirname,'../data/posts.json'));
 
 getUrlData([
+  'https://slides.com/cr0wg4n/los-enredos-de-la-web',
+  'https://slides.com/cr0wg4n/la-educacion-cambio-mi-vida-dev-edition',
+  'https://slides.com/cr0wg4n/escritura-tecnica-una-habilidad-invaluable',
+  'https://slides.com/cr0wg4n/picosatelite-cansat-como-primer-acercamiento-a-tecnologias-espaciales-diseno-construccion-de-un-picosatelite-cansat-y-su-estacion-terrena',
+  'https://slides.com/cr0wg4n/como-conseguir-tu-primera-dev-edition',  
   'https://slides.com/cr0wg4n/un-llamado-a-la-escritura-y-el-blogging',
   'https://slides.com/cr0wg4n/hardware-programming',
   'https://slides.com/cr0wg4n/privacidad-y-datos-personales',
@@ -64,7 +69,7 @@ getUrlData([
   'https://slides.com/cr0wg4n/la-navaja-suizapython',
   'https://slides.com/cr0wg4n/pythoniza-tu-vida',
   'https://slides.com/cr0wg4n/web-scraping-scrapeo-hasta-el-suelo',
-  'https://slides.com/cr0wg4n/herramientas-colaborativas-ia'
+  'https://slides.com/cr0wg4n/herramientas-colaborativas-ia',
 ],join(__dirname,'../data/slides.json'));
 
 getUrlData([

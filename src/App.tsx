@@ -1,16 +1,17 @@
 import './App.css';
-import ProfileCard from './components/Cards/ProfileCard';
-import SimpleBox from './components/Boxes/SimpleBox';
-import MainGame from './components/Game/Index';
-import PostList from './components/Posts/PostsList';
-import { useAppSelector } from './app/hooks';
-import { selectProfile } from './store/profile';
-import SlidesList from './components/Slides/SlidesList';
-import ReactGa from 'react-ga4';
-import { useEffect } from 'react';
-import Clothes from './components/Clothes/Clothes';
+
 import Control from './components/Boxes/Control';
+import PostList from './components/Posts/PostsList';
+import ProfileCard from './components/Cards/ProfileCard';
 import ProjectsList from './components/Projects/ProjectsList';
+import ReactGa from 'react-ga4';
+import Repositories from './components/Repositories/Index';
+import SimpleBox from './components/Boxes/SimpleBox';
+import SlidesList from './components/Slides/SlidesList';
+import Terminal from './components/Terminal/Index';
+import { selectProfile } from './store/profile';
+import { useAppSelector } from './app/hooks';
+import { useEffect } from 'react';
 
 function App() {
   const profile = useAppSelector(selectProfile);
@@ -39,10 +40,10 @@ function App() {
       </SimpleBox>
 
       <SimpleBox id='top-repos' firstColorClass="from-deep-purple-900" secondColorClass={'to-deep-purple-500'} title='Top Public Repos ⭐' orientation={false}>
-        <Clothes />
+        <Repositories />
       </SimpleBox>
 
-      <SimpleBox id='slides' firstColorClass="from-teal-900" secondColorClass="to-teal-500" title='Slides / Talks ▶️'>
+      <SimpleBox id='slides' firstColorClass="from-teal-900" secondColorClass="to-teal-500" title='Slides / Talks & Workshops ▶️'>
         <SlidesList />
       </SimpleBox>
 
@@ -51,7 +52,7 @@ function App() {
         <PostList />
       </SimpleBox>
 
-      <MainGame id='terminal' />
+      <Terminal id='terminal' />
     </div>
   );
 }

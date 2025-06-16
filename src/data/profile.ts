@@ -2,7 +2,7 @@
 export default function data(){
   return {
     name: 'Mauricio Matias C.',
-    role: 'Web Developer (A.k.a. cr0wg4n)',
+    role: 'Software Engineer (A.k.a. cr0wg4n)',
     description: `
   <div>
     Hi, I'm Mauricio. Building and designing technology is my main passion. 
@@ -11,7 +11,7 @@ export default function data(){
     tech experiences through articles and talks.
   </div>
     `,
-    avatar: '/images/mauri_3.jpg',
+    avatar: '/images/maui_2025.jpg',
     avatarHover: 'images/cr0wg4n.png',
   }
 }
