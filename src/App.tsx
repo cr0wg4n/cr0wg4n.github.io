@@ -21,8 +21,7 @@ function App() {
   },[])
 
   return (
-    <div className='bg-blue-gray-900 p-4 md:p-10 font-ubuntu text-blue-gray-50 relative h-full xl:px-[10%]'>
-
+    <div className='bg-blue-gray-900 p-2 md:p-10 font-ubuntu text-blue-gray-50 relative h-full xl:px-[10%]'>
       <Control />
 
       <SimpleBox id={'profile'} firstColorClass='from-deep-orange-900' secondColorClass='to-deep-orange-500' orientation={false}>
@@ -35,7 +34,7 @@ function App() {
         />
       </SimpleBox>
 
-      <SimpleBox id='development' firstColorClass="from-gray-900" secondColorClass={'to-gray-800'} title='Development 🏗️'>
+      <SimpleBox id='projects' firstColorClass="from-gray-900" secondColorClass={'to-gray-800'} title='Projects 🏗️'>
         <ProjectsList />
       </SimpleBox>
 
