@@ -1,0 +1,31 @@
+disabled = false
+locale = "en"
+label = "English"
+weight = 1
+# title = "Mauricio's Website"
+
+[params]
+  displayName = "EN"
+  isoCode = "en"
+  rtl = false
+  dateFormat = "2 January 2006"
+  logo = "img/cr0wg4n_logo.png"
+  # secondaryLogo = "img/secondary-logo.png"
+  # description = "My awesome website"
+  # copyright = "Copy, _right?_ :thinking_face:"
+
+[params.author]
+  name = "Mauricio Matias C."
+  email = "mcm.crw@gmail.com"
+  image = "img/maui_2025.jpg"
+  imageQuality = 96
+  headline = "Software Engineer (a.k.a. cr0wg4n)"
+  bio = "Hi, I'm Mauri. I'm passionate about technology and anthropology, so I love observing that magical mix in my day-to-day life. Every now and then I share my experiences in the software world through articles, workshops, and talks. I believe one of my greatest skills is recognizing patterns, identifying components at different levels within a system, and managing them to create any kind of solution."
+  links = [
+    { email = "mailto:mcm.crw@gmail.com" },
+    { github = "https://github.com/cr0wg4n" },
+    { medium = "https://cr0wg4n.medium.com" },
+    { linkedin = "https://www.linkedin.com/in/cr0wg4n/" },
+    { youtube = "https://www.youtube.com/@lowleveltech" },
+    { itch-io = "https://cr0wg4n.itch.io" },
+  ]

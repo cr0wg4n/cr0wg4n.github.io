@@ -1,0 +1,24 @@
+# -- Main Menu --
+# Ordered by weight, lowest first.
+
+[[main]]
+  name = "Artículos"
+  pageRef = "posts"
+  weight = 10
+
+[[main]]
+  name = "Proyectos"
+  pageRef = "projects"
+  weight = 20
+
+[[main]]
+  name = "Charlas"
+  pageRef = "talks"
+  weight = 30
+
+[[main]]
+  name = "Repos"
+  pageRef = "repos"
+  weight = 40
+
+# Footer menu intentionally empty.

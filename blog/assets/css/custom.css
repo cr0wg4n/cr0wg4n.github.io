@@ -1,0 +1,62 @@
+/* Two GitHub cards per row on desktop, one on mobile, with spacing between them. */
+.repo-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .repo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.repo-grid .github-card-wrapper {
+  margin: 0;
+}
+
+.repo-grid .github-card-wrapper > a,
+.repo-grid .github-card-wrapper > a > div {
+  height: 100%;
+}
+
+/* Navbar brand logo: 20% smaller than the theme default (5rem -> 4rem). */
+img.logo {
+  max-height: 3.5rem;
+  max-width: 3.5rem;
+}
+
+/* No drop shadows on cards in light mode (GitHub/repo cards, term cards, list thumbnails).
+   Scoped to <main> so the search modal and header keep theirs; dark mode is untouched. */
+html:not(.dark) main .shadow-2xl,
+html:not(.dark) main .shadow-xl,
+html:not(.dark) main .thumbnail-shadow {
+  box-shadow: none;
+}
+
+/* External-link marker on list cards: swap the theme's text arrow (↗) for an SVG icon
+   (Font Awesome "arrow-up-right-from-square", like the theme's other icons). It follows
+   the surrounding text color, so light/dark mode keep working. */
+h2 > span.cursor-default.align-top {
+  font-size: 0; /* hide the text arrows */
+}
+h2 > span.cursor-default.align-top::after {
+  content: "";
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  margin-inline-start: 0.2rem;
+  background-color: currentColor;
+  -webkit-mask: var(--external-icon) center / contain no-repeat;
+  mask: var(--external-icon) center / contain no-repeat;
+  --external-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.4 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32H320zM80 32C35.8 32 0 67.8 0 112V432c0 44.2 35.8 80 80 80H400c44.2 0 80-35.8 80-80V320c0-17.7-14.3-32-32-32s-32 14.3-32 32V432c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V112c0-8.8 7.2-16 16-16H192c17.7 0 32-14.3 32-32s-14.3-32-32-32H80z'/%3E%3C/svg%3E");
+}
+[dir="rtl"] h2 > span.cursor-default.align-top::after {
+  transform: scaleX(-1);
+}
+
+/* "Recent" list on the home page: thumbnail height matches the card thumbnails
+   (300px wide at the 2.5 ratio set by thumbnailAspectRatio), instead of the theme's 180px. */
+.thumbnail {
+  min-height: 120px;
+}
