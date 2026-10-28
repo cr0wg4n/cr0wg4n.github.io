@@ -1,0 +1,38 @@
+{{/* Per-page head extras. Uncached on purpose: the cached extend-head.html only sees the site, not the page. */}}
+
+{{/* Stubs that only link out (articles, talks, projects) are thin pages: keep them out of search results. */}}
+{{ if .Params.externalUrl }}
+  <meta name="robots" content="noindex, follow">
+{{ end }}
+
+{{/* hreflang x-default: point unmatched languages to the English page (the default language). */}}
+{{ range .AllTranslations }}
+  {{ if eq .Language.Lang "en" }}
+    <link rel="alternate" hreflang="x-default" href="{{ .Permalink }}">
+  {{ end }}
+{{ end }}
+
+{{/* Home only: describe the person for search engines (schema.org Person). */}}
+{{ if .IsHome }}
+  {{ $author := .Site.Params.author }}
+  {{ $sameAs := slice }}
+  {{ range $author.links }}
+    {{ range $name, $url := . }}
+      {{ if ne $name "email" }}{{ $sameAs = $sameAs | append $url }}{{ end }}
+    {{ end }}
+  {{ end }}
+  {{ $person := dict
+    "@context" "https://schema.org"
+    "@type" "Person"
+    "name" $author.name
+    "alternateName" "cr0wg4n"
+    "jobTitle" $author.headline
+    "description" .Description
+    "url" .Permalink
+    "sameAs" $sameAs
+  }}
+  {{ with resources.Get $author.image }}
+    {{ $person = merge $person (dict "image" .Permalink) }}
+  {{ end }}
+  <script type="application/ld+json">{{ $person | jsonify | safeJS }}</script>
+{{ end }}

@@ -19,6 +19,8 @@ replyByEmail = false
 
 mainSections = ["posts"]
 
+# Default social preview image (og:image / twitter:image) for pages without their own. 1200x630, in static/.
+images = ["img/social-card.png"]
 # robots = ""
 
 disableImageOptimization = false
