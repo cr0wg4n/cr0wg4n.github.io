@@ -1,5 +1,5 @@
 disabled = false
-locale = "es"
+locale = "es-ES"
 label = "Español"
 weight = 2
 # title = "Mauricio"
@@ -14,9 +14,9 @@ weight = 2
 [params.author]
   name = "Mauricio Matias C."
   email = "mcm.crw@gmail.com"
-  image = "img/maui_2025.jpg"
+  image = "img/maui_2026.jpeg"
   imageQuality = 96
-  headline = "Software Engineer (a.k.a. cr0wg4n)"
+  headline = "Senior Software Engineer"
   bio = "Hola, soy Mauri. Me apasiona la tecnología y la antropología, por lo que me encanta observar esa mágica mezcla en mi día a día. De vez en cuando comparto mis experiencias en el mundo del software a través de artículos, talleres y charlas. Considero que una de mis grandes habilidades es reconocer patrones, identificar componentes en distintos niveles dentro de un sistema y administrarlos para crear cualquier tipo de solución."
   links = [
     { email = "mailto:mcm.crw@gmail.com" },
