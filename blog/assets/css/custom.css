@@ -95,7 +95,8 @@ html:not(.dark) main :is(.shadow-2xl, .shadow-xl, .thumbnail-shadow) {
 }
 
 /* External-link marker on list cards: swap the theme's text arrow for an SVG icon
-   (Font Awesome "arrow-up-right-from-square"). It follows the text colour. */
+   (Font Awesome Free "arrow-up-right-from-square", CC BY 4.0: https://fontawesome.com/license/free).
+   It follows the text colour. */
 h2 > span.cursor-default.align-top {
   font-size: 0; /* hide the text arrows */
 }

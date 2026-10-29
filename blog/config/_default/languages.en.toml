@@ -12,7 +12,7 @@ weight = 1
   logo = "img/cr0wg4n_logo.png"
   # secondaryLogo = "img/secondary-logo.png"
   # description = "My awesome website"
-  # copyright = "Copy, _right?_ :thinking_face:"
+  copyright = "© { year } Mauricio Matias C. · Content under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)"
 
 [params.author]
   name = "Mauricio Matias C."

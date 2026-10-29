@@ -36,3 +36,15 @@
   {{ end }}
   <script type="application/ld+json">{{ $person | jsonify | safeJS }}</script>
 {{ end }}
+
+{{/* Licence of the page content, for search engines. Skipped on link-out stubs: the original lives elsewhere. */}}
+{{ if not .Params.externalUrl }}
+  {{ $licence := dict
+    "@context" "https://schema.org"
+    "@type" "WebPage"
+    "url" .Permalink
+    "license" "https://creativecommons.org/licenses/by/4.0/"
+    "copyrightHolder" (dict "@type" "Person" "name" .Site.Params.author.name)
+  }}
+  <script type="application/ld+json">{{ $licence | jsonify | safeJS }}</script>
+{{ end }}
