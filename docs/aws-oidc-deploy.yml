@@ -1,0 +1,111 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: >-
+  Lets GitHub Actions deploy a static site to S3 + CloudFront without any stored AWS keys (OIDC).
+  Creates (1) the GitHub OIDC identity provider, optional, and (2) an IAM role that only workflows
+  running from one branch of one repository can assume, with permissions limited to one bucket and
+  one CloudFront distribution. The defaults match cr0wg4n/cr0wg4n.github.io.
+
+# Create:  aws cloudformation deploy --region us-east-2 --template-file docs/aws-oidc-deploy.yml \
+#            --stack-name github-actions-deploy --capabilities CAPABILITY_NAMED_IAM
+#          (add `--parameter-overrides CreateOidcProvider=false` if the account already has the GitHub provider:
+#           IAM allows only one provider per URL)
+# Remove:  aws cloudformation delete-stack --region us-east-2 --stack-name github-actions-deploy
+# The IAM resources are global; the region only says where the stack itself lives. Use the same one both times.
+#
+# If the role and provider were first created by hand (CLI), a stack cannot adopt them: remove them with
+# docs/aws-oidc-teardown.sh, then create the stack. The deploy workflow fails during that gap.
+
+Parameters:
+  GitHubOwner:
+    Type: String
+    Default: cr0wg4n
+    Description: GitHub user or organization that owns the repository.
+  GitHubRepo:
+    Type: String
+    Default: cr0wg4n.github.io
+    Description: Repository whose workflows may assume the role.
+  GitHubBranch:
+    Type: String
+    Default: main
+    Description: Only workflows running from this branch may assume the role.
+  BucketName:
+    Type: String
+    Default: cr0wg4n-website
+    Description: S3 bucket the site is published to.
+  DistributionId:
+    Type: String
+    Default: E2VL3GBGM7ES3F
+    Description: CloudFront distribution whose cache is invalidated after a deploy.
+  RoleName:
+    Type: String
+    Default: github-actions-hugo-deploy
+    Description: Name of the IAM role (it is referenced by role-to-assume in the workflow).
+  CreateOidcProvider:
+    Type: String
+    Default: "true"
+    AllowedValues: ["true", "false"]
+    Description: Set to false if this account already has the token.actions.githubusercontent.com provider.
+
+Conditions:
+  CreateProvider: !Equals [!Ref CreateOidcProvider, "true"]
+
+Resources:
+  # Tells IAM to trust tokens signed by GitHub Actions. On its own it grants no access.
+  GitHubOidcProvider:
+    Type: AWS::IAM::OIDCProvider
+    Condition: CreateProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ClientIdList:
+        - sts.amazonaws.com
+
+  DeployRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Ref RoleName
+      Description: !Sub "Lets GitHub Actions (${GitHubOwner}/${GitHubRepo}, branch ${GitHubBranch}) deploy to S3 and CloudFront"
+      MaxSessionDuration: 3600
+      # Who may use the role. The "sub" condition is the real lock: without it, any GitHub repository
+      # could assume the role, because every GitHub token is signed by the same issuer.
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !If
+                - CreateProvider
+                - !Ref GitHubOidcProvider
+                - !Sub "arn:${AWS::Partition}:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com"
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                "token.actions.githubusercontent.com:aud": sts.amazonaws.com
+              StringLike:
+                "token.actions.githubusercontent.com:sub": !Sub "repo:${GitHubOwner}/${GitHubRepo}:ref:refs/heads/${GitHubBranch}"
+      # What the role may do: manage the files of one bucket and clear one distribution's cache.
+      Policies:
+        - PolicyName: hugo-deploy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: ListSiteBucket
+                Effect: Allow
+                Action: s3:ListBucket
+                Resource: !Sub "arn:${AWS::Partition}:s3:::${BucketName}"
+              - Sid: ReadWriteDeleteSiteFiles
+                Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:DeleteObject
+                Resource: !Sub "arn:${AWS::Partition}:s3:::${BucketName}/*"
+              - Sid: ClearSiteCache
+                Effect: Allow
+                Action: cloudfront:CreateInvalidation
+                Resource: !Sub "arn:${AWS::Partition}:cloudfront::${AWS::AccountId}:distribution/${DistributionId}"
+
+Outputs:
+  RoleArn:
+    Description: Put this in the workflow as role-to-assume.
+    Value: !GetAtt DeployRole.Arn

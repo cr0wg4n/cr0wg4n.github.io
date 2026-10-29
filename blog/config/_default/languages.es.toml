@@ -10,7 +10,7 @@ weight = 2
   rtl = false
   dateFormat = "2 January 2006"
   logo = "img/cr0wg4n_logo.png"
-  copyright = "© { year } Mauricio Matias C. · Contenido bajo [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es)"
+  copyright = "© { year } Mauricio Matias C. - Contenido bajo [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es)"
 
 [params.author]
   name = "Mauricio Matias C."

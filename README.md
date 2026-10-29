@@ -70,6 +70,11 @@ Where to change other things: colors, fonts and effects in `assets/css/custom.cs
 and publishes it. It logs in to AWS with a temporary key (OIDC, role `github-actions-hugo-deploy`, only from this
 repo's `main` branch), so no AWS keys are stored in GitHub. It can also be started from the Actions tab.
 
+The role is defined in [`docs/aws-oidc-deploy.yml`](docs/aws-oidc-deploy.yml) (CloudFormation). To set it up on a
+new account: `aws cloudformation deploy --region us-east-2 --template-file docs/aws-oidc-deploy.yml --stack-name
+github-actions-deploy --capabilities CAPABILITY_NAMED_IAM`; to remove it, `aws cloudformation delete-stack`.
+[`docs/aws-oidc-teardown.sh`](docs/aws-oidc-teardown.sh) removes a role created by hand instead.
+
 **Manual** (settings in `blog/config/_default/deployment.toml`; needs the AWS CLI and a profile `cr0wg4n`):
 
 ```sh
