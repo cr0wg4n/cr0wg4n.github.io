@@ -1,0 +1,29 @@
+disabled = false
+locale = "es-ES"
+label = "Español"
+weight = 2
+# title = "Mauricio"
+
+[params]
+  displayName = "ES"
+  isoCode = "es"
+  rtl = false
+  dateFormat = "2 January 2006"
+  logo = "img/cr0wg4n_logo.png"
+  copyright = "© { year } Mauricio Matias C. · Contenido bajo [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es)"
+
+[params.author]
+  name = "Mauricio Matias C."
+  email = "mcm.crw@gmail.com"
+  image = "img/maui_2026.jpeg"
+  imageQuality = 96
+  headline = "Senior Software Engineer"
+  bio = "Hola, soy Mauri. Me apasiona la tecnología y la antropología, por lo que me encanta observar esa mágica mezcla en mi día a día. De vez en cuando comparto mis experiencias en el mundo del software a través de artículos, talleres y charlas. Considero que una de mis grandes habilidades es reconocer patrones, identificar componentes en distintos niveles dentro de un sistema y administrarlos para crear cualquier tipo de solución."
+  links = [
+    { email = "mailto:mcm.crw@gmail.com" },
+    { github = "https://github.com/cr0wg4n" },
+    { medium = "https://cr0wg4n.medium.com" },
+    { linkedin = "https://www.linkedin.com/in/cr0wg4n/" },
+    { youtube = "https://www.youtube.com/@lowleveltech" },
+    { itch-io = "https://cr0wg4n.itch.io" },
+  ]

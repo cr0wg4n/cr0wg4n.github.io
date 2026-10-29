@@ -1,0 +1,62 @@
+{{- /*
+  RSS feed, overriding Blowfish's template. Differences from the theme's:
+  - Items link to the original (externalUrl) when there is one; our own page is only a stub.
+  - No e-mail address in the feed (the site obfuscates it in the HTML); the author goes in dc:creator.
+  - The home feed lists only the main sections (params.mainSections, i.e. posts), not talks and projects.
+  - Clean channel title/description for the home feed; all text is XML-escaped.
+*/ -}}
+{{- $pctx := . -}}
+{{- if .IsHome -}}{{ $pctx = .Site }}{{- end -}}
+{{- $pages := slice -}}
+{{- if .IsHome -}}
+{{- $pages = where $pctx.RegularPages "Section" "in" .Site.Params.mainSections -}}
+{{- else if .IsSection -}}
+{{- $pages = $pctx.RegularPages -}}
+{{- else -}}
+{{- $pages = $pctx.Pages -}}
+{{- end -}}
+{{- $limit := .Site.Config.Services.RSS.Limit -}}
+{{- if ge $limit 1 -}}
+{{- $pages = $pages | first $limit -}}
+{{- end -}}
+{{- $title := .Site.Title -}}
+{{- $desc := printf "Recent posts on %s" .Site.Title -}}
+{{- if .IsHome -}}
+{{- with .Description -}}{{- $desc = . -}}{{- end -}}
+{{- else -}}
+{{- $title = printf "%s on %s" .Title .Site.Title -}}
+{{- $desc = printf "Recent content in %s on %s" .Title .Site.Title -}}
+{{- end -}}
+{{- printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>{{ $title | transform.XMLEscape }}</title>
+    <link>{{ .Permalink }}</link>
+    <description>{{ $desc | transform.XMLEscape }}</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>{{ site.Language.Locale }}</language>
+    {{ if .Site.Params.footer.showCopyright | default true -}}
+    <copyright>{{ with replace .Site.Params.copyright "{ year }" now.Year }}{{ . | markdownify | plainify | transform.XMLEscape }}{{ else }}© {{ now.Format "2006" }} {{ .Site.Params.Author.name }}{{- end }}</copyright>
+    {{- end }}
+    {{ if and (not .Date.IsZero) $pages }}<lastBuildDate>{{ (index $pages.ByLastmod.Reverse 0).Lastmod.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</lastBuildDate>{{ end }}
+    {{- with .OutputFormats.Get "RSS" -}}
+    {{ printf "<atom:link href=%q rel=\"self\" type=%q />" .Permalink .MediaType | safeHTML }}
+    {{- end -}}
+    {{ if and (.Site.Params.rssnext.feedId) (.Site.Params.rssnext.userId) }}
+    <follow_challenge>
+      <feedId>{{ .Site.Params.rssnext.feedId }}</feedId>
+      <userId>{{ .Site.Params.rssnext.userId }}</userId>
+    </follow_challenge>
+    {{ end }}
+    {{ range $pages }}
+    <item>
+      <title>{{ .Title | transform.XMLEscape }}</title>
+      <link>{{ with .Params.externalUrl }}{{ . | transform.XMLEscape }}{{ else }}{{ .Permalink }}{{ end }}</link>
+      <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</pubDate>
+      {{ with $.Site.Params.Author.name }}<dc:creator>{{ . | transform.XMLEscape }}</dc:creator>{{ end }}
+      <guid isPermaLink="false">{{ .Permalink }}</guid>
+      <description>{{ .Summary | transform.XMLEscape | safeHTML }}</description>
+    </item>
+    {{ end }}
+  </channel>
+</rss>
