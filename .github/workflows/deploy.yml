@@ -1,0 +1,62 @@
+# Builds the Hugo site and publishes it to S3 + CloudFront whenever `main` changes.
+#
+# AWS access uses OIDC: GitHub proves who it is and AWS hands out a temporary key for the role below.
+# There are no AWS secrets stored in GitHub. The role's trust policy only accepts runs from the `main`
+# branch of this repository, and its permissions only cover the site's bucket and distribution.
+name: Deploy to AWS
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "blog/**"
+      - ".github/workflows/deploy.yml"
+  workflow_dispatch: # the "Run workflow" button in the Actions tab
+
+permissions:
+  id-token: write # lets the job request the OIDC token that AWS verifies
+  contents: read
+
+concurrency:
+  group: deploy # never two deploys at the same time
+  cancel-in-progress: false
+
+env:
+  HUGO_VERSION: "0.168.0"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      # Third-party actions are pinned to a full commit SHA, so a moved tag cannot change what runs
+      # with the deploy role. Update them on purpose (Dependabot can open the PRs).
+      - name: Check out the repo and the theme
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          submodules: recursive
+
+      - name: Install Hugo (extended, with deploy support)
+        run: |
+          set -euo pipefail
+          base="https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}"
+          file="hugo_extended_withdeploy_${HUGO_VERSION}_linux-amd64.tar.gz"
+          curl -fsSLO "${base}/${file}"
+          curl -fsSLO "${base}/hugo_${HUGO_VERSION}_checksums.txt"
+          grep " ${file}\$" "hugo_${HUGO_VERSION}_checksums.txt" | sha256sum -c -   # abort if the download was tampered with
+          sudo tar -xzf "${file}" -C /usr/local/bin hugo
+          hugo version
+
+      - name: Get temporary AWS credentials
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4.3.1
+        with:
+          role-to-assume: arn:aws:iam::952704332685:role/github-actions-hugo-deploy
+          aws-region: us-east-2
+
+      - name: Build the site
+        working-directory: blog
+        run: hugo --minify
+
+      - name: Deploy to S3 and invalidate CloudFront
+        working-directory: blog
+        run: hugo deploy --target production

@@ -168,12 +168,32 @@ AWS_PROFILE=cr0wg4n hugo deploy --target production              # for real
 ```
 
 `hugo deploy` uploads only what changed (it compares checksums), deletes what you removed, applies cache headers by
-file type, and invalidates CloudFront at the end. Hugo refuses to delete more than 256 files at once; the first
-deploy over the old site needs `--maxDeletes -1`.
+file type, and invalidates CloudFront at the end. As a safety brake, Hugo refuses to delete more than 256 files in one
+run (`--maxDeletes`); a normal deploy removes only a handful, so if it stops there, check what changed before
+overriding it with `--maxDeletes -1`.
 
 Cache rules (`deployment.toml`): fingerprinted CSS/JS and resized images for a year; fonts 30 days; HTML, feeds and
 JSON are always revalidated; everything else one hour. The bucket has **versioning off**, so a deletion cannot be
 undone: back up first if in doubt (`aws s3 sync s3://cr0wg4n-website ./backup --profile cr0wg4n`).
+
+### Automatic deploy (GitHub Actions)
+
+Every push to `main` that touches `blog/` runs `.github/workflows/deploy.yml`: it installs Hugo (checking the
+download's checksum), builds the site and runs `hugo deploy`, the same commands as above. You can also start it
+by hand from the **Actions** tab (*Run workflow*).
+
+AWS access uses OIDC, so **no AWS keys are stored in GitHub**: the job asks AWS for a temporary key through the
+role `github-actions-hugo-deploy`. Its trust policy only accepts runs from the `main` branch of this repository,
+and its permissions cover only the bucket and the distribution. One-time AWS setup (it must exist before the
+first run, or the AWS step fails and nothing is deployed):
+
+1. An IAM identity provider for `token.actions.githubusercontent.com` (audience `sts.amazonaws.com`).
+2. The role `github-actions-hugo-deploy`, trusting `repo:cr0wg4n/cr0wg4n.github.io:ref:refs/heads/main`.
+3. An inline policy on the role: `s3:ListBucket`, `s3:GetObject`, `s3:PutObject`, `s3:DeleteObject` on the bucket
+   and `cloudfront:CreateInvalidation` on the distribution.
+
+The third-party actions in the workflow are pinned to full commit SHAs. To update them, pick the new tag's commit
+SHA on purpose and change it in the file.
 
 ## SEO and feeds
 
