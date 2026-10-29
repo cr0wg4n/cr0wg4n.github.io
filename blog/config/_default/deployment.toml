@@ -1,0 +1,50 @@
+# -- Deployment (hugo deploy) --
+# Publishes public/ to S3 and invalidates CloudFront:
+#
+#   hugo --minify && hugo deploy --target production
+#
+# Add --dryRun first to see what would be uploaded or deleted without touching the bucket.
+# Credentials come from the normal AWS chain; locally use the CLI profile:
+#   AWS_PROFILE=cr0wg4n hugo deploy --target production
+# The identity needs s3:ListBucket, s3:PutObject, s3:DeleteObject on the bucket and
+# cloudfront:CreateInvalidation on the distribution.
+
+# Upload these first, so pages never point at assets that are not there yet.
+order = ["^(css|js|img|fonts)/"]
+
+[[targets]]
+  name = "production"
+  # S3 bucket behind cr0wg4n.com (static website hosting, index document: index.html).
+  url = "s3://cr0wg4n-website?region=us-east-2"
+  # CloudFront distribution that serves cr0wg4n.com (its origin is the bucket's website endpoint).
+  cloudFrontDistributionID = "E2VL3GBGM7ES3F"
+  exclude = "**/.DS_Store"
+
+# Matchers are checked in order and the first match wins.
+
+# Fingerprinted files: the name changes when the content does, so cache them for a year.
+[[matchers]]
+  pattern = "^(css|js)/.+"
+  cacheControl = "max-age=31536000, public, immutable"
+  gzip = true
+
+# Resized images carry a content hash in the name (…_hu_<hash>.jpg): same reasoning.
+[[matchers]]
+  pattern = "^img/.+_hu_[0-9a-f]+\\.[a-z0-9]+$"
+  cacheControl = "max-age=31536000, public, immutable"
+
+# Fonts keep their name when replaced, but almost never change: cache for 30 days.
+[[matchers]]
+  pattern = "^fonts/.+"
+  cacheControl = "max-age=2592000, public"
+
+# Pages, feeds and the search index: always revalidate so a deploy shows up straight away.
+[[matchers]]
+  pattern = "^.+\\.(html|xml|json|webmanifest|txt)$"
+  cacheControl = "max-age=0, no-cache"
+  gzip = true
+
+# Everything else (favicons, the social card, other images): one hour, because the names are not fingerprinted.
+[[matchers]]
+  pattern = "^.+$"
+  cacheControl = "max-age=3600, public"
