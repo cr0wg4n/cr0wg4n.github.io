@@ -1,5 +1,5 @@
 ---
-title: "Mauricio Matias C. · Senior Software Engineer"
+title: "Mauricio Matias - Personal Blog"
 description: "Senior Software Engineer. Projects, talks and articles by Mauricio Matias C. (cr0wg4n) on software, systems and the human side of technology."
 ---
 
