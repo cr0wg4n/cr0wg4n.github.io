@@ -18,3 +18,59 @@
     );
   })();
 </script>
+
+{{/* Google Analytics custom events. gtag() only exists in production builds (see [services.googleAnalytics]),
+     so these are no-ops while developing. Events, all with transport_type "beacon" so they survive navigation:
+       card_click       a card in a list or in "Recent"      section, item_title, destination, outbound, language
+       social_click     a profile link (rel="me")             network, language
+       language_switch  the EN/ES menu                        language_from, language_to
+       theme_toggle     the light/dark button                 mode (the mode it switched to) */}}
+<script>
+  (function () {
+    function track(name, params) {
+      if (typeof window.gtag !== "function") return;
+      params.transport_type = "beacon";
+      window.gtag("event", name, params);
+    }
+    var language = (document.documentElement.lang || "").slice(0, 2);
+    var section = location.pathname.replace(/^\/es(\/|$)/, "/").split("/")[1] || "home";
+
+    function cardTitle(link) {
+      var h2 = link.querySelector("h2");
+      if (!h2) return (link.textContent || "").trim().slice(0, 100);
+      return Array.prototype.filter.call(h2.childNodes, function (n) { return n.nodeType === 3; })
+        .map(function (n) { return n.textContent; }).join("").trim().slice(0, 100);
+    }
+
+    document.addEventListener("click", function (e) {
+      var target = e.target;
+      if (!target || !target.closest) return;
+
+      var toggle = target.closest('button[id^="appearance-switcher"]');
+      if (toggle) {
+        // the theme script flips the class during this click: read the result on the next tick
+        setTimeout(function () {
+          track("theme_toggle", { mode: document.documentElement.classList.contains("dark") ? "dark" : "light" });
+        }, 0);
+        return;
+      }
+
+      var link = target.closest("a[href]");
+      if (!link) return;
+
+      if (link.closest('article[class*="article-link"]')) {
+        track("card_click", {
+          section: section,
+          item_title: cardTitle(link),
+          destination: link.hostname,
+          outbound: link.hostname !== location.hostname,
+          language: language
+        });
+      } else if (link.matches('[rel~="me"]')) {
+        track("social_click", { network: link.getAttribute("aria-label") || link.hostname, language: language });
+      } else if (/^[A-Za-z]{2}$/.test((link.textContent || "").trim()) && link.closest("header, nav")) {
+        track("language_switch", { language_from: language, language_to: (link.textContent || "").trim().toLowerCase() });
+      }
+    }, true);
+  })();
+</script>
