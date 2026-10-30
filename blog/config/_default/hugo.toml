@@ -16,7 +16,7 @@ buildFuture = false
 
 enableEmoji = true
 
-# googleAnalytics = "G-XXXXXXXXX"
+# Google Analytics 4: see [services.googleAnalytics] below.
 
 [pagination]
   pagerSize = 100
@@ -34,6 +34,11 @@ enableEmoji = true
   changefreq = 'daily'
   filename = 'sitemap.xml'
   priority = 0.5
+
+# Google Analytics 4. Blowfish injects the tag in production builds only (hugo.IsProduction), so `hugo server`
+# sends nothing. The measurement ID is public: it is visible in the page source of any site that uses it.
+[services.googleAnalytics]
+  id = "G-26G85FRHW8"
 
 [outputs]
   home = ["HTML", "RSS", "JSON"]
