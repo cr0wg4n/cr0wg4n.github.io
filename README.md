@@ -53,7 +53,11 @@ Each page exists in two languages with the same name: `slug.en.md` and `slug.es.
   ```
   These stubs are `noindex`, and the RSS feed links to the original. New Medium posts appear in
   `https://medium.com/feed/@cr0wg4n`.
-- **Post written for this site:** same, but without `externalUrl`; write the article below the front matter.
+- **Post written for this site:** `hugo new content posts/my-post.en.md` (and `.es.md`) creates the skeleton from
+  `archetypes/posts.md`: an answer-first `description`, then sections. It has no `externalUrl`, so it is indexed and
+  gets `Article` structured data. Set `draft: false` to publish, and update `lastmod` when you change it (it becomes
+  `dateModified`). To also publish it on Medium, wait until it is live here and use Medium's *Import a story* with
+  the page URL: it sets the canonical link to this site, so search engines and AI answers credit `cr0wg4n.com`.
 - **Projects** only know the year: `date: "2024-01-01"` plus `dateYearOnly: true`.
 - **Images** go in `assets/img/<section>/`, referenced without a leading slash. Only add images you own or may use.
   For an article without a usable cover, make a title card (needs Pillow; the editable design is
