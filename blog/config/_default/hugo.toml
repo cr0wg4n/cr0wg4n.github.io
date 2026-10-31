@@ -41,7 +41,15 @@ enableEmoji = true
   id = "G-26G85FRHW8"
 
 [outputs]
-  home = ["HTML", "RSS", "JSON"]
+  home = ["HTML", "RSS", "JSON", "llms"]
+
+# /llms.txt and /es/llms.txt: a plain-text, Markdown index of the site for language models, built from the
+# content on every deploy (template: layouts/index.llms.txt).
+[outputFormats.llms]
+  mediaType = "text/plain"
+  baseName = "llms"
+  isPlainText = true
+  notAlternative = true
 
 [related]
   threshold = 0
