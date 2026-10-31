@@ -1,0 +1,40 @@
+{{- /*
+  llms.txt (https://llmstxt.org): H1 with the name, a blockquote summary, then H2 sections of links.
+  Built per language from the site's own content, so it never goes stale. Link-out entries point to the
+  original publication, which is where the full text lives.
+*/ -}}
+{{- $author := .Site.Params.author -}}
+# {{ $author.name }} (cr0wg4n)
+
+> {{ .Description }}
+
+{{ $author.bio }}
+
+Site languages:{{ range .AllTranslations }} [{{ .Language.LanguageName }}]({{ .Permalink }}){{ end }}
+
+## Sections
+{{ range $s := slice "posts" "talks" "projects" "repos" -}}
+{{ with $.Site.GetPage (printf "/%s" $s) }}- [{{ .Title }}]({{ .Permalink }}): {{ .Description }}
+{{ end -}}
+{{ end }}
+## Latest posts
+{{ range first 10 (where .Site.RegularPages "Section" "posts").ByDate.Reverse -}}
+{{ $url := .Permalink -}}{{ with .Params.externalUrl }}{{ $u := urls.Parse . }}{{ $url = printf "%s://%s%s" $u.Scheme $u.Host $u.EscapedPath }}{{ end -}}
+- [{{ .Title }}]({{ $url }}) ({{ (urls.Parse $url).Host }}, {{ .Date.Format "2006-01-02" }})
+{{ end }}
+## Talks
+{{ range first 8 (where .Site.RegularPages "Section" "talks").ByDate.Reverse -}}
+{{ $url := .Permalink -}}{{ with .Params.externalUrl }}{{ $u := urls.Parse . }}{{ $url = printf "%s://%s%s" $u.Scheme $u.Host $u.EscapedPath }}{{ end -}}
+- [{{ .Title }}]({{ $url }}) ({{ .Date.Format "2006" }})
+{{ end }}
+## Projects
+{{ range (where .Site.RegularPages "Section" "projects").ByDate.Reverse -}}
+{{ $url := .Permalink -}}{{ with .Params.externalUrl }}{{ $u := urls.Parse . }}{{ $url = printf "%s://%s%s" $u.Scheme $u.Host $u.EscapedPath }}{{ end -}}
+- [{{ .Title }}]({{ $url }}) ({{ .Date.Format "2006" }}): {{ .Summary | plainify }}
+{{ end }}
+## Feeds
+- [RSS feed]({{ (.OutputFormats.Get "RSS").Permalink }}) (articles)
+- [Sitemap]({{ "sitemap.xml" | absURL }})
+
+## Citing
+The original writing and images on this site are licensed CC BY 4.0: credit "{{ $author.name }} (cr0wg4n), cr0wg4n.com" and link the page. Entries that link out keep the terms of where they were published.
