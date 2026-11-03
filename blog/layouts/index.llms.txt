@@ -10,7 +10,7 @@
 
 {{ $author.bio }}
 
-Site languages:{{ range .AllTranslations }} [{{ .Language.LanguageName }}]({{ .Permalink }}){{ end }}
+Site languages:{{ range .AllTranslations }} [{{ .Language.Label }}]({{ .Permalink }}){{ end }}
 
 ## Sections
 {{ range $s := slice "posts" "talks" "projects" "repos" -}}

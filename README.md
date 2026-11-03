@@ -18,7 +18,7 @@ docs/                card-template.svg and make-card.py (article card generator)
 
 ## Install
 
-You need [Hugo](https://gohugo.io/installation/) **extended with deploy support** (0.168 or newer) and Git.
+You need [Hugo](https://gohugo.io/installation/) **extended with deploy support** (0.169 or newer) and Git.
 
 ```sh
 git clone --recurse-submodules git@github.com:cr0wg4n/cr0wg4n.github.io.git
@@ -58,6 +58,12 @@ Each page exists in two languages with the same name: `slug.en.md` and `slug.es.
   gets `Article` structured data. Set `draft: false` to publish, and update `lastmod` when you change it (it becomes
   `dateModified`). To also publish it on Medium, wait until it is live here and use Medium's *Import a story* with
   the page URL: it sets the canonical link to this site, so search engines and AI answers credit `cr0wg4n.com`.
+  - **Run it from `blog/`.** From the repo root it fails with the misleading `ERROR no existing content directory
+    configured for this project`. From the root, use `hugo --source blog new content posts/my-post.en.md` instead.
+  - **Name conflicts:** if the file exists, Hugo stops with `the target path conflicts with existing content`; pick
+    another name or edit the existing file.
+  - **Old skeleton?** If the new file is a short TOML header (`+++`) without `description` and `lastmod`, your clone
+    predates the template: run `git pull`.
 - **Projects** only know the year: `date: "2024-01-01"` plus `dateYearOnly: true`.
 - **Images** go in `assets/img/<section>/`, referenced without a leading slash. Only add images you own or may use.
   For an article without a usable cover, make a title card (needs Pillow; the editable design is
@@ -67,6 +73,10 @@ Each page exists in two languages with the same name: `slug.en.md` and `slug.es.
 Where to change other things: colors, fonts and effects in `assets/css/custom.css`; theme settings in
 `config/_default/params.toml`; name, bio and links in `config/_default/languages.*.toml`; the link-preview image
 (og:image) in `static/img/social-card.png`.
+
+Generated or loaded on every production build: `/llms.txt` and `/es/llms.txt` (an index for AI tools, from
+`layouts/index.llms.txt`), and Google Analytics 4 (id in `config/_default/hugo.toml`, custom events in
+`layouts/partials/extend-footer.html`; nothing is sent from `hugo server`).
 
 ## Deploy
 
