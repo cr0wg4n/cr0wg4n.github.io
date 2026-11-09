@@ -65,8 +65,8 @@
 
 /* Navbar brand logo: smaller than the theme's 5rem default. */
 img.logo {
-  max-width: 3.5rem;
-  max-height: 3.5rem;
+  max-width: 3rem;
+  max-height: 3rem;
 }
 
 /* Cards: no drop shadow in light mode (repo cards, term cards, list thumbnails).

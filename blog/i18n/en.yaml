@@ -1,0 +1,5 @@
+error:
+  404_title: "Page not found"
+  404_error: "Error 404"
+  404_description: "The page you're looking for doesn't exist or was moved. Maybe the link is broken, or the post is still a draft."
+  404_home: "Back to the homepage"
