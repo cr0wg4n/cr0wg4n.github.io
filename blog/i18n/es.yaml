@@ -1,0 +1,5 @@
+error:
+  404_title: "Página no encontrada"
+  404_error: "Error 404"
+  404_description: "La página que buscas no existe o fue movida. Quizás el enlace está roto o el post sigue en borrador."
+  404_home: "Volver al inicio"
