@@ -10,7 +10,7 @@ Description: >-
 #       --output-template-file packaged.yaml
 #   aws cloudformation deploy --template-file packaged.yaml --stack-name cr0wg4n-comments \
 #       --capabilities CAPABILITY_NAMED_IAM \
-#       --parameter-overrides OwnerEmail=you@example.com
+#       --parameter-overrides OwnerEmail=you@example.com   # DomainName and HostedZoneId have defaults; override them for another site
 
 Parameters:
   AllowedOrigin:
@@ -20,6 +20,14 @@ Parameters:
   OwnerEmail:
     Type: String
     Description: Where the "comment pending" e-mails go. AWS sends it a confirmation e-mail on deploy; click the link once.
+  DomainName:
+    Type: String
+    Default: comments.cr0wg4n.com
+    Description: Address of the API. Must be inside the Route 53 hosted zone below; the certificate and the DNS record are created for it.
+  HostedZoneId:
+    Type: String
+    Default: Z01541593BF49IZ1EB3LJ
+    Description: Route 53 hosted zone of the site's domain (Route 53 > Hosted zones).
   SecretParameter:
     Type: String
     Default: /cr0wg4n/comments/secret
@@ -166,6 +174,44 @@ Resources:
         "GET /moderate": { ThrottlingRateLimit: 2, ThrottlingBurstLimit: 5 }
         "POST /moderate": { ThrottlingRateLimit: 2, ThrottlingBurstLimit: 5 }
 
+  # The API's own address (comments.cr0wg4n.com) instead of the long execute-api one: stable if the API is ever
+  # rebuilt, readable in the moderation e-mail links, and first-party for the browser.
+  Certificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Ref DomainName
+      ValidationMethod: DNS
+      DomainValidationOptions:
+        - DomainName: !Ref DomainName
+          HostedZoneId: !Ref HostedZoneId
+
+  ApiDomain:
+    Type: AWS::ApiGatewayV2::DomainName
+    Properties:
+      DomainName: !Ref DomainName
+      DomainNameConfigurations:
+        - CertificateArn: !Ref Certificate
+          EndpointType: REGIONAL
+          SecurityPolicy: TLS_1_2
+
+  ApiMapping:
+    Type: AWS::ApiGatewayV2::ApiMapping
+    DependsOn: Stage
+    Properties:
+      DomainName: !Ref ApiDomain
+      ApiId: !Ref Api
+      Stage: !Ref Stage
+
+  DnsRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Ref HostedZoneId
+      Name: !Ref DomainName
+      Type: A
+      AliasTarget:
+        DNSName: !GetAtt ApiDomain.RegionalDomainName
+        HostedZoneId: !GetAtt ApiDomain.RegionalHostedZoneId
+
   InvokePermission:
     Type: AWS::Lambda::Permission
     Properties:
@@ -177,6 +223,9 @@ Resources:
 Outputs:
   ApiUrl:
     Description: Put this in config/_default/params.toml as [comments] apiUrl.
+    Value: !Sub "https://${DomainName}"
+  DefaultApiUrl:
+    Description: The long address AWS gives every API. It keeps working; use ApiUrl instead.
     Value: !Sub "https://${Api}.execute-api.${AWS::Region}.amazonaws.com"
   TableName:
     Value: !Ref Table
