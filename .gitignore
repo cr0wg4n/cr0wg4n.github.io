@@ -1,2 +1,4 @@
 # font downloaded by docs/make-card.py
 /docs/.cache/
+/api/target/
+/api/packaged.yaml

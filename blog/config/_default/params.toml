@@ -206,3 +206,9 @@ forgejoDefaultServer = "https://v11.next.forgejo.org"
 
 [advertisement]
   # adsense = ""
+
+# -- Reactions and comments --
+# Backed by the API in ../api (AWS). While apiUrl is empty nothing is rendered. A page shows the section when its
+# front matter has `showComments: true` (the posts archetype sets it). Use the ApiUrl output of the CloudFormation stack.
+[comments]
+  apiUrl = ""

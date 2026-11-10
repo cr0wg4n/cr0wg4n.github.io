@@ -74,6 +74,29 @@ Where to change other things: colors, fonts and effects in `assets/css/custom.cs
 `config/_default/params.toml`; name, bio and links in `config/_default/languages.*.toml`; the link-preview image
 (og:image) in `static/img/social-card.png`.
 
+**Reactions and comments** have their own backend in `api/` (Rust on AWS Lambda, DynamoDB, SES; `api/template.yaml`
+is the CloudFormation stack). A post shows the section when its front matter has `showComments: true` (the archetype
+sets it); link-out entries don't. Comments are stored as pending and you get an e-mail with *Approve* and *Delete*
+links (each opens a confirmation page; nothing changes until you press the button). Nothing is rendered until
+`[comments] apiUrl` is set in `config/_default/params.toml`. One-time setup, in `us-east-2`:
+
+```sh
+# 1. SES > Verified identities: verify the address that sends and receives the moderation mail.
+# 2. The signing secret for the moderation links (never commit it):
+aws ssm put-parameter --region us-east-2 --name /cr0wg4n/comments/secret --type SecureString --value "$(openssl rand -hex 32)"
+# 3. A private bucket for the build output:
+aws s3 mb s3://<your-artifacts-bucket> --region us-east-2
+# 4. Build (needs `pip install cargo-lambda`), package, deploy:
+cd api && cargo lambda build --release --x86-64 --output-format zip
+aws cloudformation package --region us-east-2 --template-file template.yaml --s3-bucket <your-artifacts-bucket> --output-template-file packaged.yaml
+aws cloudformation deploy --region us-east-2 --template-file packaged.yaml --stack-name cr0wg4n-comments \
+  --capabilities CAPABILITY_IAM --parameter-overrides OwnerEmail=<you> FromEmail=<you>
+# 5. Copy the ApiUrl output into [comments] apiUrl and deploy the site:
+aws cloudformation describe-stacks --region us-east-2 --stack-name cr0wg4n-comments --query 'Stacks[0].Outputs'
+```
+
+Run the same build, package and deploy commands again to update the API. `cargo test` in `api/` runs its tests.
+
 Generated or loaded on every production build: `/llms.txt` and `/es/llms.txt` (an index for AI tools, from
 `layouts/index.llms.txt`), and Google Analytics 4 (id in `config/_default/hugo.toml`, custom events in
 `layouts/partials/extend-footer.html`; nothing is sent from `hugo server`).

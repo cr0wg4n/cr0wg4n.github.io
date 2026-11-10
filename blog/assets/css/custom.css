@@ -287,3 +287,45 @@ main article > header:has(> img.rounded-full)::before {
     display: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Reactions and comments: see layouts/partials/comments.html and assets/js/comments.js
+   --------------------------------------------------------------------------- */
+.cm { margin-top: 2.5rem; }
+.cm-title { margin: 0 0 1rem; font-size: 1.25rem; }
+.cm-reactions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
+.cm-react {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.35rem 0.8rem; border: 1px solid rgb(var(--color-neutral-300)); border-radius: 999px;
+  background: transparent; color: inherit; font: inherit; cursor: pointer;
+}
+.dark .cm-react { border-color: rgb(var(--color-neutral-600)); }
+.cm-react:hover, .cm-react:focus-visible { border-color: rgb(var(--color-primary-500)); }
+.cm-react[aria-pressed="true"] { border-color: rgb(var(--color-primary-500)); background: rgba(var(--color-primary-500), 0.15); }
+.cm-react:disabled { opacity: 0.6; cursor: progress; }
+.cm-count { min-width: 0.6rem; font-variant-numeric: tabular-nums; }
+.cm-list { margin-bottom: 1.5rem; }
+.cm-item { padding: 0.75rem 0; border-top: 1px solid rgb(var(--color-neutral-200)); }
+.dark .cm-item { border-color: rgb(var(--color-neutral-700)); }
+.cm-item header { display: flex; gap: 0.75rem; align-items: baseline; font-size: 0.9rem; }
+.cm-item time { color: rgb(var(--color-neutral-500)); font-size: 0.8rem; }
+.cm-item p { margin: 0.25rem 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.cm-empty, .cm-note, .cm-status { font-size: 0.875rem; color: rgb(var(--color-neutral-600)); }
+.dark .cm-empty, .dark .cm-note, .dark .cm-status { color: rgb(var(--color-neutral-400)); }
+.cm-form { display: grid; gap: 0.75rem; }
+.cm-form label { display: grid; gap: 0.25rem; font-size: 0.9rem; }
+.cm-form input[type="text"], .cm-form textarea {
+  width: 100%; padding: 0.5rem 0.75rem; border: 1px solid rgb(var(--color-neutral-300)); border-radius: 0.5rem;
+  background: transparent; color: inherit; font: inherit;
+}
+.dark .cm-form input[type="text"], .dark .cm-form textarea { border-color: rgb(var(--color-neutral-600)); }
+.cm-form input:focus-visible, .cm-form textarea:focus-visible { outline: 2px solid rgb(var(--color-primary-500)); outline-offset: 1px; }
+.cm-submit {
+  justify-self: start; padding: 0.5rem 1rem; border: 1px solid rgb(var(--color-primary-500)); border-radius: 0.5rem;
+  background: transparent; color: rgb(var(--color-primary-600)); font: inherit; cursor: pointer;
+}
+.dark .cm-submit { color: rgb(var(--color-primary-400)); }
+.cm-submit:hover, .cm-submit:focus-visible { background: rgba(var(--color-primary-500), 0.12); }
+.cm-submit:disabled { opacity: 0.6; cursor: progress; }
+.cm-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.cm-status:empty { display: none; }

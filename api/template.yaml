@@ -1,0 +1,171 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: >-
+  Comments and reactions API for cr0wg4n.com: HTTP API -> one Rust Lambda -> DynamoDB, with SES
+  e-mails to the owner to approve comments. Pay-per-use; everything idles at about zero cost.
+
+# Deploy (from the repo root; see the README "Comments and reactions" section for the one-time steps):
+#   cd api && cargo lambda build --release --x86-64 --output-format zip
+#   aws cloudformation package --template-file template.yaml --s3-bucket <artifacts-bucket> \
+#       --output-template-file packaged.yaml
+#   aws cloudformation deploy --template-file packaged.yaml --stack-name cr0wg4n-comments \
+#       --capabilities CAPABILITY_NAMED_IAM \
+#       --parameter-overrides OwnerEmail=you@example.com FromEmail=you@example.com
+
+Parameters:
+  AllowedOrigin:
+    Type: String
+    Default: https://cr0wg4n.com
+    Description: The only website allowed to call the API from a browser (CORS). No trailing slash.
+  OwnerEmail:
+    Type: String
+    Description: Where the "comment pending" e-mails go.
+  FromEmail:
+    Type: String
+    Description: Sender address. Must be a verified SES identity in this region (the same address as OwnerEmail is fine).
+  SecretParameter:
+    Type: String
+    Default: /cr0wg4n/comments/secret
+    Description: Name of the SSM SecureString holding the signing secret (create it before deploying).
+
+Resources:
+  # The comments themselves: keep the table if the stack is ever deleted.
+  Table:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - { AttributeName: PK, AttributeType: S }
+        - { AttributeName: SK, AttributeType: S }
+      KeySchema:
+        - { AttributeName: PK, KeyType: HASH }
+        - { AttributeName: SK, KeyType: RANGE }
+      TimeToLiveSpecification:
+        AttributeName: ttl
+        Enabled: true
+
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${AWS::StackName}-api"
+      RetentionInDays: 30
+
+  Role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: { Service: lambda.amazonaws.com }
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: comments-api
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: WriteLogs
+                Effect: Allow
+                Action: [logs:CreateLogStream, logs:PutLogEvents]
+                Resource: !GetAtt LogGroup.Arn
+              - Sid: UseTheTable
+                Effect: Allow
+                Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:UpdateItem, dynamodb:DeleteItem, dynamodb:Query]
+                Resource: !GetAtt Table.Arn
+              - Sid: ReadTheSecret
+                Effect: Allow
+                Action: ssm:GetParameter
+                Resource: !Sub "arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter${SecretParameter}"
+              - Sid: SendModerationMail
+                Effect: Allow
+                Action: ses:SendEmail
+                Resource: "*"
+                Condition:
+                  StringEquals:
+                    "ses:FromAddress": !Ref FromEmail
+
+  Function:
+    Type: AWS::Lambda::Function
+    DependsOn: LogGroup
+    Properties:
+      FunctionName: !Sub "${AWS::StackName}-api"
+      Runtime: provided.al2023
+      Architectures: [x86_64]
+      Handler: bootstrap
+      # `aws cloudformation package` uploads this zip and replaces the path with its S3 location.
+      Code: target/lambda/bootstrap/bootstrap.zip
+      MemorySize: 128
+      Timeout: 10
+      Role: !GetAtt Role.Arn
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref Table
+          SECRET_PARAM: !Ref SecretParameter
+          OWNER_EMAIL: !Ref OwnerEmail
+          FROM_EMAIL: !Ref FromEmail
+
+  Api:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: !Sub "${AWS::StackName}"
+      ProtocolType: HTTP
+      CorsConfiguration:
+        AllowOrigins: [!Ref AllowedOrigin]
+        AllowMethods: [GET, POST, OPTIONS]
+        AllowHeaders: [content-type]
+        MaxAge: 3600
+
+  Integration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref Api
+      IntegrationType: AWS_PROXY
+      IntegrationUri: !GetAtt Function.Arn
+      PayloadFormatVersion: "2.0"
+
+  RouteGetComments:
+    Type: AWS::ApiGatewayV2::Route
+    Properties: { ApiId: !Ref Api, RouteKey: "GET /comments", Target: !Sub "integrations/${Integration}" }
+  RoutePostComments:
+    Type: AWS::ApiGatewayV2::Route
+    Properties: { ApiId: !Ref Api, RouteKey: "POST /comments", Target: !Sub "integrations/${Integration}" }
+  RouteGetReactions:
+    Type: AWS::ApiGatewayV2::Route
+    Properties: { ApiId: !Ref Api, RouteKey: "GET /reactions", Target: !Sub "integrations/${Integration}" }
+  RoutePostReactions:
+    Type: AWS::ApiGatewayV2::Route
+    Properties: { ApiId: !Ref Api, RouteKey: "POST /reactions", Target: !Sub "integrations/${Integration}" }
+  RouteGetModerate:
+    Type: AWS::ApiGatewayV2::Route
+    Properties: { ApiId: !Ref Api, RouteKey: "GET /moderate", Target: !Sub "integrations/${Integration}" }
+  RoutePostModerate:
+    Type: AWS::ApiGatewayV2::Route
+    Properties: { ApiId: !Ref Api, RouteKey: "POST /moderate", Target: !Sub "integrations/${Integration}" }
+
+  Stage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref Api
+      StageName: $default
+      AutoDeploy: true
+      # Caps the whole API, so a flood cannot run up the bill: 10 requests/second, bursts of 20.
+      DefaultRouteSettings:
+        ThrottlingRateLimit: 10
+        ThrottlingBurstLimit: 20
+
+  InvokePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref Function
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub "arn:${AWS::Partition}:execute-api:${AWS::Region}:${AWS::AccountId}:${Api}/*"
+
+Outputs:
+  ApiUrl:
+    Description: Put this in config/_default/params.toml as [comments] apiUrl.
+    Value: !Sub "https://${Api}.execute-api.${AWS::Region}.amazonaws.com"
+  TableName:
+    Value: !Ref Table
