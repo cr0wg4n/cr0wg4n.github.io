@@ -30,13 +30,6 @@
     <div class="cm-trap" aria-hidden="true"><label>Website <input name="website" type="text" tabindex="-1" autocomplete="off"></label></div>
     <button type="submit" class="cm-submit">{{ if $es }}Enviar comentario{{ else }}Send comment{{ end }}</button>
     <p class="cm-status" role="status"></p>
-    <p class="cm-note">
-      {{ if $es -}}
-        Reviso los comentarios antes de publicarlos. Guardo tu nombre y tu comentario, sin correo. Para frenar el spam uso una huella de tu dirección IP que no se puede revertir y se borra en un par de días.
-      {{- else -}}
-        I review comments before they appear. I store your name and comment, no e-mail. To stop spam I use a one-way fingerprint of your IP address that is deleted within a couple of days.
-      {{- end }}
-    </p>
   </form>
 </section>
 <script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>
