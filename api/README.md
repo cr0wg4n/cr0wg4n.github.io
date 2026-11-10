@@ -41,6 +41,7 @@ src/lib.rs        exposes the modules below
 src/security.rs   signing, hashing, path and text validation, HTML escaping (pure, no AWS)
 src/store.rs      all DynamoDB access
 src/main.rs       Lambda entry point: routing, handlers, moderation e-mail and pages
+dev/              mock-server.py: a fake API to try the site locally
 tests/            integration tests, one file per module (tests/security.rs)
 template.yaml     CloudFormation stack: table, function, role, HTTP API, routes, throttling
 ```
@@ -54,6 +55,18 @@ cargo clippy --all-targets
 
 The tests cover the pure helpers. The handlers and the DynamoDB code need real AWS services, so they are checked
 after a deploy (try the routes with `curl` against the stack's `ApiUrl`).
+
+## Try the site locally
+
+The comment section only renders when `[comments] apiUrl` is set, so point it at the fake API in `dev/`:
+
+```sh
+python3 api/dev/mock-server.py                                              # terminal 1
+cd blog && HUGO_PARAMS_COMMENTS_APIURL=http://127.0.0.1:8787 hugo server -D  # terminal 2
+```
+
+Open `http://localhost:1313/posts/masters-of-sampling-miloj-daft-punk/` and scroll to the end. To try the real stack
+instead, deploy it with `AllowedOrigin=http://localhost:1313` (CORS only allows one origin) and use its `ApiUrl`.
 
 ## Build and deploy
 
