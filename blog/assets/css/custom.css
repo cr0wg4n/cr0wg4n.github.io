@@ -289,7 +289,7 @@ main article > header:has(> img.rounded-full)::before {
 }
 
 /* ---------------------------------------------------------------------------
-   Comments (Giscus): the box is loaded on demand, see layouts/partials/comments.html
+   Comments (Giscus): the box loads when the reader gets near it, see layouts/partials/comments.html
    --------------------------------------------------------------------------- */
 .giscus-title {
   margin: 0 0 0.5rem;
@@ -302,23 +302,4 @@ main article > header:has(> img.rounded-full)::before {
 }
 .dark .giscus-note {
   color: rgb(var(--color-neutral-400));
-}
-.giscus-button {
-  padding: 0.5rem 1rem;
-  border: 1px solid rgb(var(--color-primary-500));
-  border-radius: 0.5rem;
-  background: transparent;
-  color: rgb(var(--color-primary-600));
-  font: inherit;
-  cursor: pointer;
-}
-.dark .giscus-button {
-  color: rgb(var(--color-primary-400));
-}
-.giscus-button:hover,
-.giscus-button:focus-visible {
-  background: rgba(var(--color-primary-500), 0.12);
-}
-.giscus-button[hidden] {
-  display: none;
 }

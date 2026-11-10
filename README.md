@@ -75,8 +75,8 @@ Where to change other things: colors, fonts and effects in `assets/css/custom.cs
 (og:image) in `static/img/social-card.png`.
 
 **Comments and reactions** use [Giscus](https://giscus.app) (GitHub Discussions of this repo). A post shows them when its
-front matter has `showComments: true` (the archetype sets it); link-out entries don't. The box loads only after the
-reader presses *Show comments*. One-time setup: enable *Settings > Features > Discussions*, create a category
+front matter has `showComments: true` (the archetype sets it); link-out entries don't. giscus.app and GitHub load only
+when the reader scrolls close to the section. One-time setup: enable *Settings > Features > Discussions*, create a category
 `Comments` of type *Announcements*, install the [giscus app](https://github.com/apps/giscus) on the repo, then put the
 category id in `[giscus] categoryId` (`config/_default/params.toml`). Get it with
 `gh api graphql -f query='{repository(owner:"cr0wg4n",name:"cr0wg4n.github.io"){discussionCategories(first:20){nodes{id name}}}}'`.
