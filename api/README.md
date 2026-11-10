@@ -28,33 +28,34 @@ browser --> HTTP API (throttled) --> Lambda (Rust) --> DynamoDB   comments, coun
 
 - A new comment is `pending` and invisible. The e-mail has *Approve* and *Delete* links signed with HMAC-SHA256.
   They open a page with a button: mail scanners that open links therefore cannot change anything.
-- Spam: a honeypot field, a minimum fill time (3 s), 3 comments and 30 reactions per visitor per hour, and the
-  API-wide throttle (10 requests/s, bursts of 20).
-- Privacy: no raw IP address is stored. A visitor is a salted one-way hash that changes every day, kept in
-  DynamoDB items that expire through TTL (hours to two days).
+- Spam and flooding, in layers (all limits are constants in `src/config.rs`):
+  1. API Gateway throttling per route (comments: 2 requests/s, bursts of 5): excess gets a 429 and never runs the Lambda.
+  2. Per address: 5 comments and 60 reactions per hour. People behind one address still fit.
+  3. Overall: 120 comments per hour, and at most 20 "pending" e-mails per hour. Comments over the e-mail cap are
+     still stored, and one summary e-mail says so; the inbox cannot be flooded.
+  4. A honeypot field and a minimum fill time (3 s) for simple bots, answered like a real submission.
+  5. Requests over 16 KB are rejected; text is limited to 60 and 2000 characters; pages must be `/posts/<slug>/`.
+  6. Nothing is public until approved, and unreviewed pending comments are deleted after 30 days.
+- Privacy: no raw IP address is stored. Addresses and browsers are salted one-way hashes that change every day, kept
+  in DynamoDB items that expire through TTL (hours to two days).
 - Table layout (one table, keys `PK`/`SK`, TTL attribute `ttl`) is documented at the top of `src/store.rs`.
 
 ## Layout
 
 ```
-src/lib.rs        exposes the modules below
-src/security.rs   signing, hashing, path and text validation, HTML escaping (pure, no AWS)
-src/store.rs      all DynamoDB access
-src/main.rs       Lambda entry point: routing, handlers, moderation e-mail and pages
-dev/              mock-server.py: a fake API to try the site locally
-tests/            integration tests, one file per module (tests/security.rs)
-template.yaml     CloudFormation stack: table, function, role, HTTP API, routes, throttling
+src/
+  main.rs            entry point: builds the shared state and starts the Lambda
+  lib.rs             module list
+  config.rs          environment, shared state, and every limit
+  http.rs            read requests (IP, host, body), build JSON and HTML responses
+  routes/            one file per endpoint: comments.rs, reactions.rs, moderation.rs (mod.rs dispatches)
+  notify.rs          the "comment pending" e-mail through SNS, with the hourly cap
+  security/          signing.rs (HMAC, hashes), validation.rs (paths, text), escape.rs (HTML)
+  store/             DynamoDB: comments.rs, reactions.rs, limits.rs (rate-limit counters); layout in mod.rs
+tests/               one file per area: signing, validation, escape, limits
+dev/                 mock-server.py: a fake API to try the site locally
+template.yaml        CloudFormation stack: table, topic, function, role, HTTP API, routes, throttling
 ```
-
-## Develop
-
-```sh
-cargo test            # unit-level tests in tests/
-cargo clippy --all-targets
-```
-
-The tests cover the pure helpers. The handlers and the DynamoDB code need real AWS services, so they are checked
-after a deploy (try the routes with `curl` against the stack's `ApiUrl`).
 
 ## Try the site locally
 

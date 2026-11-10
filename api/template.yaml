@@ -150,14 +150,21 @@ Resources:
 
   Stage:
     Type: AWS::ApiGatewayV2::Stage
+    DependsOn: [RouteGetComments, RoutePostComments, RouteGetReactions, RoutePostReactions, RouteGetModerate, RoutePostModerate]
     Properties:
       ApiId: !Ref Api
       StageName: $default
       AutoDeploy: true
-      # Caps the whole API, so a flood cannot run up the bill: 10 requests/second, bursts of 20.
+      # Throttling is per route (AWS applies the default to each route) and best-effort: a target, not a guarantee.
+      # Reading is cheap, writing a comment is the expensive and spammable action, so it gets the tightest limit.
+      # Requests over a limit get a 429 from API Gateway without running the Lambda.
       DefaultRouteSettings:
         ThrottlingRateLimit: 10
         ThrottlingBurstLimit: 20
+      RouteSettings:
+        "POST /comments": { ThrottlingRateLimit: 2, ThrottlingBurstLimit: 5 }
+        "GET /moderate": { ThrottlingRateLimit: 2, ThrottlingBurstLimit: 5 }
+        "POST /moderate": { ThrottlingRateLimit: 2, ThrottlingBurstLimit: 5 }
 
   InvokePermission:
     Type: AWS::Lambda::Permission
