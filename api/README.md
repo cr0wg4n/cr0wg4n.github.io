@@ -101,19 +101,26 @@ aws cloudformation deploy --region us-east-2 --template-file packaged.yaml --sta
 
 1. AWS e-mails `OwnerEmail` a *Subscription Confirmation*. Click **Confirm subscription** once (check spam). Until
    then no "comment pending" e-mails arrive.
-2. Read the API address and put it in `blog/config/_default/params.toml` as `[comments] apiUrl`, then deploy the site:
+2. Read the API address (`ApiUrl`, `https://comments.cr0wg4n.com`) and put it in `blog/config/_default/params.toml` as
+   `[comments] apiUrl`, then deploy the site:
    ```sh
    aws cloudformation describe-stacks --region us-east-2 --stack-name cr0wg4n-comments \
      --query 'Stacks[0].Outputs'
    ```
 3. If the site's address changes, redeploy with `AllowedOrigin=https://<new-address>` (CORS allows one origin).
 
+The stack also creates the API's own address: a certificate (validated through DNS in your Route 53 zone), the API Gateway
+custom domain, and the DNS record. The defaults are `DomainName=comments.cr0wg4n.com` and the zone `HostedZoneId`; for
+another site pass `--parameter-overrides DomainName=... HostedZoneId=...`. The long `execute-api` address keeps working
+(output `DefaultApiUrl`). The certificate can take a few minutes to start being served after the first deploy.
+
 The Lambda reads `TABLE_NAME`, `SECRET_PARAM` and `TOPIC_ARN` from its environment; the stack sets them.
 
 ## Delete
 
 ```sh
-# The stack: function, API, topic, role, logs. The comments table is KEPT on purpose (DeletionPolicy: Retain).
+# The stack: function, API, topic, role, logs, certificate, custom domain and DNS record. The comments table is
+# KEPT on purpose (DeletionPolicy: Retain).
 aws cloudformation delete-stack --region us-east-2 --stack-name cr0wg4n-comments
 aws cloudformation wait stack-delete-complete --region us-east-2 --stack-name cr0wg4n-comments
 
