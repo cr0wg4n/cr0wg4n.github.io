@@ -16,3 +16,6 @@
 .DS_Store
 
 # Cargo.lock IS committed: this crate is a binary, and the lock file makes the Lambda build reproducible.
+
+# Local tooling for builds (pip install cargo-lambda)
+.venv/

@@ -69,22 +69,61 @@ cd blog && HUGO_PARAMS_COMMENTS_APIURL=http://127.0.0.1:8787 hugo server -D  # t
 Open `http://localhost:1313/posts/masters-of-sampling-miloj-daft-punk/` and scroll to the end. To try the real stack
 instead, deploy it with `AllowedOrigin=http://localhost:1313` (CORS only allows one origin) and use its `ApiUrl`.
 
-## Build and deploy
+## Deploy
 
-One-time setup (signing secret, artifacts bucket; the e-mail subscription is confirmed after the first deploy) is in the [root README](../README.md), section
-*Reactions and comments*. Then, from this folder:
+Everything runs in `us-east-2` with your AWS profile (not the GitHub Actions role, which cannot and should not edit
+this stack). Needs the AWS CLI, Rust, and Python (for `cargo-lambda`, which bundles Zig to cross-compile for Lambda).
+
+**One time**
 
 ```sh
-pip install cargo-lambda      # once; bundles Zig, which cross-compiles for Lambda
-cargo lambda build --release --x86-64 --output-format zip
-aws cloudformation package --region us-east-2 --template-file template.yaml \
-  --s3-bucket <your-artifacts-bucket> --output-template-file packaged.yaml
-aws cloudformation deploy --region us-east-2 --template-file packaged.yaml --stack-name cr0wg4n-comments \
-  --capabilities CAPABILITY_IAM --parameter-overrides OwnerEmail=<you>
+# 1. The secret that signs the moderation links. The value is random and never printed or committed.
+aws ssm put-parameter --region us-east-2 --name /cr0wg4n/comments/secret --type SecureString --value "$(openssl rand -hex 32)"
+
+# 2. A private bucket where `package` uploads the compiled code (new buckets are private and encrypted).
+aws s3 mb s3://<artifacts-bucket> --region us-east-2
+
+# 3. cargo-lambda, in a local virtualenv (ignored by git).
+python3 -m venv .venv && .venv/bin/pip install cargo-lambda
 ```
 
+**Build, package and deploy** (from this folder; run the same commands again to update)
+
+```sh
+PATH="$PWD/.venv/bin:$PATH" cargo lambda build --release --x86-64 --output-format zip
+aws cloudformation package --region us-east-2 --template-file template.yaml \
+  --s3-bucket <artifacts-bucket> --output-template-file packaged.yaml
+aws cloudformation deploy --region us-east-2 --template-file packaged.yaml --stack-name cr0wg4n-comments \
+  --capabilities CAPABILITY_IAM --parameter-overrides OwnerEmail=<your-email>
+```
+
+**After the first deploy**
+
+1. AWS e-mails `OwnerEmail` a *Subscription Confirmation*. Click **Confirm subscription** once (check spam). Until
+   then no "comment pending" e-mails arrive.
+2. Read the API address and put it in `blog/config/_default/params.toml` as `[comments] apiUrl`, then deploy the site:
+   ```sh
+   aws cloudformation describe-stacks --region us-east-2 --stack-name cr0wg4n-comments \
+     --query 'Stacks[0].Outputs'
+   ```
+3. If the site's address changes, redeploy with `AllowedOrigin=https://<new-address>` (CORS allows one origin).
+
 The Lambda reads `TABLE_NAME`, `SECRET_PARAM` and `TOPIC_ARN` from its environment; the stack sets them.
-The table is kept if the stack is deleted, because it holds the comments.
+
+## Delete
+
+```sh
+# The stack: function, API, topic, role, logs. The comments table is KEPT on purpose (DeletionPolicy: Retain).
+aws cloudformation delete-stack --region us-east-2 --stack-name cr0wg4n-comments
+aws cloudformation wait stack-delete-complete --region us-east-2 --stack-name cr0wg4n-comments
+
+# Optional, in any order. The first one deletes every stored comment and reaction for good.
+aws dynamodb delete-table --region us-east-2 --table-name <TableName>            # name: see the stack's Outputs, or `aws dynamodb list-tables`
+aws ssm delete-parameter --region us-east-2 --name /cr0wg4n/comments/secret
+aws s3 rb s3://<artifacts-bucket> --force
+```
+
+Then remove `apiUrl` from `params.toml` (or leave it empty) and deploy the site, so the section stops rendering.
 
 ## License
 
