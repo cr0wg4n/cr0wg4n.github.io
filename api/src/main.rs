@@ -20,10 +20,9 @@ use std::time::{SystemTime, UNIX_EPOCH};
 
 struct App {
     store: Store,
-    ses: aws_sdk_sesv2::Client,
+    sns: aws_sdk_sns::Client,
+    topic_arn: String,
     secret: Vec<u8>,
-    owner_email: String,
-    from_email: String,
 }
 
 #[derive(Deserialize)]
@@ -177,7 +176,6 @@ async fn notify_owner(
     pk: &str,
     sk: &str,
 ) -> Result<(), Error> {
-    use aws_sdk_sesv2::types::{Body as MailBody, Content, Destination, EmailContent, Message};
     let link = |action: &str| {
         let sig = sign(&app.secret, &[action, pk, sk]);
         format!(
@@ -196,20 +194,16 @@ async fn notify_owner(
         link("approve"),
         link("delete")
     );
-    let content = |s: &str| Content::builder().data(s).charset("UTF-8").build();
-    let message = Message::builder()
-        .subject(content(&format!("Comment pending: {path}"))?)
-        .body(MailBody::builder().text(content(&text)?).build())
-        .build();
-    app.ses
-        .send_email()
-        .from_email_address(&app.from_email)
-        .destination(
-            Destination::builder()
-                .to_addresses(&app.owner_email)
-                .build(),
-        )
-        .content(EmailContent::builder().simple(message).build())
+    // SNS subjects must be plain ASCII, at most 100 characters; the path only holds [A-Za-z0-9/_.-].
+    let subject: String = format!("Comment pending: {path}")
+        .chars()
+        .take(100)
+        .collect();
+    app.sns
+        .publish()
+        .topic_arn(&app.topic_arn)
+        .subject(subject)
+        .message(text)
         .send()
         .await?;
     Ok(())
@@ -362,10 +356,9 @@ async fn main() -> Result<(), Error> {
         .expect("the secret parameter has no value");
     let app = Arc::new(App {
         store: Store::new(aws_sdk_dynamodb::Client::new(&config), env("TABLE_NAME")),
-        ses: aws_sdk_sesv2::Client::new(&config),
+        sns: aws_sdk_sns::Client::new(&config),
+        topic_arn: env("TOPIC_ARN"),
         secret,
-        owner_email: env("OWNER_EMAIL"),
-        from_email: env("FROM_EMAIL"),
     });
     run(service_fn(move |req| handle(app.clone(), req))).await
 }

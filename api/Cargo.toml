@@ -2,7 +2,7 @@
 name = "comments-api"
 version = "0.1.0"
 edition = "2021"
-description = "Comments and reactions API for cr0wg4n.com (AWS Lambda + DynamoDB + SES)"
+description = "Comments and reactions API for cr0wg4n.com (AWS Lambda + DynamoDB + SNS)"
 license = "GPL-3.0-only"
 publish = false
 
@@ -21,7 +21,7 @@ panic = "abort"
 [dependencies]
 aws-config = "1.13.1"
 aws-sdk-dynamodb = "1.138.0"
-aws-sdk-sesv2 = "1.146.0"
+aws-sdk-sns = "1.122.0"
 aws-sdk-ssm = "1.135.0"
 hex = "0.4.3"
 hmac = "0.13.0"

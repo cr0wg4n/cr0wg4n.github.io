@@ -1,7 +1,7 @@
 # comments-api
 
 Reactions and comments for [cr0wg4n.com](https://cr0wg4n.com): a Rust AWS Lambda behind an HTTP API, with DynamoDB
-for storage and SES to e-mail the owner. Pay-per-use. The site side lives in `../blog/layouts/partials/comments.html`
+for storage and SNS to e-mail the owner. Pay-per-use. The site side lives in `../blog/layouts/partials/comments.html`
 and `../blog/assets/js/comments.js`.
 
 ## Routes
@@ -22,7 +22,7 @@ the site's origin.
 
 ```
 browser --> HTTP API (throttled) --> Lambda (Rust) --> DynamoDB   comments, counters, rate limits
-                                                   --> SES        "comment pending" e-mail
+                                                   --> SNS        "comment pending" e-mail (topic with an e-mail subscription)
                                                    --> SSM        signing secret (SecureString)
 ```
 
@@ -70,7 +70,7 @@ instead, deploy it with `AllowedOrigin=http://localhost:1313` (CORS only allows 
 
 ## Build and deploy
 
-One-time setup (SES identity, signing secret, artifacts bucket) is in the [root README](../README.md), section
+One-time setup (signing secret, artifacts bucket; the e-mail subscription is confirmed after the first deploy) is in the [root README](../README.md), section
 *Reactions and comments*. Then, from this folder:
 
 ```sh
@@ -79,10 +79,10 @@ cargo lambda build --release --x86-64 --output-format zip
 aws cloudformation package --region us-east-2 --template-file template.yaml \
   --s3-bucket <your-artifacts-bucket> --output-template-file packaged.yaml
 aws cloudformation deploy --region us-east-2 --template-file packaged.yaml --stack-name cr0wg4n-comments \
-  --capabilities CAPABILITY_IAM --parameter-overrides OwnerEmail=<you> FromEmail=<you>
+  --capabilities CAPABILITY_IAM --parameter-overrides OwnerEmail=<you>
 ```
 
-The Lambda reads `TABLE_NAME`, `SECRET_PARAM`, `OWNER_EMAIL` and `FROM_EMAIL` from its environment; the stack sets them.
+The Lambda reads `TABLE_NAME`, `SECRET_PARAM` and `TOPIC_ARN` from its environment; the stack sets them.
 The table is kept if the stack is deleted, because it holds the comments.
 
 ## License
