@@ -6,7 +6,7 @@
 
 use crate::config::{App, NOTIFICATIONS_PER_HOUR};
 use crate::http::now_s;
-use crate::security::sign;
+use crate::security::{encode_token, sign};
 use lambda_http::Error;
 
 /// Takes one of the hourly announcement slots. False means "too many comments this hour: hold this one".
@@ -58,17 +58,14 @@ pub async fn comments_held(app: &App) -> Result<(), Error> {
     publish(app, "Comments are being held", text).await
 }
 
-/// A link that deletes one comment, signed so it cannot be forged or edited.
+/// A link that deletes one comment. Everything in it is letters, digits, "-" and "_" (see security/token.rs), and it is
+/// signed so it cannot be forged or edited.
 fn delete_link(app: &App, domain: &str, pk: &str, sk: &str) -> String {
     let sig = sign(&app.secret, &["delete", pk, sk]);
-    let query = serde_urlencoded::to_string([
-        ("action", "delete"),
-        ("p", pk),
-        ("k", sk),
-        ("sig", sig.as_str()),
-    ])
-    .unwrap_or_default();
-    format!("https://{domain}/moderate?{query}")
+    format!(
+        "https://{domain}/moderate?a=delete&t={}&s={sig}",
+        encode_token(pk, sk)
+    )
 }
 
 async fn publish(app: &App, subject: &str, message: String) -> Result<(), Error> {

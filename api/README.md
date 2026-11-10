@@ -12,7 +12,7 @@ and `../blog/assets/js/comments.js`.
 | `POST /comments` | `{key, lang, name, body, website, ts}`: publishes the comment at once (`201` with the comment) and e-mails you a delete link. During a flood it is held instead (`202`) |
 | `GET /reactions?key=...` | Counters of the four reactions: `like`, `love`, `idea`, `party` |
 | `POST /reactions` | `{key, kind}`: one reaction per browser, kind and post per day |
-| `GET /moderate?action=delete&p=&k=&sig=` | Confirmation page opened from the e-mail. Changes nothing |
+| `GET /moderate?a=delete&t=<token>&s=<signature>` | Confirmation page opened from the e-mail. Changes nothing |
 | `POST /moderate` | Deletes the comment, only with a valid signature |
 
 `key` identifies the **post**, not a page: Hugo gives the English and the Spanish version of a post the same translation
@@ -29,7 +29,11 @@ browser --> HTTP API (throttled) --> Lambda (Rust) --> DynamoDB   comments, coun
 ```
 
 - **Comments are published at once.** Each one is announced by e-mail with a *Delete* link signed with HMAC-SHA256. The
-  link opens a confirmation page with a button, so mail scanners that open links cannot delete anything.
+  link opens a confirmation page with a button, so mail scanners that open links cannot delete anything. The link
+  holds the comment's identity as a token of letters, digits, `-` and `_` only (`src/security/token.rs`): an earlier
+  version percent-encoded `#` and `/`, and Firefox on Android decoded `%23` back to `#` and cut the link in half.
+  If a link ever "does not work", the Lambda log says why: search `moderation link rejected` in CloudWatch Logs
+  (`/aws/lambda/cr0wg4n-comments-api`); it records which part was missing or altered, never the signature or secret.
 - **Reactions and comments belong to a post, shared by its translations.** The site sends Hugo's translation key
   (`/posts/<slug>`), the same for the English and the Spanish page.
 - Spam and flooding, in layers (all limits are constants in `src/config.rs`):
@@ -56,9 +60,9 @@ src/
   http.rs            read requests (IP, host, body), build JSON and HTML responses
   routes/            one file per endpoint: comments.rs, reactions.rs, moderation.rs (mod.rs dispatches)
   notify.rs          the "new comment" e-mail through SNS, with the hourly cap
-  security/          signing.rs (HMAC, hashes), validation.rs (paths, text), escape.rs (HTML)
+  security/          signing.rs (HMAC, hashes), token.rs (link tokens), validation.rs (post key, text), escape.rs (HTML)
   store/             DynamoDB: comments.rs, reactions.rs, limits.rs (rate-limit counters); layout in mod.rs
-tests/               one file per area: signing, validation, escape, limits
+tests/               one file per area: signing, token, validation, escape, limits
 dev/                 mock-server.py: a fake API to try the site locally
 template.yaml        CloudFormation stack: table, topic, function, role, HTTP API, routes, throttling
 ```
