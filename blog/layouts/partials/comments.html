@@ -1,0 +1,37 @@
+{{- /*
+  Reactions and comments, backed by the API in api/ (AWS Lambda + DynamoDB). Shown on pages with
+  `showComments: true` in the front matter, once [comments] apiUrl is set in params.toml.
+  The page talks only to our own API, and only when the section is about to be seen (assets/js/comments.js).
+*/ -}}
+{{- with site.Params.comments }}
+{{- if .apiUrl }}
+{{- $es := eq $.Lang "es" }}
+{{- $js := resources.Get "js/comments.js" | minify | fingerprint }}
+<section id="comments" class="cm" data-api="{{ .apiUrl }}" data-path="{{ $.RelPermalink }}" data-lang="{{ $.Lang }}" aria-labelledby="cm-title">
+  <h2 id="cm-title" class="cm-title">{{ if $es }}Reacciones y comentarios{{ else }}Reactions and comments{{ end }}</h2>
+
+  <div class="cm-reactions" role="group" aria-label="{{ if $es }}Reacciones{{ else }}Reactions{{ end }}">
+    <button type="button" class="cm-react" data-reaction="like" aria-pressed="false" aria-label="{{ if $es }}Me gusta{{ else }}Like{{ end }}"><span aria-hidden="true">👍</span><span class="cm-count"></span></button>
+    <button type="button" class="cm-react" data-reaction="love" aria-pressed="false" aria-label="{{ if $es }}Me encanta{{ else }}Love{{ end }}"><span aria-hidden="true">❤️</span><span class="cm-count"></span></button>
+    <button type="button" class="cm-react" data-reaction="idea" aria-pressed="false" aria-label="{{ if $es }}Me hizo pensar{{ else }}Made me think{{ end }}"><span aria-hidden="true">💡</span><span class="cm-count"></span></button>
+    <button type="button" class="cm-react" data-reaction="party" aria-pressed="false" aria-label="{{ if $es }}Celebrar{{ else }}Celebrate{{ end }}"><span aria-hidden="true">🎉</span><span class="cm-count"></span></button>
+  </div>
+
+  <div class="cm-list" aria-live="polite"></div>
+
+  <form class="cm-form" novalidate>
+    <label>{{ if $es }}Nombre{{ else }}Name{{ end }}
+      <input name="name" type="text" maxlength="60" required autocomplete="nickname">
+    </label>
+    <label>{{ if $es }}Comentario{{ else }}Comment{{ end }}
+      <textarea name="body" rows="4" maxlength="2000" required></textarea>
+    </label>
+    {{- /* honeypot: hidden from people and screen readers, bots tend to fill every field */}}
+    <div class="cm-trap" aria-hidden="true"><label>Website <input name="website" type="text" tabindex="-1" autocomplete="off"></label></div>
+    <button type="submit" class="cm-submit">{{ if $es }}Enviar comentario{{ else }}Send comment{{ end }}</button>
+    <p class="cm-status" role="status"></p>
+  </form>
+</section>
+<script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>
+{{- end }}
+{{- end }}

@@ -10,6 +10,7 @@ heroStyle: "basic"
 showTableOfContents: true
 description: "Milo J and Daft Punk made history by reusing fragments of other artists' work, and software engineers do the same every day. It has never been easier to start or harder to keep up; you are a master of sampling and you don't know it."
 tags: ["career", "ai", "music"]
+showComments: true
 ---
 
 First things first: [play this video](https://youtu.be/Zwggkz3z6SY), turn the volume down to 15%, hide that window (we only need the audio) and keep reading...

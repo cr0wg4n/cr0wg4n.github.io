@@ -74,6 +74,13 @@ Where to change other things: colors, fonts and effects in `assets/css/custom.cs
 `config/_default/params.toml`; name, bio and links in `config/_default/languages.*.toml`; the link-preview image
 (og:image) in `static/img/social-card.png`.
 
+**Reactions and comments** have their own backend in `api/` (Rust on AWS Lambda, DynamoDB, SNS; `api/template.yaml`
+is the CloudFormation stack). A post shows the section when its front matter has `showComments: true` (the archetype
+sets it); link-out entries don't. Comments are stored as pending and you get an e-mail with *Approve* and *Delete*
+links (each opens a confirmation page; nothing changes until you press the button). Nothing is rendered until
+`[comments] apiUrl` is set in `config/_default/params.toml`. Everything about the backend (what it does, how to deploy
+it, update it and delete it) is in [`api/README.md`](api/README.md).
+
 Generated or loaded on every production build: `/llms.txt` and `/es/llms.txt` (an index for AI tools, from
 `layouts/index.llms.txt`), and Google Analytics 4 (id in `config/_default/hugo.toml`, custom events in
 `layouts/partials/extend-footer.html`; nothing is sent from `hugo server`).

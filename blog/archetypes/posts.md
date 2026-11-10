@@ -5,6 +5,7 @@ lastmod: {{ .Date }} # update it whenever you change the article: it becomes dat
 draft: true
 description: "Answer first: two or three sentences saying what the reader will learn or decide. Search results, AI answers and the Article structured data use this text."
 tags: []
+showComments: true # reactions and comments; leave it out for entries that link out
 # A post written for this site has NO externalUrl: that field is only for entries that link out (Medium, slides...).
 ---
 
