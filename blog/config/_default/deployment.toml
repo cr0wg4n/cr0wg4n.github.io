@@ -38,6 +38,13 @@ order = ["^(css|js|img|fonts)/"]
   pattern = "^fonts/.+"
   cacheControl = "max-age=2592000, public"
 
+# The sitemap is not an RSS feed: without this it is served as application/rss+xml.
+[[matchers]]
+  pattern = "^(es/)?sitemap\\.xml$"
+  contentType = "application/xml"
+  cacheControl = "max-age=0, no-cache"
+  gzip = true
+
 # Pages, feeds and the search index: always revalidate so a deploy shows up straight away.
 [[matchers]]
   pattern = "^.+\\.(html|xml|json|webmanifest|txt)$"

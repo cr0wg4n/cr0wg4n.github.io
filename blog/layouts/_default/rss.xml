@@ -1,6 +1,7 @@
 {{- /*
   RSS feed, overriding Blowfish's template. Differences from the theme's:
-  - Items link to the original (externalUrl) when there is one; our own page is only a stub.
+  - Items always link to a page on this site, so the feed only points at our own host; for entries published
+    elsewhere that page is a short noindex summary, and the description carries the link to the original.
   - No e-mail address in the feed (the site obfuscates it in the HTML); the author goes in dc:creator.
   - The home feed lists only the main sections (params.mainSections, i.e. posts), not talks and projects.
   - Clean channel title/description for the home feed; all text is XML-escaped.
@@ -51,12 +52,13 @@
     {{ range $pages }}
     <item>
       <title>{{ .Title | transform.XMLEscape }}</title>
-      <link>{{ with .Params.externalUrl }}{{ . | transform.XMLEscape }}{{ else }}{{ .Permalink }}{{ end }}</link>
+      <link>{{ .Permalink }}</link>
       <pubDate>{{ .Date.Format "Mon, 02 Jan 2006 15:04:05 -0700" | safeHTML }}</pubDate>
       {{ with $.Site.Params.Author.name }}<dc:creator>{{ . | transform.XMLEscape }}</dc:creator>{{ end }}
       <guid isPermaLink="false">{{ .Permalink }}</guid>
       {{- /* summaryLength = 0 disables auto-summaries, so posts without a `summary` fall back to their `description` */}}
       {{- $itemDesc := .Summary | default .Description }}
+      {{- with .Params.externalUrl }}{{ $itemDesc = printf "%s %s: %s" $itemDesc (cond (eq $.Lang "es") "Leer el original" "Read the original") . }}{{ end }}
       <description>{{ $itemDesc | transform.XMLEscape | safeHTML }}</description>
     </item>
     {{ end }}
