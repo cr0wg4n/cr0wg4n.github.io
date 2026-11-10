@@ -121,10 +121,24 @@ aws cloudformation deploy --region us-east-2 --template-file packaged.yaml --sta
 
 The stack also creates the API's own address: a certificate (validated through DNS in your Route 53 zone), the API Gateway
 custom domain, and the DNS record. The defaults are `DomainName=comments.cr0wg4n.com` and the zone `HostedZoneId`; for
-another site pass `--parameter-overrides DomainName=... HostedZoneId=...`. The long `execute-api` address keeps working
-(output `DefaultApiUrl`). The certificate can take a few minutes to start being served after the first deploy.
+another site pass `--parameter-overrides DomainName=... HostedZoneId=...`. The long `execute-api` address that AWS gives
+every API is switched off (`DisableExecuteApiEndpoint`), so the API only answers on its own address. The certificate can
+take a few minutes to start being served after the first deploy.
 
 The Lambda reads `TABLE_NAME`, `SECRET_PARAM` and `TOPIC_ARN` from its environment; the stack sets them.
+
+## Cost guard
+
+Everything here is pay-per-use and idles at about zero. As a safety net the account has a monthly budget of USD 5 that
+e-mails you at 50%, 80% and 100% of actual spend (AWS Budgets: the first two budgets are free). It covers the whole
+AWS account, not only this stack. To create or change it:
+
+```sh
+aws budgets create-budget --account-id <account-id> \
+  --budget '{"BudgetName":"monthly-cost-guard","BudgetLimit":{"Amount":"5","Unit":"USD"},"TimeUnit":"MONTHLY","BudgetType":"COST"}' \
+  --notifications-with-subscribers '[{"Notification":{"NotificationType":"ACTUAL","ComparisonOperator":"GREATER_THAN","Threshold":80,"ThresholdType":"PERCENTAGE"},"Subscribers":[{"SubscriptionType":"EMAIL","Address":"<your-email>"}]}]'
+aws budgets delete-budget --account-id <account-id> --budget-name monthly-cost-guard     # to remove it
+```
 
 ## Delete
 

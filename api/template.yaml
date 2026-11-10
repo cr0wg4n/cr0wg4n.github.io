@@ -123,6 +123,8 @@ Resources:
     Properties:
       Name: !Sub "${AWS::StackName}"
       ProtocolType: HTTP
+      # Only the custom address (DomainName) reaches the API: the long execute-api address is switched off.
+      DisableExecuteApiEndpoint: true
       CorsConfiguration:
         AllowOrigins: [!Ref AllowedOrigin]
         AllowMethods: [GET, POST, OPTIONS]
@@ -224,8 +226,5 @@ Outputs:
   ApiUrl:
     Description: Put this in config/_default/params.toml as [comments] apiUrl.
     Value: !Sub "https://${DomainName}"
-  DefaultApiUrl:
-    Description: The long address AWS gives every API. It keeps working; use ApiUrl instead.
-    Value: !Sub "https://${Api}.execute-api.${AWS::Region}.amazonaws.com"
   TableName:
     Value: !Ref Table
