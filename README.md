@@ -76,8 +76,9 @@ Where to change other things: colors, fonts and effects in `assets/css/custom.cs
 
 **Reactions and comments** have their own backend in `api/` (Rust on AWS Lambda, DynamoDB, SNS; `api/template.yaml`
 is the CloudFormation stack). A post shows the section when its front matter has `showComments: true` (the archetype
-sets it); link-out entries don't. Comments are stored as pending and you get an e-mail with *Approve* and *Delete*
-links (each opens a confirmation page; nothing changes until you press the button). Nothing is rendered until
+sets it); link-out entries don't. They belong to the post, so its English and Spanish pages share them. Comments are
+published at once and you get an e-mail with a *Delete* link (it opens a confirmation page; nothing changes until you
+press the button). Nothing is rendered until
 `[comments] apiUrl` is set in `config/_default/params.toml`. Everything about the backend (what it does, how to deploy
 it, update it and delete it) is in [`api/README.md`](api/README.md).
 

@@ -1,28 +1,43 @@
-//! What the API accepts as a page address and as comment text.
+//! What the API accepts as the identifier of a post and as comment text.
 
-use comments_api::security::{clean_text, normalize_path};
+use comments_api::security::{clean_text, normalize_page};
 
 #[test]
-fn accepts_one_post_in_either_language() {
+fn every_form_of_the_same_post_gives_the_same_key() {
+    let key = Some("posts/my-post".to_string());
     assert_eq!(
-        normalize_path("/posts/my-post"),
-        Some("/posts/my-post/".into())
+        normalize_page("/posts/my-post"),
+        key,
+        "Hugo's translation key"
+    );
+    assert_eq!(normalize_page("posts/my-post"), key);
+    assert_eq!(
+        normalize_page("/posts/my-post/"),
+        key,
+        "English page address"
     );
     assert_eq!(
-        normalize_path("/posts/my-post/"),
-        Some("/posts/my-post/".into())
+        normalize_page("/es/posts/my-post/"),
+        key,
+        "Spanish page address"
+    );
+    assert_eq!(normalize_page("es/posts/my-post"), key);
+    assert_eq!(normalize_page("  /posts/my-post  "), key);
+}
+
+#[test]
+fn accepts_real_slugs() {
+    assert_eq!(
+        normalize_page("/posts/AI-slop"),
+        Some("posts/AI-slop".into())
     );
     assert_eq!(
-        normalize_path("/es/posts/mi_post/"),
-        Some("/es/posts/mi_post/".into())
+        normalize_page("/es/posts/mi_post/"),
+        Some("posts/mi_post".into())
     );
     assert_eq!(
-        normalize_path("/posts/AI-slop/"),
-        Some("/posts/AI-slop/".into())
-    );
-    assert_eq!(
-        normalize_path("/posts/masters-of-sampling-miloj-daft-punk/"),
-        Some("/posts/masters-of-sampling-miloj-daft-punk/".into())
+        normalize_page("/posts/masters-of-sampling-miloj-daft-punk"),
+        Some("posts/masters-of-sampling-miloj-daft-punk".into())
     );
 }
 
@@ -34,6 +49,7 @@ fn rejects_everything_else() {
         "/posts/",
         "/es/posts/",
         "/talks/x/",
+        "/projects/x",
         "/posts/a/b/",
         "/posts/../etc/",
         "/posts/a.b/",
@@ -42,21 +58,22 @@ fn rejects_everything_else() {
         "/posts//a/",
         "/posts/a b/",
         "/posts/á/",
+        "/fr/posts/a/",
         "https://evil.example/posts/a/",
         "//evil.example/posts/a/",
-        "posts/a/",
+        "es/es/posts/a",
     ] {
-        assert_eq!(normalize_path(bad), None, "should reject {bad:?}");
+        assert_eq!(normalize_page(bad), None, "should reject {bad:?}");
     }
     assert_eq!(
-        normalize_path(&format!("/posts/{}", "a".repeat(121))),
+        normalize_page(&format!("/posts/{}", "a".repeat(121))),
         None,
         "slug too long"
     );
     assert_eq!(
-        normalize_path(&format!("/posts/{}", "a".repeat(300))),
+        normalize_page(&format!("/posts/{}", "a".repeat(300))),
         None,
-        "path too long"
+        "key too long"
     );
 }
 

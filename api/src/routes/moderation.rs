@@ -1,4 +1,4 @@
-//! The approve / delete links from the e-mail. A link only opens a confirmation page (mail scanners open links);
+//! The delete link from the new-comment e-mail. A link only opens a confirmation page (mail scanners open links);
 //! the change happens when the button on that page is pressed.
 
 use crate::config::{App, MAX_BODY_BYTES};
@@ -17,7 +17,7 @@ struct Form {
 }
 
 fn valid(app: &App, action: &str, pk: &str, sk: &str, sig: &str) -> bool {
-    matches!(action, "approve" | "delete")
+    action == "delete"
         && pk.starts_with("P#")
         && sk.starts_with("C#")
         && verify(&app.secret, &[action, pk, sk], sig)
@@ -48,7 +48,6 @@ pub async fn show(app: &App, req: &Request) -> Result<Response<Body>, Error> {
     let Some(comment) = app.store.get_comment(pk, sk).await? else {
         return page("Comment not found", "<p>It was already deleted.</p>");
     };
-    let approve = action == "approve";
     let inner = format!(
         "<p>Page: <b>{}</b><br>From: <b>{}</b><br>Status: {}</p><blockquote>{}</blockquote>\
          <form method=post action=\"/moderate\">\
@@ -63,20 +62,9 @@ pub async fn show(app: &App, req: &Request) -> Result<Response<Body>, Error> {
         html_escape(pk),
         html_escape(sk),
         html_escape(sig),
-        if approve {
-            "Approve and publish"
-        } else {
-            "Delete for good"
-        },
+        "Delete for good",
     );
-    page(
-        if approve {
-            "Approve this comment?"
-        } else {
-            "Delete this comment?"
-        },
-        &inner,
-    )
+    page("Delete this comment?", &inner)
 }
 
 pub async fn apply(app: &App, req: &Request) -> Result<Response<Body>, Error> {
@@ -89,13 +77,6 @@ pub async fn apply(app: &App, req: &Request) -> Result<Response<Body>, Error> {
     if !valid(app, &form.action, &form.p, &form.k, &form.sig) {
         return json(403, json!({ "error": "invalid link" }));
     }
-    if form.action == "approve" {
-        match app.store.approve(&form.p, &form.k).await {
-            Ok(()) => page("Published", "<p>The comment is now visible.</p>"),
-            Err(_) => page("Not found", "<p>The comment no longer exists.</p>"),
-        }
-    } else {
-        app.store.delete_comment(&form.p, &form.k).await?;
-        page("Deleted", "<p>The comment was removed.</p>")
-    }
+    app.store.delete_comment(&form.p, &form.k).await?;
+    page("Deleted", "<p>The comment was removed.</p>")
 }

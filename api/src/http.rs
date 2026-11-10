@@ -1,6 +1,6 @@
 //! Reading requests and building responses.
 
-use crate::security::{normalize_path, visitor_hash};
+use crate::security::{normalize_page, visitor_hash};
 use lambda_http::request::RequestContext;
 use lambda_http::{Body, Error, Request, RequestExt, Response};
 use serde_json::Value;
@@ -83,9 +83,11 @@ pub fn visitor(secret: &[u8], req: &Request) -> String {
     visitor_hash(secret, &client_ip(req), ua, now_s() / 86_400)
 }
 
-/// The `path` query parameter, if it is a page that can have comments.
-pub fn path_param(req: &Request) -> Option<String> {
-    req.query_string_parameters()
-        .first("path")
-        .and_then(normalize_path)
+/// The page a request is about: the `key` query parameter (or the older `path`), as "posts/<slug>".
+pub fn page_param(req: &Request) -> Option<String> {
+    let query = req.query_string_parameters();
+    query
+        .first("key")
+        .or_else(|| query.first("path"))
+        .and_then(normalize_page)
 }

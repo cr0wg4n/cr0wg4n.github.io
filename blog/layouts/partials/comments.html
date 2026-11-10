@@ -1,5 +1,6 @@
 {{- /*
-  Reactions and comments, backed by the API in api/ (AWS Lambda + DynamoDB). Shown on pages with
+  Reactions and comments, backed by the API in api/ (AWS Lambda + DynamoDB). They belong to the POST, not to one page:
+  the English and the Spanish version of a post share them (data-key is Hugo's translation key). Shown on pages with
   `showComments: true` in the front matter, once [comments] apiUrl is set in params.toml.
   The page talks only to our own API, and only when the section is about to be seen (assets/js/comments.js).
 */ -}}
@@ -7,7 +8,7 @@
 {{- if .apiUrl }}
 {{- $es := eq $.Lang "es" }}
 {{- $js := resources.Get "js/comments.js" | minify | fingerprint }}
-<section id="comments" class="cm" data-api="{{ .apiUrl }}" data-path="{{ $.RelPermalink }}" data-lang="{{ $.Lang }}" aria-labelledby="cm-title">
+<section id="comments" class="cm" data-api="{{ .apiUrl }}" data-key="{{ $.TranslationKey }}" data-lang="{{ $.Lang }}" aria-labelledby="cm-title">
   <h2 id="cm-title" class="cm-title">{{ if $es }}Reacciones y comentarios{{ else }}Reactions and comments{{ end }}</h2>
 
   <div class="cm-reactions" role="group" aria-label="{{ if $es }}Reacciones{{ else }}Reactions{{ end }}">
