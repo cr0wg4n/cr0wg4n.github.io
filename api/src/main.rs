@@ -9,17 +9,14 @@
 //!
 //! CORS is handled by API Gateway (see template.yaml), so no CORS headers here.
 
-mod security;
-mod store;
-
+use comments_api::security::{clean_text, html_escape, normalize_path, sign, verify, visitor_hash};
+use comments_api::store::{Store, REACTION_KINDS};
 use lambda_http::request::RequestContext;
 use lambda_http::{run, service_fn, Body, Error, Request, RequestExt, Response};
-use security::{clean_text, html_escape, normalize_path, sign, verify, visitor_hash};
 use serde::Deserialize;
 use serde_json::{json, Value};
 use std::sync::Arc;
 use std::time::{SystemTime, UNIX_EPOCH};
-use store::{Store, REACTION_KINDS};
 
 struct App {
     store: Store,
@@ -57,7 +54,10 @@ struct ModerationForm {
 }
 
 fn now_ms() -> u64 {
-    SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_millis() as u64).unwrap_or(0)
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|d| d.as_millis() as u64)
+        .unwrap_or(0)
 }
 
 fn respond(status: u16, content_type: &str, body: String) -> Result<Response<Body>, Error> {
@@ -96,7 +96,11 @@ fn api_domain(req: &Request) -> String {
 }
 
 fn visitor(app: &App, req: &Request, now_s: u64) -> String {
-    let ua = req.headers().get("user-agent").and_then(|v| v.to_str().ok()).unwrap_or("");
+    let ua = req
+        .headers()
+        .get("user-agent")
+        .and_then(|v| v.to_str().ok())
+        .unwrap_or("");
     visitor_hash(&app.secret, &client_ip(req), ua, now_s / 86_400)
 }
 
@@ -115,7 +119,9 @@ async fn handle(app: Arc<App>, req: Request) -> Result<Response<Body>, Error> {
 }
 
 fn path_param(req: &Request) -> Option<String> {
-    req.query_string_parameters().first("path").and_then(normalize_path)
+    req.query_string_parameters()
+        .first("path")
+        .and_then(normalize_path)
 }
 
 async fn list_comments(app: &App, req: &Request) -> Result<Response<Body>, Error> {
@@ -147,7 +153,10 @@ async fn post_comment(app: &App, req: &Request) -> Result<Response<Body>, Error>
     let now_s = now_ms() / 1000;
     let who = visitor(app, req, now_s);
     if !app.store.allow("comment", &who, 3, 3600, now_s).await? {
-        return json_response(429, json!({ "error": "too many comments, try again later" }));
+        return json_response(
+            429,
+            json!({ "error": "too many comments, try again later" }),
+        );
     }
 
     let (pk, sk) = app.store.add_comment(&path, &name, &body, now_ms()).await?;
@@ -159,13 +168,27 @@ async fn post_comment(app: &App, req: &Request) -> Result<Response<Body>, Error>
     json_response(202, json!({ "status": "pending" }))
 }
 
-async fn notify_owner(app: &App, domain: &str, path: &str, name: &str, body: &str, pk: &str, sk: &str) -> Result<(), Error> {
+async fn notify_owner(
+    app: &App,
+    domain: &str,
+    path: &str,
+    name: &str,
+    body: &str,
+    pk: &str,
+    sk: &str,
+) -> Result<(), Error> {
     use aws_sdk_sesv2::types::{Body as MailBody, Content, Destination, EmailContent, Message};
     let link = |action: &str| {
         let sig = sign(&app.secret, &[action, pk, sk]);
         format!(
             "https://{domain}/moderate?{}",
-            serde_urlencoded::to_string([("action", action), ("p", pk), ("k", sk), ("sig", sig.as_str())]).unwrap_or_default()
+            serde_urlencoded::to_string([
+                ("action", action),
+                ("p", pk),
+                ("k", sk),
+                ("sig", sig.as_str())
+            ])
+            .unwrap_or_default()
         )
     };
     let text = format!(
@@ -181,7 +204,11 @@ async fn notify_owner(app: &App, domain: &str, path: &str, name: &str, body: &st
     app.ses
         .send_email()
         .from_email_address(&app.from_email)
-        .destination(Destination::builder().to_addresses(&app.owner_email).build())
+        .destination(
+            Destination::builder()
+                .to_addresses(&app.owner_email)
+                .build(),
+        )
         .content(EmailContent::builder().simple(message).build())
         .send()
         .await?;
@@ -192,7 +219,10 @@ async fn get_reactions(app: &App, req: &Request) -> Result<Response<Body>, Error
     let Some(path) = path_param(req) else {
         return json_response(400, json!({ "error": "invalid path" }));
     };
-    json_response(200, json!({ "reactions": app.store.reactions(&path).await? }))
+    json_response(
+        200,
+        json!({ "reactions": app.store.reactions(&path).await? }),
+    )
 }
 
 async fn post_reaction(app: &App, req: &Request) -> Result<Response<Body>, Error> {
@@ -208,14 +238,26 @@ async fn post_reaction(app: &App, req: &Request) -> Result<Response<Body>, Error
     let now_s = now_ms() / 1000;
     let who = visitor(app, req, now_s);
     if !app.store.allow("reaction", &who, 30, 3600, now_s).await? {
-        return json_response(429, json!({ "error": "too many reactions, try again later" }));
+        return json_response(
+            429,
+            json!({ "error": "too many reactions, try again later" }),
+        );
     }
-    let added = app.store.add_reaction(&path, &input.kind, &who, now_s).await?;
-    json_response(200, json!({ "added": added, "reactions": app.store.reactions(&path).await? }))
+    let added = app
+        .store
+        .add_reaction(&path, &input.kind, &who, now_s)
+        .await?;
+    json_response(
+        200,
+        json!({ "added": added, "reactions": app.store.reactions(&path).await? }),
+    )
 }
 
 fn moderation_fields(app: &App, action: &str, pk: &str, sk: &str, sig: &str) -> bool {
-    matches!(action, "approve" | "delete") && pk.starts_with("P#") && sk.starts_with("C#") && verify(&app.secret, &[action, pk, sk], sig)
+    matches!(action, "approve" | "delete")
+        && pk.starts_with("P#")
+        && sk.starts_with("C#")
+        && verify(&app.secret, &[action, pk, sk], sig)
 }
 
 fn page(title: &str, inner: &str) -> Result<Response<Body>, Error> {
@@ -231,7 +273,10 @@ fn page(title: &str, inner: &str) -> Result<Response<Body>, Error> {
         .status(200)
         .header("content-type", "text/html; charset=utf-8")
         .header("cache-control", "no-store")
-        .header("content-security-policy", "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'")
+        .header(
+            "content-security-policy",
+            "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'",
+        )
         .body(Body::from(html))?)
 }
 
@@ -264,9 +309,20 @@ async fn moderation_page(app: &App, req: &Request) -> Result<Response<Body>, Err
         html_escape(pk),
         html_escape(sk),
         html_escape(sig),
-        if action == "approve" { "Approve and publish" } else { "Delete for good" },
+        if action == "approve" {
+            "Approve and publish"
+        } else {
+            "Delete for good"
+        },
     );
-    page(if action == "approve" { "Approve this comment?" } else { "Delete this comment?" }, &inner)
+    page(
+        if action == "approve" {
+            "Approve this comment?"
+        } else {
+            "Delete this comment?"
+        },
+        &inner,
+    )
 }
 
 async fn moderation_apply(app: &App, req: &Request) -> Result<Response<Body>, Error> {

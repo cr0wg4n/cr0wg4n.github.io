@@ -36,7 +36,10 @@ pub struct StoredComment {
 }
 
 fn s(item: &std::collections::HashMap<String, A>, key: &str) -> String {
-    item.get(key).and_then(|v| v.as_s().ok()).cloned().unwrap_or_default()
+    item.get(key)
+        .and_then(|v| v.as_s().ok())
+        .cloned()
+        .unwrap_or_default()
 }
 
 fn n(item: &std::collections::HashMap<String, A>, key: &str) -> u64 {
@@ -52,7 +55,13 @@ impl Store {
     }
 
     /// Stores a new comment as "pending" and returns its (PK, SK).
-    pub async fn add_comment(&self, path: &str, name: &str, body: &str, now_ms: u64) -> Res<(String, String)> {
+    pub async fn add_comment(
+        &self,
+        path: &str,
+        name: &str,
+        body: &str,
+        now_ms: u64,
+    ) -> Res<(String, String)> {
         let id = uuid::Uuid::new_v4().simple().to_string();
         let pk = format!("P#{path}");
         let sk = format!("C#{now_ms:013}#{id}");
@@ -142,7 +151,8 @@ impl Store {
 
     /// Reaction counters of a page; every known kind is present (0 when never used).
     pub async fn reactions(&self, path: &str) -> Res<BTreeMap<String, u64>> {
-        let mut counts: BTreeMap<String, u64> = REACTION_KINDS.iter().map(|k| (k.to_string(), 0)).collect();
+        let mut counts: BTreeMap<String, u64> =
+            REACTION_KINDS.iter().map(|k| (k.to_string(), 0)).collect();
         let out = self
             .client
             .query()
@@ -162,7 +172,13 @@ impl Store {
     }
 
     /// Adds one reaction unless this visitor already used this kind on this page. Returns whether it was added.
-    pub async fn add_reaction(&self, path: &str, kind: &str, visitor: &str, now_s: u64) -> Res<bool> {
+    pub async fn add_reaction(
+        &self,
+        path: &str,
+        kind: &str,
+        visitor: &str,
+        now_s: u64,
+    ) -> Res<bool> {
         let marker = self
             .client
             .put_item()
@@ -175,7 +191,10 @@ impl Store {
             .await;
         match marker {
             Ok(_) => {}
-            Err(e) if e.as_service_error().is_some_and(|se| se.is_conditional_check_failed_exception()) => {
+            Err(e)
+                if e.as_service_error()
+                    .is_some_and(|se| se.is_conditional_check_failed_exception()) =>
+            {
                 return Ok(false)
             }
             Err(e) => return Err(e.into()),
@@ -195,12 +214,22 @@ impl Store {
 
     /// Counts one hit in a bucket; false when the visitor is over `max` hits in the current window of `window_s`
     /// seconds. Each window has its own item, so an expired item that TTL has not deleted yet never blocks anyone.
-    pub async fn allow(&self, bucket: &str, visitor: &str, max: u64, window_s: u64, now_s: u64) -> Res<bool> {
+    pub async fn allow(
+        &self,
+        bucket: &str,
+        visitor: &str,
+        max: u64,
+        window_s: u64,
+        now_s: u64,
+    ) -> Res<bool> {
         let res = self
             .client
             .update_item()
             .table_name(&self.table)
-            .key("PK", A::S(format!("RL#{bucket}#{visitor}#{}", now_s / window_s)))
+            .key(
+                "PK",
+                A::S(format!("RL#{bucket}#{visitor}#{}", now_s / window_s)),
+            )
             .key("SK", A::S("x".into()))
             .update_expression("SET #t = :ttl ADD #n :one")
             .condition_expression("attribute_not_exists(#n) OR #n < :max")
@@ -213,7 +242,12 @@ impl Store {
             .await;
         match res {
             Ok(_) => Ok(true),
-            Err(e) if e.as_service_error().is_some_and(|se| se.is_conditional_check_failed_exception()) => Ok(false),
+            Err(e)
+                if e.as_service_error()
+                    .is_some_and(|se| se.is_conditional_check_failed_exception()) =>
+            {
+                Ok(false)
+            }
             Err(e) => Err(e.into()),
         }
     }
