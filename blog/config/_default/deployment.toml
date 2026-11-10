@@ -39,9 +39,12 @@ order = ["^(css|js|img|fonts)/"]
   cacheControl = "max-age=2592000, public"
 
 # The sitemap is not an RSS feed: without this it is served as application/rss+xml.
+# force = true: hugo deploy skips files whose content did not change, so the new content type would never
+# reach an already uploaded sitemap. The files are tiny, so re-uploading them on every deploy costs nothing.
 [[matchers]]
   pattern = "^(es/)?sitemap\\.xml$"
   contentType = "application/xml"
+  force = true
   cacheControl = "max-age=0, no-cache"
   gzip = true
 
