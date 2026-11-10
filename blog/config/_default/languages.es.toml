@@ -2,7 +2,8 @@ disabled = false
 locale = "es-ES"
 label = "Español"
 weight = 2
-# title = "Mauricio"
+# The site title: it is the <title> of the home page and the end of every other page title.
+title = "Mauricio Matias - Blog Personal"
 
 [params]
   displayName = "ES"
