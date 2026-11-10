@@ -74,6 +74,14 @@ Where to change other things: colors, fonts and effects in `assets/css/custom.cs
 `config/_default/params.toml`; name, bio and links in `config/_default/languages.*.toml`; the link-preview image
 (og:image) in `static/img/social-card.png`.
 
+**Comments and reactions** use [Giscus](https://giscus.app) (GitHub Discussions of this repo). A post shows them when its
+front matter has `showComments: true` (the archetype sets it); link-out entries don't. The box loads only after the
+reader presses *Show comments*. One-time setup: enable *Settings > Features > Discussions*, create a category
+`Comments` of type *Announcements*, install the [giscus app](https://github.com/apps/giscus) on the repo, then put the
+category id in `[giscus] categoryId` (`config/_default/params.toml`). Get it with
+`gh api graphql -f query='{repository(owner:"cr0wg4n",name:"cr0wg4n.github.io"){discussionCategories(first:20){nodes{id name}}}}'`.
+Until that id is set, no comment box is rendered.
+
 Generated or loaded on every production build: `/llms.txt` and `/es/llms.txt` (an index for AI tools, from
 `layouts/index.llms.txt`), and Google Analytics 4 (id in `config/_default/hugo.toml`, custom events in
 `layouts/partials/extend-footer.html`; nothing is sent from `hugo server`).

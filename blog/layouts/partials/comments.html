@@ -1,0 +1,59 @@
+{{- /*
+  Giscus comments and reactions (GitHub Discussions of the repo set in [giscus] in params.toml).
+  - Shown only on pages with `showComments: true` (the posts archetype sets it; link-out entries do not).
+  - Renders nothing until [giscus] categoryId is filled in, so the site builds fine before Discussions exist.
+  - Nothing is loaded from giscus.app / github.com until the reader presses the button (privacy + speed).
+  - Each page gets its own discussion (mapping = pathname), so /posts/x/ and /es/posts/x/ stay separate.
+*/ -}}
+{{- with site.Params.giscus }}
+{{- if and .repo .repoId .category .categoryId }}
+{{- $es := eq $.Lang "es" }}
+<section id="comments" class="giscus-section" aria-labelledby="comments-title">
+  <h2 id="comments-title" class="giscus-title">{{ if $es }}Comentarios y reacciones{{ else }}Comments and reactions{{ end }}</h2>
+  <p class="giscus-note">
+    {{ if $es -}}
+      Los comentarios usan GitHub Discussions (necesitas una cuenta de GitHub). Al mostrarlos se cargan giscus.app y GitHub.
+    {{- else -}}
+      Comments use GitHub Discussions (you need a GitHub account). Showing them loads giscus.app and GitHub.
+    {{- end }}
+  </p>
+  <button type="button" id="giscus-load" class="giscus-button">{{ if $es }}Mostrar comentarios{{ else }}Show comments{{ end }}</button>
+  <div id="giscus-container" class="giscus"></div>
+</section>
+<script>
+  (function () {
+    var button = document.getElementById("giscus-load");
+    if (!button) return;
+    function mode() { return document.documentElement.classList.contains("dark") ? "dark" : "light"; }
+    button.addEventListener("click", function () {
+      var s = document.createElement("script");
+      s.src = "https://giscus.app/client.js";
+      s.async = true;
+      s.crossOrigin = "anonymous";
+      s.setAttribute("data-repo", {{ .repo }});
+      s.setAttribute("data-repo-id", {{ .repoId }});
+      s.setAttribute("data-category", {{ .category }});
+      s.setAttribute("data-category-id", {{ .categoryId }});
+      s.setAttribute("data-mapping", "pathname");
+      s.setAttribute("data-strict", "1");
+      s.setAttribute("data-reactions-enabled", "1");
+      s.setAttribute("data-emit-metadata", "0");
+      s.setAttribute("data-input-position", "top");
+      s.setAttribute("data-theme", mode());
+      s.setAttribute("data-lang", {{ if $es }}"es"{{ else }}"en"{{ end }});
+      s.setAttribute("data-loading", "lazy");
+      document.getElementById("giscus-container").appendChild(s);
+      button.hidden = true;
+      if (typeof window.gtag === "function") {
+        window.gtag("event", "comments_open", { language: {{ if $es }}"es"{{ else }}"en"{{ end }}, transport_type: "beacon" });
+      }
+      // follow the light/dark button after the iframe exists
+      new MutationObserver(function () {
+        var frame = document.querySelector("iframe.giscus-frame");
+        if (frame) frame.contentWindow.postMessage({ giscus: { setConfig: { theme: mode() } } }, "https://giscus.app");
+      }).observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    });
+  })();
+</script>
+{{- end }}
+{{- end }}

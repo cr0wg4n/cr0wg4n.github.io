@@ -206,3 +206,14 @@ forgejoDefaultServer = "https://v11.next.forgejo.org"
 
 [advertisement]
   # adsense = ""
+
+# -- Comments and reactions (Giscus) --
+# Uses GitHub Discussions of this repo. Needs: Discussions enabled, the giscus GitHub app installed on the repo,
+# and a category (type "Announcements", so only giscus can start threads). Get the ids at https://giscus.app
+# or with the GraphQL query in the README. While categoryId is empty, no comment box is rendered.
+# Which pages show it: `showComments: true` in the front matter (the posts archetype sets it).
+[giscus]
+  repo = "cr0wg4n/cr0wg4n.github.io"
+  repoId = "R_kgDOHP4e6w"
+  category = "Comments"
+  categoryId = ""
