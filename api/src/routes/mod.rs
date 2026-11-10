@@ -1,11 +1,11 @@
 //! One handler per endpoint:
 //!
-//!   GET  /comments?path=/posts/x/   approved comments
-//!   POST /comments                  new comment, stored as "pending"; the owner gets an e-mail
-//!   GET  /reactions?path=...        counters
-//!   POST /reactions                 one reaction per browser, kind and page per day
+//!   GET  /comments?key=/posts/x     published comments of a post (all its translations)
+//!   POST /comments                  new comment: published at once, the owner gets an e-mail with a delete link
+//!   GET  /reactions?key=...         counters
+//!   POST /reactions                 one reaction per browser, kind and post per day
 //!   GET  /moderate?...              confirmation page from the e-mail link (never changes anything)
-//!   POST /moderate                  approve or delete, only with a valid signature
+//!   POST /moderate                  delete a comment, only with a valid signature
 //!
 //! CORS is handled by API Gateway (see template.yaml), so no CORS headers here.
 

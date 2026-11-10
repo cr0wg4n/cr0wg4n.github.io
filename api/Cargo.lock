@@ -647,6 +647,7 @@ dependencies = [
  "aws-sdk-dynamodb",
  "aws-sdk-sns",
  "aws-sdk-ssm",
+ "base64 0.23.1",
  "hex",
  "hmac",
  "lambda_http",

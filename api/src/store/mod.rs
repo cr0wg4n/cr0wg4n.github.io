@@ -1,8 +1,8 @@
 //! DynamoDB access. One table, keys PK/SK, TTL attribute "ttl".
 //!
-//!   PK = P#<path>        SK = C#<ms, 13 digits>#<id>   a comment   (id, name, body, status, created, ttl while pending)
-//!   PK = P#<path>        SK = R#<kind>                 a reaction counter (count)
-//!   PK = RX#<visitor>#<path>#<kind>  SK = x            "this browser already reacted" marker (ttl)
+//!   PK = P#posts/<slug>  SK = C#<ms, 13 digits>#<id>   a comment   (id, name, body, lang, status, created, ttl while pending)
+//!   PK = P#posts/<slug>  SK = R#<kind>                 a reaction counter (count); one post = all its translations
+//!   PK = RX#<visitor>#posts/<slug>#<kind>  SK = x            "this browser already reacted" marker (ttl)
 //!   PK = RL#<bucket>#<who>#<window>  SK = x            rate-limit counter (n, ttl)
 //!
 //! "name", "status", "count" and "ttl" are DynamoDB reserved words, hence the #placeholders in expressions.

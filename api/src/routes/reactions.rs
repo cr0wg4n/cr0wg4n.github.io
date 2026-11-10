@@ -1,6 +1,6 @@
 use crate::config::*;
-use crate::http::{body_bytes, client_ip, json, now_s, path_param, visitor};
-use crate::security::{ip_hash, normalize_path};
+use crate::http::{body_bytes, client_ip, json, now_s, page_param, visitor};
+use crate::security::{ip_hash, normalize_page};
 use crate::store::REACTION_KINDS;
 use lambda_http::{Body, Error, Request, Response};
 use serde::Deserialize;
@@ -8,17 +8,19 @@ use serde_json::json;
 
 #[derive(Deserialize)]
 struct NewReaction {
-    path: String,
+    /// The post's translation key; older pages sent their address as `path`.
+    #[serde(alias = "path")]
+    key: String,
     kind: String,
 }
 
 pub async fn list(app: &App, req: &Request) -> Result<Response<Body>, Error> {
-    let Some(path) = path_param(req) else {
-        return json(400, json!({ "error": "invalid path" }));
+    let Some(page) = page_param(req) else {
+        return json(400, json!({ "error": "invalid page" }));
     };
     json(
         200,
-        json!({ "reactions": app.store.reactions(&path).await? }),
+        json!({ "reactions": app.store.reactions(&page).await? }),
     )
 }
 
@@ -29,8 +31,8 @@ pub async fn create(app: &App, req: &Request) -> Result<Response<Body>, Error> {
     let Ok(input) = serde_json::from_slice::<NewReaction>(body_bytes(req)) else {
         return json(400, json!({ "error": "invalid request" }));
     };
-    let Some(path) = normalize_path(&input.path) else {
-        return json(400, json!({ "error": "invalid path" }));
+    let Some(page) = normalize_page(&input.key) else {
+        return json(400, json!({ "error": "invalid page" }));
     };
     if !REACTION_KINDS.contains(&input.kind.as_str()) {
         return json(400, json!({ "error": "invalid reaction" }));
@@ -51,10 +53,10 @@ pub async fn create(app: &App, req: &Request) -> Result<Response<Body>, Error> {
     }
     let added = app
         .store
-        .add_reaction(&path, &input.kind, &visitor(&app.secret, req), now)
+        .add_reaction(&page, &input.kind, &visitor(&app.secret, req), now)
         .await?;
     json(
         200,
-        json!({ "added": added, "reactions": app.store.reactions(&path).await? }),
+        json!({ "added": added, "reactions": app.store.reactions(&page).await? }),
     )
 }

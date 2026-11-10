@@ -1,23 +1,23 @@
-/// Accepts the address of one post, "/posts/<slug>/" or "/es/posts/<slug>/", and returns it in canonical form
-/// (with the trailing slash). Anything else is rejected: other sections, nested paths, queries, odd characters.
-pub fn normalize_path(raw: &str) -> Option<String> {
-    let mut path = raw.trim().to_string();
-    if path.is_empty() || path.len() > 200 {
+/// The identifier of one post, shared by all its translations: "posts/<slug>".
+///
+/// Accepts the key Hugo gives to every language version of a page ("/posts/<slug>"), and also the address of either
+/// language version ("/posts/<slug>/", "/es/posts/<slug>/"), so the English and the Spanish page of a post end up
+/// with the same comments and reactions. Anything else is rejected: other sections, nested paths, queries, odd characters.
+pub fn normalize_page(raw: &str) -> Option<String> {
+    let raw = raw.trim();
+    if raw.is_empty() || raw.len() > 200 {
         return None;
     }
-    if !path.ends_with('/') {
-        path.push('/');
-    }
-    let rest = path
-        .strip_prefix("/es/posts/")
-        .or_else(|| path.strip_prefix("/posts/"))?;
-    let slug = rest.strip_suffix('/')?;
+    let raw = raw.strip_prefix('/').unwrap_or(raw);
+    let raw = raw.strip_suffix('/').unwrap_or(raw);
+    let raw = raw.strip_prefix("es/").unwrap_or(raw);
+    let slug = raw.strip_prefix("posts/")?;
     let valid = !slug.is_empty()
         && slug.len() <= 120
         && slug
             .chars()
             .all(|c| c.is_ascii_alphanumeric() || c == '-' || c == '_');
-    valid.then_some(path)
+    valid.then(|| format!("posts/{slug}"))
 }
 
 /// Trims, normalizes line breaks, drops control characters and enforces 1..=max characters.

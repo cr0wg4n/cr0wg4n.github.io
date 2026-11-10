@@ -4,13 +4,14 @@
   var root = document.getElementById("comments");
   if (!root) return;
   var api = root.dataset.api.replace(/\/$/, "");
-  var path = root.dataset.path;
+  var key = root.dataset.key; // the post: shared by all its translations
   var lang = root.dataset.lang === "es" ? "es" : "en";
   var T = {
     en: {
       empty: "No comments yet. Be the first.",
       sending: "Sending…",
-      sent: "Thanks! Your comment will appear after I review it.",
+      published: "Thanks! Your comment is published.",
+      held: "Thanks! Your comment will appear after I review it.",
       tooMany: "Too many attempts. Try again in a while.",
       failed: "Something went wrong. Please try again.",
       already: "You already used that reaction on this page.",
@@ -19,7 +20,8 @@
     es: {
       empty: "Todavía no hay comentarios. Sé el primero.",
       sending: "Enviando…",
-      sent: "¡Gracias! Tu comentario aparecerá cuando lo revise.",
+      published: "¡Gracias! Tu comentario está publicado.",
+      held: "¡Gracias! Tu comentario aparecerá cuando lo revise.",
       tooMany: "Demasiados intentos. Prueba de nuevo más tarde.",
       failed: "Algo salió mal. Inténtalo otra vez.",
       already: "Ya usaste esa reacción en esta página.",
@@ -56,10 +58,10 @@
     });
   }
   function remembered(kind) {
-    try { return localStorage.getItem("cm:" + path + ":" + kind) === "1"; } catch (e) { return false; }
+    try { return localStorage.getItem("cm:" + key + ":" + kind) === "1"; } catch (e) { return false; }
   }
   function remember(kind) {
-    try { localStorage.setItem("cm:" + path + ":" + kind, "1"); } catch (e) { /* private mode */ }
+    try { localStorage.setItem("cm:" + key + ":" + kind, "1"); } catch (e) { /* private mode */ }
   }
   Array.prototype.forEach.call(reactionButtons, function (button) {
     var kind = button.dataset.reaction;
@@ -67,7 +69,7 @@
     button.addEventListener("click", function () {
       if (button.getAttribute("aria-pressed") === "true") return;
       button.disabled = true;
-      request("POST", "/reactions", { path: path, kind: kind }).then(function (r) {
+      request("POST", "/reactions", { key: key, kind: kind }).then(function (r) {
         if (r.status === 200) {
           showCounts(r.data.reactions);
           button.setAttribute("aria-pressed", "true");
@@ -87,6 +89,25 @@
   var status = root.querySelector(".cm-status");
   function setStatus(text) { status.textContent = text; }
 
+  function commentElement(c) {
+    var item = document.createElement("article");
+    item.className = "cm-item";
+    var head = document.createElement("header");
+    var name = document.createElement("strong");
+    name.textContent = c.name;
+    var when = document.createElement("time");
+    var date = new Date(c.created);
+    when.dateTime = date.toISOString();
+    when.textContent = date.toLocaleDateString(lang === "es" ? "es-ES" : "en-US", { year: "numeric", month: "short", day: "numeric" });
+    head.appendChild(name);
+    head.appendChild(when);
+    var body = document.createElement("p");
+    body.textContent = c.body;
+    item.appendChild(head);
+    item.appendChild(body);
+    return item;
+  }
+
   function renderComments(comments) {
     list.textContent = "";
     if (!comments.length) {
@@ -96,28 +117,18 @@
       list.appendChild(empty);
       return;
     }
-    comments.forEach(function (c) {
-      var item = document.createElement("article");
-      item.className = "cm-item";
-      var head = document.createElement("header");
-      var name = document.createElement("strong");
-      name.textContent = c.name;
-      var when = document.createElement("time");
-      var date = new Date(c.created);
-      when.dateTime = date.toISOString();
-      when.textContent = date.toLocaleDateString(lang === "es" ? "es-ES" : "en-US", { year: "numeric", month: "short", day: "numeric" });
-      head.appendChild(name);
-      head.appendChild(when);
-      var body = document.createElement("p");
-      body.textContent = c.body;
-      item.appendChild(head);
-      item.appendChild(body);
-      list.appendChild(item);
-    });
+    comments.forEach(function (c) { list.appendChild(commentElement(c)); });
+  }
+
+  // A comment that was just published shows up at once, without reloading.
+  function appendComment(c) {
+    var empty = list.querySelector(".cm-empty");
+    if (empty) list.removeChild(empty);
+    list.appendChild(commentElement(c));
   }
 
   function load() {
-    var q = "?path=" + encodeURIComponent(path);
+    var q = "?key=" + encodeURIComponent(key);
     request("GET", "/reactions" + q).then(function (r) { if (r.status === 200) showCounts(r.data.reactions); }).catch(function () {});
     request("GET", "/comments" + q).then(function (r) {
       if (r.status === 200) renderComments(r.data.comments || []);
@@ -133,16 +144,22 @@
     button.disabled = true;
     setStatus(T.sending);
     request("POST", "/comments", {
-      path: path,
+      key: key,
+      lang: lang,
       name: form.elements.name.value,
       body: form.elements.body.value,
       website: form.elements.website.value,
       ts: shownAt
     }).then(function (r) {
-      if (r.status === 202) {
-        setStatus(T.sent);
+      if (r.status === 201) {
+        setStatus(T.published);
+        appendComment(r.data.comment);
         form.reset();
-        track("comment_submit", {});
+        track("comment_submit", { outcome: "published" });
+      } else if (r.status === 202) {
+        setStatus(T.held);
+        form.reset();
+        track("comment_submit", { outcome: "held" });
       } else if (r.status === 429) {
         setStatus(T.tooMany);
       } else {
