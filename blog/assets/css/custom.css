@@ -291,8 +291,8 @@ main article > header:has(> img.rounded-full)::before {
 /* ---------------------------------------------------------------------------
    Reactions and comments: see layouts/partials/comments.html and assets/js/comments.js
    --------------------------------------------------------------------------- */
-.cm { margin-top: 2.5rem; font-size: 0.875rem; }
-.cm-title { margin: 0 0 1rem; font-size: 1.1rem; }
+.cm { margin-top: 2.5rem; font-size: 1rem; line-height: 1.6; } /* same size as the article text */
+.cm-title { margin: 0 0 1rem; font-size: 1.25rem; }
 .cm-reactions { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.5rem; }
 .cm-react {
   display: inline-flex; align-items: center; gap: 0.4rem;
