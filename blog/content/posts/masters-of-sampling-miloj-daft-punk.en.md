@@ -13,7 +13,9 @@ tags: ["career", "ai", "music"]
 showComments: true
 ---
 
-First things first: [play this video](https://youtu.be/Zwggkz3z6SY), turn the volume down to 15%, hide that window (we only need the audio) and keep reading...
+First things first: play the video below, turn the volume down to 15%, hide that window (we only need the audio) and keep reading...
+
+{{< youtube id="Zwggkz3z6SY" title="Milo J - Cuando El Agua Hirviendo (Visualizer)" loading="lazy" >}}
 
 It is striking how fast something becomes obsolete in a very short time, thanks to something that spread like a virus and changed reality overnight. Not long ago I spent my days reading and writing a lot of code the traditional way; now it has been a very long time since I programmed anything elaborate on my own. Everything I do day to day is give instructions; to a large extent that is the point: we keep giving instructions to solve concrete problems. Code is still part of the craft, but it is more ephemeral than ever, just as assembly lost much of its relevance after C/C++.
 
@@ -25,7 +27,7 @@ You are probably finishing the song by now. Let's think about Milo J: I met him 
 
 Coincidentally, several of those samples are part of the punch moments that resonate so much in my head. All thanks to an artist who is not Milo J, someone who set out to compose a song for themselves, for their time, for an audience and, without knowing it, for an unforeseen future in which it would be part of a new album. And what if that author had borrowed a few chords, a few lyrics from someone else, and so on...? As the famous saying goes: "if I have seen further, it is by standing on the shoulders of giants".
 
-Just like Milo J, we have another great example: Daft Punk. I don't think there is anyone on earth who hasn't heard at least a part of one of their compositions. In case you are part of that 0.001% of people who still don't know them, [this is Daft Punk](https://www.youtube.com/watch?v=m2r-aOS79WA). They are a renowned musical duo, popularly known for working magic with samples and having a repertoire full of them, among a thousand other things. [Play this video to see a compilation of several of the samples Daft Punk used throughout their songs](https://www.youtube.com/watch?v=n_STypDIO2g).
+Just like Milo J, we have another great example: Daft Punk. I don't think there is anyone on earth who hasn't heard at least a part of one of their compositions. In case you are part of that 0.001% of people who still don't know them, this is [Daft Punk](https://www.youtube.com/watch?v=m2r-aOS79WA). They are a renowned musical duo, popularly known for working magic with samples and having a repertoire full of them, among a thousand other things. [Here is a compilation of several of the samples Daft Punk used throughout their songs](https://www.youtube.com/watch?v=n_STypDIO2g).
 
 Including parts of existing songs never stopped their massive success or their high standing in music culture to this day. What did the success of Daft Punk and Milo J depend on? The lyrics and sounds used as samples are not personal creations, but a reuse of something that already exists: an `import` into their rhythm and structure, an `implements` in their genre and their tunes, an `export` and `publish` for a future musical world; without belittling all the effort, talent and instinct it takes to put each piece together, feed back into it and bring great musical works to life.
 
@@ -44,7 +46,7 @@ If you liked this post, save my [RSS](https://cr0wg4n.com/index.xml) or find me 
 
 Here are some videos that help to understand the current state of the art:
 
-* Lead Architect Reveals His Rules for Coding Agents https://youtu.be/mkN4uRZYPfs
-* AI Writes the Code. So What's Left for Engineers? - Laurie Voss, Arize AI, https://youtu.be/kspZP5BgkEU
-* Senior Engineers Are Using AI Wrong and Software Factories Are Dumb, https://youtu.be/4Oq_gdhjYUw
-* AI Agents Still Can't Maintain Your Codebase, https://youtu.be/ntO2eQ2iu6o
+* [Lead Architect Reveals His Rules for Coding Agents](https://youtu.be/mkN4uRZYPfs) · Beyond Coding
+* [AI Writes the Code. So What's Left for Engineers? - Laurie Voss, Arize AI](https://youtu.be/kspZP5BgkEU) · AI Engineer
+* [Senior Engineers Are Using AI Wrong and Software Factories Are Dumb](https://youtu.be/4Oq_gdhjYUw) · Joe Maddalone
+* [AI Agents Still Can't Maintain Your Codebase](https://youtu.be/ntO2eQ2iu6o) · Perfology
