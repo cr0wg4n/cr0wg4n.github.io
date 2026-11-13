@@ -27,11 +27,7 @@ Probablemente ya estés terminando de escuchar la canción. Pensemos en Milo J: 
 
 Coincidentemente, varios de esos samples forman parte de los momentos punch que resuenan tanto en mi cabeza. Todo gracias a un artista que no es Milo J, alguien a quien se le ocurrió componer una canción para sí, para su tiempo, para un público y, sin saberlo, para un futuro no previsto en el que sería parte de un nuevo álbum. ¿Y qué pasa si dicho autor tomó prestados unos acordes, unas cuantas letras de alguien más y así sucesivamente...? Como famosamente dicen: “si he visto más lejos, es porque me he parado sobre los hombros de gigantes”.
 
-Así como Milo J, tenemos otro grandioso ejemplo: Daft Punk. No creo que haya alguien en la tierra que no haya escuchado siquiera una parte de alguna de sus composiciones. Por si eres parte de ese 0.001% de personas que todavía no los conocen, son ellos:
-
-{{< youtube id="m2r-aOS79WA" title="Daft Funk Live - Studio Session London 2024" loading="lazy" >}}
-
-Es un reconocido dúo musical, popularmente conocido por hacer magia con samples y tener un repertorio lleno de ellos, entre mil cosas más. Este es un compilado de varios de los samples empleados por Daft Punk a lo largo de sus canciones:
+Así como Milo J, tenemos otro grandioso ejemplo: Daft Punk. No creo que haya alguien en la tierra que no haya escuchado siquiera una parte de alguna de sus composiciones. Por si eres parte de ese 0.001% de personas que todavía no los conocen, son [ellos](https://www.youtube.com/watch?v=m2r-aOS79WA). Es un reconocido dúo musical, popularmente conocido por hacer magia con samples y tener un repertorio lleno de ellos, entre mil cosas más. Este es un compilado de varios de los samples empleados por Daft Punk a lo largo de sus canciones:
 
 {{< youtube id="n_STypDIO2g" title="Sample(/Cover) Compilation: Daft Punk & Related Acts (Update)" loading="lazy" >}}
 

@@ -27,11 +27,7 @@ You are probably finishing the song by now. Let's think about Milo J: I met him 
 
 Coincidentally, several of those samples are part of the punch moments that resonate so much in my head. All thanks to an artist who is not Milo J, someone who set out to compose a song for themselves, for their time, for an audience and, without knowing it, for an unforeseen future in which it would be part of a new album. And what if that author had borrowed a few chords, a few lyrics from someone else, and so on...? As the famous saying goes: "if I have seen further, it is by standing on the shoulders of giants".
 
-Just like Milo J, we have another great example: Daft Punk. I don't think there is anyone on earth who hasn't heard at least a part of one of their compositions. In case you are part of that 0.001% of people who still don't know them, this is Daft Punk:
-
-{{< youtube id="m2r-aOS79WA" title="Daft Funk Live - Studio Session London 2024" loading="lazy" >}}
-
-They are a renowned musical duo, popularly known for working magic with samples and having a repertoire full of them, among a thousand other things. Here is a compilation of several of the samples Daft Punk used throughout their songs:
+Just like Milo J, we have another great example: Daft Punk. I don't think there is anyone on earth who hasn't heard at least a part of one of their compositions. In case you are part of that 0.001% of people who still don't know them, this is [Daft Punk](https://www.youtube.com/watch?v=m2r-aOS79WA). They are a renowned musical duo, popularly known for working magic with samples and having a repertoire full of them, among a thousand other things. Here is a compilation of several of the samples Daft Punk used throughout their songs:
 
 {{< youtube id="n_STypDIO2g" title="Sample(/Cover) Compilation: Daft Punk & Related Acts (Update)" loading="lazy" >}}
 
