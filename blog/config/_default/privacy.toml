@@ -1,0 +1,3 @@
+# Embedded YouTube videos use the privacy-enhanced domain (youtube-nocookie.com).
+[youtube]
+  privacyEnhanced = true
