@@ -52,18 +52,7 @@ If you liked this post, save my [RSS](https://cr0wg4n.com/index.xml) or find me 
 
 Here are some videos that help to understand the current state of the art:
 
-**Lead Architect Reveals His Rules for Coding Agents** · Beyond Coding
-
-{{< youtube id="mkN4uRZYPfs" title="Lead Architect Reveals His Rules for Coding Agents" loading="lazy" >}}
-
-**AI Writes the Code. So What's Left for Engineers? - Laurie Voss, Arize AI** · AI Engineer
-
-{{< youtube id="kspZP5BgkEU" title="AI Writes the Code. So What's Left for Engineers? - Laurie Voss, Arize AI" loading="lazy" >}}
-
-**Senior Engineers Are Using AI Wrong and Software Factories Are Dumb** · Joe Maddalone
-
-{{< youtube id="4Oq_gdhjYUw" title="Senior Engineers Are Using AI Wrong and Software Factories Are Dumb" loading="lazy" >}}
-
-**AI Agents Still Can't Maintain Your Codebase** · Perfology
-
-{{< youtube id="ntO2eQ2iu6o" title="AI Agents Still Can't Maintain Your Codebase" loading="lazy" >}}
+* [Lead Architect Reveals His Rules for Coding Agents](https://youtu.be/mkN4uRZYPfs) · Beyond Coding
+* [AI Writes the Code. So What's Left for Engineers? - Laurie Voss, Arize AI](https://youtu.be/kspZP5BgkEU) · AI Engineer
+* [Senior Engineers Are Using AI Wrong and Software Factories Are Dumb](https://youtu.be/4Oq_gdhjYUw) · Joe Maddalone
+* [AI Agents Still Can't Maintain Your Codebase](https://youtu.be/ntO2eQ2iu6o) · Perfology
