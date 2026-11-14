@@ -3,3 +3,12 @@
 
 {{/* Machine-readable licence of the original writing and images (see CONTENT-LICENSE.md in the repo). */}}
 <link rel="license" href="https://creativecommons.org/licenses/by/4.0/">
+
+{{/* Visual effects: which ones are on is decided in code, in [effects] of config/_default/params.toml (not exposed
+     to visitors). Each enabled effect becomes a class on <html> before the first paint (fx-<name>), available as a hook for scripts and CSS.
+     The effect's own CSS and scripts are loaded by partials/effects/scripts.html. */}}
+{{ $enabled := slice }}
+{{ range $name, $on := site.Params.effects }}{{ if $on }}{{ $enabled = $enabled | append (printf "fx-%s" $name) }}{{ end }}{{ end }}
+{{ with $enabled }}
+<script>document.documentElement.classList.add.apply(document.documentElement.classList, {{ . | jsonify | safeJS }});</script>
+{{ end }}

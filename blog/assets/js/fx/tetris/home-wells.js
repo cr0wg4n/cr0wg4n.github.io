@@ -1,27 +1,32 @@
 // Two small Tetris wells on both sides of the home avatar, each playing itself. Purely decorative:
-// the canvases are hidden from assistive tech, ignore the pointer, pause when off screen or in a background
-// tab, and with "reduce motion" they show one still frame instead of moving.
+// the canvases are hidden from assistive tech, pause when off screen or in a background
+// tab, and with "reduce motion" they show one still frame instead of moving. A click on a well drops the falling piece in that column.
 (function () {
   var avatar = document.querySelector("main article > header > img.rounded-full");
   if (!avatar) return;
   var header = avatar.parentElement;
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-  var COLS = 6, ROWS = 10, CELL = 14;
+  // The wells scale to the room beside the photo (see layout()), so ROWS and CELL change with the width.
+  var NARROW_COLS = 6, WIDE_COLS = 10; // phones keep the narrow well, wider screens get the wide one
+  var WELL_HEIGHT = 165; // px: taller wells let the stack grow higher before the game restarts
+  var COLS = NARROW_COLS, ROWS = 10, CELL = 14;
   var SHAPES = {
     I: [[1, 1, 1, 1]], O: [[1, 1], [1, 1]], T: [[0, 1, 0], [1, 1, 1]],
     S: [[0, 1, 1], [1, 1, 0]], Z: [[1, 1, 0], [0, 1, 1]], J: [[1, 0, 0], [1, 1, 1]], L: [[0, 0, 1], [1, 1, 1]]
   };
   var TYPES = Object.keys(SHAPES);
-  var TOKENS = { I: "primary-300", O: "primary-400", T: "primary-500", S: "primary-600", Z: "primary-700", J: "secondary-400", L: "secondary-600" };
 
   function rotate(m) {
     return m[0].map(function (_, c) { return m.map(function (r) { return r[c]; }).reverse(); });
   }
+  // Pieces use a range of shades of the brand colour (the theme's primary, orange in the "fire" scheme), so
+  // they look related but not flat.
+  var SHADES = { I: "300", O: "400", T: "500", S: "600", Z: "700", J: "400", L: "600" };
   function palette() {
     var style = getComputedStyle(document.documentElement), out = {};
     TYPES.forEach(function (t) {
-      var v = style.getPropertyValue("--color-" + TOKENS[t]).trim();
+      var v = style.getPropertyValue("--color-primary-" + SHADES[t]).trim();
       out[t] = v ? "rgb(" + v + ")" : "#f97316";
     });
     return out;
@@ -70,7 +75,7 @@
       }
       var sum = heights.reduce(function (a, b) { return a + b; }, 0), bump = 0;
       for (c = 1; c < COLS; c++) bump += Math.abs(heights[c] - heights[c - 1]);
-      return -0.5 * sum - 0.4 * holes * 3 - 0.2 * bump + 0.8 * fullRows(g).length * 3 + Math.random() * 0.9;
+      return -0.25 * sum - 0.4 * holes * 3 - 0.2 * bump + 0.8 * fullRows(g).length * 1.5 + Math.random() * 0.9;
     }
     function plan(type) {
       var best = null, shape = SHAPES[type];
@@ -108,12 +113,18 @@
         return;
       }
       if (!piece) { spawn(); return; }
-      if (piece.x !== piece.target) {
+      if (piece.hard) { // dropped by a click: slide over, then fall fast until it lands
+        if (!collide(grid, piece.shape, piece.target, piece.y)) piece.x = piece.target;
+        for (var k = 0; k < 3 && !collide(grid, piece.shape, piece.x, piece.y + 1); k++) piece.y++;
+        if (!collide(grid, piece.shape, piece.x, piece.y + 1)) return;
+      } else if (piece.x !== piece.target) {
         var nx = piece.x + (piece.target > piece.x ? 1 : -1);
         if (!collide(grid, piece.shape, nx, piece.y)) piece.x = nx;
       }
-      if (++piece.tick % 2) return; // gravity: one row every second step
-      if (!collide(grid, piece.shape, piece.x, piece.y + 1)) { piece.y++; return; }
+      if (!piece.hard) {
+        if (++piece.tick % 2) return; // gravity: one row every second step
+        if (!collide(grid, piece.shape, piece.x, piece.y + 1)) { piece.y++; return; }
+      }
       lock(grid, piece.shape, piece.x, piece.y, piece.type);
       piece = null;
       if (fullRows(grid).length) flash = 4;
@@ -147,6 +158,16 @@
     reset();
     return {
       tick: function () { step(); draw(); },
+      // A click on column `col`: the falling piece moves there and drops until it lands.
+      drop: function (col) {
+        if (wait > 0 || flash > 0) return;
+        if (!piece) spawn();
+        if (!piece) return;
+        piece.target = Math.max(0, Math.min(COLS - piece.shape[0].length, col - Math.floor(piece.shape[0].length / 2)));
+        piece.hard = true;
+        if (reduce.matches) { for (var i = 0; i < 40 && piece; i++) step(); } else step(); // no loop to animate it
+        draw();
+      },
       still: function () { // "reduce motion": play ahead without drawing, then show one frame
         for (var i = 0; i < 260; i++) step();
         piece = null; draw();
@@ -154,22 +175,59 @@
     };
   }
 
-  function make(side, delay) {
+  var canvases = ["left", "right"].map(function (side) {
     var canvas = document.createElement("canvas");
     canvas.className = "tetris-well tetris-" + side;
     canvas.setAttribute("aria-hidden", "true");
-    canvas.style.width = COLS * CELL + "px";
-    canvas.style.height = ROWS * CELL + "px";
     header.appendChild(canvas);
-    return Well(canvas, delay);
-  }
-  var wells = [make("left", 0), make("right", 14)];
+    canvas.addEventListener("pointerdown", function (e) {
+      var well = wells[canvases.indexOf(canvas)], box = canvas.getBoundingClientRect();
+      if (well && box.width) well.drop(Math.floor((e.clientX - box.left) / box.width * COLS));
+    });
+    return canvas;
+  });
+  var wells = [];
 
-  if (reduce.matches) { wells.forEach(function (w) { w.still(); }); return; }
+  // Fits the wells into the room beside the photo at any width. The room is measured from the photo to the
+  // edge of the window (the header itself is narrower than the window). Full size (14 px cells, 40 px away from
+  // the photo) when there is space; smaller cells and a tighter gap on narrow screens. Rebuilds the wells only
+  // if their size changed.
+  function layout() {
+    var photo = avatar.getBoundingClientRect();
+    var box = header.getBoundingClientRect();
+    var radius = (photo.width || 144) / 2;
+    var centre = photo.left + photo.width / 2;
+    var viewport = document.documentElement.clientWidth;
+    var room = Math.min(centre, viewport - centre) - radius - 8; // free space beside the photo, 8 px from the edge
+    var cols = room >= WIDE_COLS * 14 + 40 ? WIDE_COLS : NARROW_COLS; // wider wells when the screen is not a phone
+    var gap = room >= cols * 14 + 40 ? 40 : 8;
+    var cell = Math.max(5, Math.min(14, Math.floor((room - gap) / cols)));
+    var rows = Math.max(8, Math.floor(WELL_HEIGHT / cell));
+    var w = cols * cell, h = rows * cell;
+    var top = avatar.offsetTop + avatar.offsetHeight - h; // bottom of the well level with the bottom of the photo
+    var local = centre - box.left; // photo centre, relative to the header
+    canvases.forEach(function (canvas, i) {
+      canvas.style.width = w + "px";
+      canvas.style.height = h + "px";
+      canvas.style.top = top + "px";
+      canvas.style.left = (i === 0 ? local - radius - gap - w : local + radius + gap) + "px";
+    });
+    if (wells.length && cell === CELL && rows === ROWS && cols === COLS) return;
+    CELL = cell; ROWS = rows; COLS = cols;
+    wells = [Well(canvases[0], 0), Well(canvases[1], 14)];
+    if (reduce.matches) wells.forEach(function (w) { w.still(); });
+  }
+  layout();
+  // The photo and the fonts finish loading after the script runs, which moves things: measure again.
+  if (!avatar.complete) avatar.addEventListener("load", layout);
+  window.addEventListener("load", layout);
+  if ("ResizeObserver" in window) new ResizeObserver(layout).observe(header);
 
   var timer = null, onScreen = true;
+  function enabled() { return document.documentElement.classList.contains("fx-tetris"); }
   function run() {
-    var should = onScreen && !document.hidden && getComputedStyle(header.querySelector(".tetris-well")).display !== "none";
+    if (reduce.matches) return; // one still frame, no loop
+    var should = enabled() && onScreen && !document.hidden;
     if (should && !timer) timer = setInterval(function () { wells.forEach(function (w) { w.tick(); }); }, 90);
     if (!should && timer) { clearInterval(timer); timer = null; }
   }
@@ -177,6 +235,10 @@
     new IntersectionObserver(function (e) { onScreen = e[0].isIntersecting; run(); }).observe(header);
   }
   document.addEventListener("visibilitychange", run);
-  window.addEventListener("resize", run);
+  var resizing = null;
+  window.addEventListener("resize", function () {
+    clearTimeout(resizing);
+    resizing = setTimeout(layout, 120);
+  });
   run();
 })();

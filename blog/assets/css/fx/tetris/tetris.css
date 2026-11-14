@@ -1,0 +1,80 @@
+/* ==========================================================================
+   Effect "tetris": loaded by layouts/partials/effects/scripts.html only when
+   [effects] tetris = true in config/_default/params.toml. Scripts:
+   assets/js/fx/tetris/home-wells.js (home wells) and click-piece.js (a piece at every click).
+   ========================================================================== */
+
+/* The wells are positioned inside the avatar header. */
+main article > header:has(> img.rounded-full) {
+  position: relative;
+}
+
+/* ---------------------------------------------------------------------------
+   Home: two self-playing Tetris wells beside the avatar (assets/js/fx/tetris/home-wells.js).
+   The header must be position: relative (set below). The script sizes and places each well (size, top and
+   left are set inline) so it fits beside the photo at any screen width. They fade in from the top so pieces
+   appear out of nowhere.
+   --------------------------------------------------------------------------- */
+.tetris-well {
+  position: absolute;
+  cursor: pointer; /* a click drops the falling piece there */
+  touch-action: manipulation;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 28%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 28%);
+}
+
+/* --- Click Tetris piece: falls from the top of the window to the pointer, then fades (click-piece.js) --- */
+
+@keyframes click-piece {
+  0% {
+    transform: translateY(calc(-1 * var(--fall)));
+    opacity: 0.9;
+    animation-timing-function: cubic-bezier(0.55, 0, 0.9, 0.6);
+  }
+  45% {
+    transform: translateY(0);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+}
+/* Behind the content like the click ripple (z-index: -1). The squares are positioned around the click point. */
+.click-piece {
+  position: fixed;
+  z-index: -1;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  animation: click-piece 1.2s linear forwards;
+}
+/* Home: no fall, the piece appears centred on the click and fades out. */
+@keyframes click-piece-still {
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.click-piece-still {
+  animation: click-piece-still 1s ease-out forwards;
+}
+.click-piece i {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.25);
+}
+
+/* --- Reduced motion: no pieces at the click --- */
+@media (prefers-reduced-motion: reduce) {
+  .click-piece {
+    display: none;
+  }
+}

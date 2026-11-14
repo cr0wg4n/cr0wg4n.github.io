@@ -70,7 +70,7 @@ Each page exists in two languages with the same name: `slug.en.md` and `slug.es.
   `docs/card-template.svg`):
   `python3 ../docs/make-card.py "My article" --source medium.com --out assets/img/posts/my-article.png`
 
-Where to change other things: colors, fonts and effects in `assets/css/custom.css`; theme settings in
+Where to change other things: colors and fonts in `assets/css/custom.css`; visual effects are switched on or off in `[effects]` of `blog/config/_default/params.toml` (how to add one: `blog/layouts/partials/effects/scripts.html`); theme settings in
 `config/_default/params.toml`; name, bio and links in `config/_default/languages.*.toml`; the link-preview image
 (og:image) in `static/img/social-card.png`.
 

@@ -5,7 +5,8 @@
    2. Components   logo, card shadows, repo grid, external-link icon, recent list
    3. Home profile headline and icons
    4. Page glow        soft orange gradient at the top of every page
-   5. Ripple effects   shared tokens, avatar ripples, click ripple
+   Visual effects (ripples, tetris) are not here: one stylesheet each in assets/css/fx/<name>/, loaded by
+   layouts/partials/effects/scripts.html only when the effect is enabled in [effects] (params.toml).
 
    Conventions: override with selector specificity (no !important), scope
    home-only rules to the avatar header, and tie colours to the active theme
@@ -173,121 +174,6 @@ body::before {
   );
 }
 
-
-/* ==========================================================================
-   5. Ripple effects (orange rings)
-   One look for two uses: a looping ripple behind the home avatar, and a
-   one-shot burst wherever the user clicks (script: layouts/partials/
-   extend-footer.html). Four radial-gradient layers draw the rings. Animating
-   --ripple-phase from 0 to 1 moves every ring out to the next ring's place, so
-   the loop is seamless; each ring gets thinner the farther it travels, and a
-   radial mask fades it too. The colour is the scheme's primary.
-   ========================================================================== */
-
-/* Tokens. Dark mode: stronger rings. Light mode: softer, more transparent. */
-:root {
-  --ripple-period: 56px; /* distance between rings */
-  --ripple-stroke: 5px; /* ring width next to the photo (plus ~1.5px soft edge per side) */
-  --ripple-reach: 3.5; /* the stroke tapers to nothing after this many periods */
-  --ripple-alpha: 0.45; /* ring opacity */
-  --ripple-solid: 42%; /* mask: full strength up to here... */
-  --ripple-fade: 74%; /* ...fully transparent from here */
-}
-html:not(.dark) {
-  --ripple-alpha: 0.3;
-  --ripple-solid: 30%;
-  --ripple-fade: 72%;
-}
-
-/* Animated progress of the rings: 0 = ring n sits at n periods, 1 = at n + 1. */
-@property --ripple-phase {
-  syntax: "<number>";
-  inherits: false;
-  initial-value: 0;
-}
-
-/* Shared ring drawing. Ring n has radius --rn and half-width --hn; both are
-   derived from the phase, so they change smoothly as the ring moves out. */
-main article > header:has(> img.rounded-full)::before,
-.click-ripple {
-  --r0: calc((0 + var(--ripple-phase)) * var(--ripple-period));
-  --r1: calc((1 + var(--ripple-phase)) * var(--ripple-period));
-  --r2: calc((2 + var(--ripple-phase)) * var(--ripple-period));
-  --r3: calc((3 + var(--ripple-phase)) * var(--ripple-period));
-  --h0: max(0px, calc(var(--ripple-stroke) * (1 - (0 + var(--ripple-phase)) / var(--ripple-reach)) / 2));
-  --h1: max(0px, calc(var(--ripple-stroke) * (1 - (1 + var(--ripple-phase)) / var(--ripple-reach)) / 2));
-  --h2: max(0px, calc(var(--ripple-stroke) * (1 - (2 + var(--ripple-phase)) / var(--ripple-reach)) / 2));
-  --h3: max(0px, calc(var(--ripple-stroke) * (1 - (3 + var(--ripple-phase)) / var(--ripple-reach)) / 2));
-  --ring: rgba(var(--color-primary-500), var(--ripple-alpha));
-  aspect-ratio: 1;
-  border-radius: 50%;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at center, transparent calc(var(--r0) - var(--h0) - 1.5px), var(--ring) calc(var(--r0) - var(--h0)), var(--ring) calc(var(--r0) + var(--h0)), transparent calc(var(--r0) + var(--h0) + 1.5px)),
-    radial-gradient(circle at center, transparent calc(var(--r1) - var(--h1) - 1.5px), var(--ring) calc(var(--r1) - var(--h1)), var(--ring) calc(var(--r1) + var(--h1)), transparent calc(var(--r1) + var(--h1) + 1.5px)),
-    radial-gradient(circle at center, transparent calc(var(--r2) - var(--h2) - 1.5px), var(--ring) calc(var(--r2) - var(--h2)), var(--ring) calc(var(--r2) + var(--h2)), transparent calc(var(--r2) + var(--h2) + 1.5px)),
-    radial-gradient(circle at center, transparent calc(var(--r3) - var(--h3) - 1.5px), var(--ring) calc(var(--r3) - var(--h3)), var(--ring) calc(var(--r3) + var(--h3)), transparent calc(var(--r3) + var(--h3) + 1.5px));
-  -webkit-mask-image: radial-gradient(circle, #000 var(--ripple-solid), transparent var(--ripple-fade));
-  mask-image: radial-gradient(circle, #000 var(--ripple-solid), transparent var(--ripple-fade));
-}
-
-/* --- Avatar ripples (home): loop forever behind everything --------------- */
-
-@keyframes avatar-ripple {
-  to {
-    --ripple-phase: 1;
-  }
-}
-/* No isolation/z-index on the header: it must not form its own stacking context, so the rings'
-   z-index: -1 puts them at the very back of the page (above the background and glow, below the
-   navbar, text and cards) instead of painting over the content that follows the header. */
-main article > header:has(> img.rounded-full) {
-  position: relative;
-}
-main article > header:has(> img.rounded-full)::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  left: 50%;
-  top: 76px; /* avatar centre: 4px header padding + half of the 144px avatar */
-  width: min(500px, 96vw);
-  transform: translate(-50%, -50%);
-  animation: avatar-ripple 5s linear infinite;
-}
-
-/* --- Click ripple: one burst at the pointer, then removed by the script --- */
-
-@keyframes click-ripple {
-  from {
-    --ripple-phase: 0;
-    opacity: 1;
-  }
-  to {
-    --ripple-phase: 1;
-    opacity: 0;
-  }
-}
-/* z-index: -1 puts it at the very back, like the avatar ripples: above the page background, below
-   the navbar, text and cards (opaque cards hide it). The script appends it to <body>. */
-.click-ripple {
-  position: fixed;
-  z-index: -1;
-  width: 200px;
-  transform: translate(-50%, -50%);
-  animation: click-ripple 1.1s ease-out forwards;
-}
-
-/* --- Reduced motion ------------------------------------------------------ */
-
-@media (prefers-reduced-motion: reduce) {
-  main article > header:has(> img.rounded-full)::before {
-    animation: none;
-  }
-  .click-ripple {
-    display: none;
-  }
-}
-
 /* ---------------------------------------------------------------------------
    Reactions and comments: see layouts/partials/comments.html and assets/js/comments.js
    --------------------------------------------------------------------------- */
@@ -329,21 +215,3 @@ main article > header:has(> img.rounded-full)::before {
 .cm-submit:disabled { opacity: 0.6; cursor: progress; }
 .cm-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .cm-status:empty { display: none; }
-
-/* ---------------------------------------------------------------------------
-   Home: two self-playing Tetris wells beside the avatar (assets/js/tetris.js).
-   The header already is position: relative (ripples). Each well is 84 x 140 px, level with the photo,
-   with its inner edge 112 px from the centre. They fade in from the top so pieces appear out of nowhere.
-   --------------------------------------------------------------------------- */
-.tetris-well {
-  position: absolute;
-  top: 8px;
-  pointer-events: none;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 28%);
-  mask-image: linear-gradient(to bottom, transparent 0, #000 28%);
-}
-.tetris-left { left: calc(50% - 196px); }
-.tetris-right { left: calc(50% + 112px); }
-@media (max-width: 700px) {
-  .tetris-well { display: none; }
-}
