@@ -215,3 +215,13 @@ body::before {
 .cm-submit:disabled { opacity: 0.6; cursor: progress; }
 .cm-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .cm-status:empty { display: none; }
+
+/* ---------------------------------------------------------------------------
+   Narrow figure: add figureClass="figure-narrow" to a {{< figure >}} to show the image at a fixed width,
+   centred (never wider than the text column). Change --figure-width for another size.
+   --------------------------------------------------------------------------- */
+.figure-narrow {
+  --figure-width: 280px;
+  max-width: min(var(--figure-width), 100%);
+  margin-inline: auto;
+}
