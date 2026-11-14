@@ -212,3 +212,11 @@ forgejoDefaultServer = "https://v11.next.forgejo.org"
 # front matter has `showComments: true` (the posts archetype sets it). Use the ApiUrl output of the CloudFormation stack.
 [comments]
   apiUrl = "https://comments.cr0wg4n.com"
+
+# -- Visual effects --
+# On/off switches, decided here in code (visitors cannot change them). Adding an effect: see
+# layouts/partials/effects/scripts.html. ripples: rings behind the home photo and a ripple at every click.
+# tetris: self-playing Tetris wells on the home page and a piece at every click.
+[effects]
+  ripples = false
+  tetris = true

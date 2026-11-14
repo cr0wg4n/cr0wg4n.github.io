@@ -1,0 +1,23 @@
+{{/* Loads the stylesheets and scripts of every enabled visual effect ([effects] in config/_default/params.toml).
+
+     To add an effect:
+       1. add its flag to [effects] in params.toml (true / false);
+       2. put its styles in assets/css/fx/<name>/*.css and its scripts in assets/js/fx/<name>/*.js
+          (a script named home-*.js is loaded on the home page only);
+       3. optional: html.fx-<name> (set in partials/extend-head.html) is available as a hook for scripts and CSS.
+     A disabled effect ships no CSS or script at all. Scripts that need page elements must return quietly without them. */}}
+{{ $page := . }}
+{{ range $name, $on := site.Params.effects }}
+  {{ if $on }}
+    {{ range resources.Match (printf "css/fx/%s/*.css" $name) }}
+      {{ $css := . | minify | fingerprint }}
+      <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+    {{ end }}
+    {{ range resources.Match (printf "js/fx/%s/*.js" $name) }}
+      {{ if or $page.IsHome (not (strings.HasPrefix (path.Base .Name) "home-")) }}
+        {{ $js := . | minify | fingerprint }}
+        <script defer src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}"></script>
+      {{ end }}
+    {{ end }}
+  {{ end }}
+{{ end }}
