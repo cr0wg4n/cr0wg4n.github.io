@@ -329,3 +329,21 @@ main article > header:has(> img.rounded-full)::before {
 .cm-submit:disabled { opacity: 0.6; cursor: progress; }
 .cm-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .cm-status:empty { display: none; }
+
+/* ---------------------------------------------------------------------------
+   Home: two self-playing Tetris wells beside the avatar (assets/js/tetris.js).
+   The header already is position: relative (ripples). Each well is 84 x 140 px, level with the photo,
+   with its inner edge 112 px from the centre. They fade in from the top so pieces appear out of nowhere.
+   --------------------------------------------------------------------------- */
+.tetris-well {
+  position: absolute;
+  top: 8px;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 28%);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 28%);
+}
+.tetris-left { left: calc(50% - 196px); }
+.tetris-right { left: calc(50% + 112px); }
+@media (max-width: 700px) {
+  .tetris-well { display: none; }
+}

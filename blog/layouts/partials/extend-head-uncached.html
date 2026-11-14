@@ -48,3 +48,9 @@
   }}
   <script type="application/ld+json">{{ $licence | jsonify | safeJS }}</script>
 {{ end }}
+
+{{/* Home only: the self-playing Tetris wells beside the avatar (decorative). */}}
+{{ if .IsHome }}
+  {{ $tetris := resources.Get "js/tetris.js" | minify | fingerprint }}
+  <script defer src="{{ $tetris.RelPermalink }}" integrity="{{ $tetris.Data.Integrity }}"></script>
+{{ end }}
