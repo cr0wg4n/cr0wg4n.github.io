@@ -69,6 +69,8 @@ Each page exists in two languages with the same name: `slug.en.md` and `slug.es.
   For an article without a usable cover, make a title card (needs Pillow; the editable design is
   `docs/card-template.svg`):
   `python3 ../docs/make-card.py "My article" --source medium.com --out assets/img/posts/my-article.png`
+  Four looks: `--style rings` (default), `blocks`, `grid`, `stripes`; `--style auto` picks one from the title so covers
+  do not all look alike.
 
 Where to change other things: colors and fonts in `assets/css/custom.css`; visual effects are switched on or off in `[effects]` of `blog/config/_default/params.toml` (how to add one: `blog/layouts/partials/effects/scripts.html`); theme settings in
 `config/_default/params.toml`; name, bio and links in `config/_default/languages.*.toml`; the link-preview image
