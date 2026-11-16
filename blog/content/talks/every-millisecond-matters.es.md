@@ -23,4 +23,4 @@ Cada milisegundo que tarda en responder una página afecta la experiencia de los
 
 Este es el repositorio que usamos durante el taller: [https://github.com/cr0wg4n/performance-laboratory](https://github.com/cr0wg4n/performance-laboratory)
 
-Las diapositivas eran material interno, así que aquí solo comparto esta visión general y el repositorio. Pronto escribiré más acerca de ello.
+Era material interno, así que aquí solo comparto esta visión general. Pronto escribiré más acerca de ello.
