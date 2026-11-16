@@ -23,4 +23,4 @@ Every millisecond a page takes to respond affects the users' experience, how lon
 
 This is the repository we used during the workshop: [https://github.com/cr0wg4n/performance-laboratory](https://github.com/cr0wg4n/performance-laboratory)
 
-It was internal material, so I only share this overview here. I will write more about it soon.
+The slides were internal material, so I only share this overview and the repository here. I will write more about it soon.
