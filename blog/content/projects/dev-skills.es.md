@@ -1,6 +1,5 @@
 ---
 title: "Dev Skills - AI Agent Skills"
-externalUrl: "https://github.com/cr0wg4n/dev-skills"
 featureimage: "img/projects/dev-skills.png"
 tags: ["ai", "vue", "typescript"]
 date: "2026-06-15"
@@ -12,6 +11,12 @@ Estas son algunas de las buenas prácticas y guías de código que he aprendido 
 ¡Me emociona decir que ya está funcionando en proyectos reales! Como todavía es nuevo, lo sigo probando y mejorando, ¡pero  está listo para compartirse!
 
 Este es el repositorio: [https://github.com/cr0wg4n/dev-skills](https://github.com/cr0wg4n/dev-skills)
+
+O puedes instalarlo con el siguiente comando:
+
+```
+npx skills add cr0wg4n/dev-skills
+```
 
 o instalalo directamente con el siguiente comando:
 

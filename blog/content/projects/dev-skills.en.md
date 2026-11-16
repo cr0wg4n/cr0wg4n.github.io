@@ -1,6 +1,5 @@
 ---
 title: "Dev Skills - AI Agent Skills"
-externalUrl: "https://github.com/cr0wg4n/dev-skills"
 featureimage: "img/projects/dev-skills.png"
 tags: ["ai", "vue", "typescript"]
 date: "2026-06-15"
