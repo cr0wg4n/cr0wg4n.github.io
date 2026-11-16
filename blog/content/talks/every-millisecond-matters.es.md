@@ -19,4 +19,8 @@ La idea del taller:
 
 Cada milisegundo que tarda en responder una página afecta la experiencia de los usuarios, su permanencia e interacción, y el rendimiento de la aplicación. En las dos sesiones revisamos estrategias modernas de optimización web para mejorar los tres aspectos.
 
+## Repositorio
+
+Este es el repositorio que usamos durante el taller: [https://github.com/cr0wg4n/performance-laboratory](https://github.com/cr0wg4n/performance-laboratory)
+
 Era material interno, así que aquí solo comparto esta visión general. Pronto escribiré más acerca de ello.

@@ -19,4 +19,8 @@ The idea behind the workshop:
 
 Every millisecond a page takes to respond affects the users' experience, how long they stay and how much they engage, and the performance of the application. Over the two sessions we looked at modern web optimization strategies to improve all three aspects.
 
+## Repository
+
+This is the repository we used during the workshop: [https://github.com/cr0wg4n/performance-laboratory](https://github.com/cr0wg4n/performance-laboratory)
+
 It was internal material, so I only share this overview here. I will write more about it soon.
